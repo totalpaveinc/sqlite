@@ -23,6 +23,11 @@ echo "Building Android AAR..."
 
 ANDROID_JNI_LIBS=./android/sqlite3/src/main/jniLibs
 
+mkdir -p $ANDROID_JNI_LIBS/arm64-v8a
+mkdir -p $ANDROID_JNI_LIBS/armeabi-v7a
+mkdir -p $ANDROID_JNI_LIBS/x86
+mkdir -p $ANDROID_JNI_LIBS/x86_64
+
 cp out/android/arm64-v8a/sqlite3/lib/libsqlite3.so $ANDROID_JNI_LIBS/arm64-v8a/libsqlite3.so
 cp out/android/armeabi-v7a/sqlite3/lib/libsqlite3.so $ANDROID_JNI_LIBS/armeabi-v7a/libsqlite3.so
 cp out/android/x86/sqlite3/lib/libsqlite3.so $ANDROID_JNI_LIBS/x86/libsqlite3.so
