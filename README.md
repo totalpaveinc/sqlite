@@ -5,7 +5,7 @@ The purpose of this package is to provide a build system around SQLite as a Shar
 
 If an application contains mulitple copies of SQLite, database corruption could ensue on POSIX systems, so it's important that applications (including linked libraries) to only use one copy of SQLite. See Section 2.2 of [How To Corrupt](https://www.sqlite.org/howtocorrupt.html) for more information.
 
-This package contains the original SQLite sources which is in the Public Domain. Additionally it contains JNI Wrappers for Android targets and build scripts for producing binaries for several architectures. Built binaries gets published to the [sqlite-bin](https://github.com/totalpaveinc/sqlite-bin) repository.
+This package contains the original SQLite sources which is in the Public Domain. Additionally it contains build scripts for producing binaries for several architectures. Built binaries gets published to the [sqlite-bin](https://github.com/totalpaveinc/sqlite-bin) repository.
 
 This package is currently using SQLite3 v3.39.2.
 
@@ -28,6 +28,8 @@ Prebuilt binaries are available for:
 If you simply need the prebuilt binaries, take a look at our [sqlite-bin](https://github.com/totalpaveinc/sqlite-bin) repository.
 
 The individual SO libraries are provided for linking with other libraries. Applications should import the AAR / xcframework file.
+
+Note that the AAR files do not contain JNI. The AAR package is simply to ensure applications all use a single copy of SQLite.
 
 Android binaries are built using API 24.
 

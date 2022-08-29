@@ -1,3 +1,4 @@
+#!/bin/bash
 
 # Copyright 2022 Total Pave Inc.
 
@@ -18,4 +19,32 @@
 # CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE
 # OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-echo "TODO: Build XCFramework"
+echo "Installing to bin..."
+
+echo "Installing headers"
+cp -r out/`uname`/sqlite3/include bin/include
+
+echo "Installing `uname`"
+cp out/`uname`/sqlite3/lib/libsqlite3.so bin/`uname`/libsqlite3.so
+
+androidBuilds=("armeabi-v7a" "arm64-v8a" "x86" "x86_64")
+for build in ${androidBuilds[@]}; do
+    echo "Installing Android $build"
+    mkdir -p bin/android/$build
+    cp out/android/$build/sqlite3/lib/libsqlite3.so bin/android/$build/libsqlite3.so
+done
+
+cp android/sqlite3/build/outputs/aar/sqlite3-release.aar bin/android/sqlite3.aar
+
+# TODO      bash doesn't like empty if conditions, so uncomment
+# TODO      and fill in the install process for iOS/Macs
+# if [ `uname` == "Darwin" ]; then
+#     # Install iOS libraries/xcframework
+#     # builds+=("ios-arm64" "ios-x86_64")
+# fi
+
+cd bin
+git add *
+git commit -m "Update SQLite Binaries"
+git push
+cd ..
