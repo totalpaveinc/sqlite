@@ -10,3 +10,5 @@ gradlew.bat
 android/sqlite3/build
 android/sqlite3/gradle
 *.so
+*.cache
+config.status

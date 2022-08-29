@@ -64,3 +64,13 @@ Clang compiler is required.
 ## Updating SQLite
 
 To update SQLite, unpack the sources into the `src` folder.
+
+## TotalPave Committers
+
+This repository contains submodules. Clone this repo with the `--recurse-submodules` flag.
+
+e.g: `git clone --recurse-submodules git@github.com:totalpaveinc/sqlite.git`
+
+If you have already cloned without submodules, you can correct the repo by running `git submodule update --init`
+
+Without the `bin/` (`sqlite-bin`) submodule, the `install.sh` script will not work properly.
