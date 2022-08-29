@@ -1,0 +1,64 @@
+
+# SQLite
+
+The purpose of this package is to provide a build system around SQLite as a Shared Library for cross-compiling for Android & iOS, as well as building for testing on local machines.
+
+If an application contains mulitple copies of SQLite, database corruption could ensue on POSIX systems, so it's important that applications (including linked libraries) to only use one copy of SQLite. See Section 2.2 of [How To Corrupt](https://www.sqlite.org/howtocorrupt.html) for more information.
+
+This package contains the original SQLite sources which is in the Public Domain. Additionally it contains JNI Wrappers for Android targets and build scripts for producing binaries for several architectures. Built binaries gets published to the [sqlite-bin](https://github.com/totalpaveinc/sqlite-bin) repository.
+
+This package is currently using SQLite3 v3.39.2.
+
+Prebuilt binaries are available for:
+- iOS:
+- - ARM64
+- - x86_64 (For simulators)
+- - xcframework (Contains all architectures)
+- Android:
+- - armeabi-v7a
+- - arm64-v8a
+- - x86
+- - x86_64
+- - AAR library (Contains all prebuilt architectures)
+- Linux:
+- - x86_64
+- Mac OS:
+- - x86_64
+
+If you simply need the prebuilt binaries, take a look at our [sqlite-bin](https://github.com/totalpaveinc/sqlite-bin) repository.
+
+The individual SO libraries are provided for linking with other libraries. Applications should import the AAR / xcframework file.
+
+Android binaries are built using API 24.
+
+## Licensing
+
+See [LICENSE](./LICENSE)
+
+## Building
+
+To build, simply run the `build.sh` script in the root directory.
+
+### Build Requirements
+
+Mac OS or Linux with bash shell is required.
+
+#### Android
+
+The following tools is required:
+- NDK Version 25.0.8775105
+- Gradle 7
+- `ANDROID_HOME` environment variable should be set to the Android SDK.
+
+#### iOS
+
+The following tools is required:
+- XCode 13.0 (with additional command line tools installed)
+
+#### Linux
+
+Clang compiler is required.
+
+## Updating SQLite
+
+To update SQLite, unpack the sources into the `src` folder.

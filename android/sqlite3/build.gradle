@@ -1,0 +1,25 @@
+
+plugins {
+    id 'com.android.library'
+}
+
+task wrapper(type: Wrapper) {
+    gradleVersion = "7.5.1"
+}
+
+android {
+    compileSdk 32
+
+    defaultConfig {
+        minSdk 24
+        targetSdk 32
+        versionCode 1
+        versionName "1.0 Beta"
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+        }
+    }
+}

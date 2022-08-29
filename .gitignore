@@ -1,0 +1,12 @@
+
+out
+.deps
+*.log
+gradlew
+gradlew.bat
+*.tmp
+.libs
+.gradle
+android/sqlite3/build
+android/sqlite3/gradle
+*.so
