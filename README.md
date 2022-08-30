@@ -37,6 +37,10 @@ Android binaries are built using API 24.
 
 See [LICENSE](./LICENSE)
 
+## Docs
+
+See [Documentation](./docs.md)
+
 ## Building
 
 To build, simply run the `build.sh` script in the root directory.
@@ -63,7 +67,7 @@ Clang compiler is required.
 
 ## Updating SQLite
 
-To update SQLite, unpack the sources into the `src` folder.
+To update SQLite, unpack the sources into the `src/sqlite` folder.
 
 ## TotalPave Committers
 

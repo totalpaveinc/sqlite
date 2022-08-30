@@ -3,7 +3,7 @@ SQLite is Public Domain
 
 Read More: https://www.sqlite.org/copyright.html
 
-All code in the src/ folder are the original SQLite files as unpacked from their autoconf tarball.
+All code in the src/sqlite folder are the original SQLite files as unpacked from their autoconf tarball.
 
 All other files:
 

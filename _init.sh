@@ -58,6 +58,8 @@ if [ `uname` == "Darwin" ]; then
     # TODO add/find xcode clang paths
 fi
 
+export PROJECT_DIR=`pwd`
+
 # We need to resolve the relative path, which idk if this works on macs
 export PREBUILT_DIR=`readlink -f ./out`
 

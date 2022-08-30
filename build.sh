@@ -22,7 +22,7 @@
 echo "Building SQLite..."
 source _init.sh
 
-cd src
+cd $PROJECT_DIR/src/sqlite
 
 make clean > /dev/null 2>&1 # Hide clean errors, they are probably not important (e.g. indicating that there is nothing to clean on fresh repos)
 
@@ -45,37 +45,57 @@ for build in ${builds[@]}; do
     echo "Building SQLite for $build"
     # We do not direct the prefix to the prebuilt directory directly because we don't want any executable binaries or shared documentations
     # in the repo, we **just** need the include and library binaries.
-    prefix=`pwd`/out/$build
+    prefix=$PROJECT_DIR/src/sqlite/out/$build
     mkdir -p $prefix
+
+    buildShared=yes
+    buildStatic=no
+    buildJNI=no
 
     if [ "$build" == "local" ]; then
         ./configure \
             CFLAGS="${CFLAGS}" \
             --prefix=$prefix \
             --enable-all \
-            --enable-static=no \
-            --enable-shared=yes \
+            --enable-static=$buildStatic \
+            --enable-shared=$buildShared \
             --enable-editline=no \
             > /dev/null 2>&1
     else
         case $build in
             android-armeabi-v7a)
                 CC="${ANDROID_ARM_CLANG}"
+                CXX="${ANDROID_ARM_CLANGXX}"
                 host="arm-linux-android"
+                buildStatic=yes
+                buildShared=no
+                buildJNI=yes
                 ;;
             android-arm64-v8a)
                 CC="${ANDROID_AARCH64_CLANG}"
+                CXX="${ANDROID_AARCH64_CLANGXX}"
                 host="aarch64-linux-android"
+                buildStatic=yes
+                buildShared=no
+                buildJNI=yes
                 ;;
             android-x86)
                 CC="${ANDROID_X86_CLANG}"
+                CXX="${ANDROID_X86_CLANGXX}"
                 host="x86-linux-android"
+                buildStatic=yes
+                buildShared=no
+                buildJNI=yes
                 ;;
             android-x86_64)
                 CC="${ANDROID_X86_64_CLANG}"
+                CXX="${ANDROID_X86_64_CLANGXX}"
                 host="x86_64-linux-android"
+                buildStatic=yes
+                buildShared=no
+                buildJNI=yes
                 ;;
-            # TODO add iOS
+            # TODO add iOS -- it should be built as a shared, not static
         esac
 
         ./configure \
@@ -83,8 +103,8 @@ for build in ${builds[@]}; do
             CFLAGS="${CFLAGS}" \
             --prefix=$prefix \
             --enable-all \
-            --enable-static=no \
-            --enable-shared=yes \
+            --enable-static=$buildStatic \
+            --enable-shared=$buildShared \
             --enable-editline=no \
             --host=$host \
             > /dev/null 2>&1
@@ -99,6 +119,13 @@ for build in ${builds[@]}; do
     if [ $? -ne 0 ]; then
         echo "Failed to intermediate install SQLite for $build"
         exit 1
+    fi
+
+    if [ "$buildJNI" == "yes" ]; then
+        # Build JNI Wrapper
+        cd $PROJECT_DIR/src/android
+        ${CXX} -shared -fPIC -DANDROID -I$prefix/include -L$prefix/lib -lsqlite3 -o $prefix/lib/libsqlite3.so jni.cc
+        cd $PROJECT_DIR/src/sqlite
     fi
 
     case $build in
@@ -125,14 +152,16 @@ for build in ${builds[@]}; do
             ;;
     esac
 
-    mkdir -p $prebuildPath/sqlite3
-    cp -r $prefix/include $prebuildPath/sqlite3/
-    cp -r $prefix/lib $prebuildPath/sqlite3/
+    mkdir -p $prebuildPath
+    mkdir -p $prebuildPath/lib
+
+    cp -r $prefix/include $prebuildPath/
+    cp -r $prefix/lib/libsqlite3.so $prebuildPath/lib/libsqlite3.so
 
     make clean > /dev/null 2>&1
 done
 
-cd ..
+cd $PROJECT_DIR
 
 source _buildAAR.sh
 

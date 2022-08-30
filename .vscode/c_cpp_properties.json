@@ -1,0 +1,20 @@
+{
+    "configurations": [
+        {
+            "name": "Linux",
+            "includePath": [
+                "${default}",
+                "${ANDROID_HOME}/ndk/25.0.8775105/toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/include",
+                "${workspaceFolder}/src/sqlite"
+            ],
+            "defines": [
+                "ANDROID"
+            ],
+            "compilerPath": "/usr/bin/clang",
+            "cStandard": "c17",
+            "cppStandard": "c++14",
+            "intelliSenseMode": "linux-clang-x64"
+        }
+    ],
+    "version": 4
+}

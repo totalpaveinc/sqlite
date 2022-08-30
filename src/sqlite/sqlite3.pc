@@ -1,6 +1,6 @@
 # Package Information for pkg-config
 
-prefix=/development/totalpave/sqlite/src/out/android-x86_64
+prefix=/development/totalpave/sqlite/src/sqlite/out/android-x86_64
 exec_prefix=${prefix}
 libdir=${exec_prefix}/lib
 includedir=${prefix}/include
