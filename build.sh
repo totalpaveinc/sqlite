@@ -137,8 +137,8 @@ for build in ${builds[@]}; do
 
     if [ "$buildJNI" == "yes" ]; then
         # Build JNI Wrapper
-        cd $PROJECT_DIR/src/android
-        ${CXX} -shared -fPIC -DANDROID -DANDROID_STL=c++_shared -I$prefix/include -L$prefix/lib -lsqlite3 -o $prefix/lib/libsqlite3.so jni.cc
+        cd $PROJECT_DIR/src/totalpave
+        ${CXX} -shared -fPIC -DANDROID -DANDROID_STL=c++_shared -I$prefix/include -L$prefix/lib -lsqlite3 -o $prefix/lib/libsqlite3.so binding.cc
         cd $PROJECT_DIR/src/sqlite
     fi
 
