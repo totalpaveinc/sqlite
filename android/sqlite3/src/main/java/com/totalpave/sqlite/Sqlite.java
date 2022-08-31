@@ -1,5 +1,5 @@
 
-package com.totalpave.sqlite;
+package com.totalpave.sqlite3;
 
 // Copyright 2022 Total Pave Inc.
 
@@ -21,7 +21,7 @@ package com.totalpave.sqlite;
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
 // IN THE SOFTWARE.
 
-class Sqlite {
+public class Sqlite {
     static {
         System.loadLibrary("sqlite3");
     }

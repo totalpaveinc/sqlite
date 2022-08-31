@@ -1,5 +1,5 @@
 
-package com.totalpave.sqlite;
+package com.totalpave.sqlite3;
 
 // Copyright 2022 Total Pave Inc.
 

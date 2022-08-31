@@ -12,3 +12,9 @@ android/sqlite3/gradle
 *.so
 *.cache
 config.status
+/src/sqlite/libtool
+/src/sqlite/Makefile
+*.aar
+*.idea
+test/android/gradle/wrapper
+

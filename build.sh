@@ -65,6 +65,9 @@ for build in ${builds[@]}; do
         case $build in
             android-armeabi-v7a)
                 CC="${ANDROID_ARM_CLANG}"
+                AR=$ANDROID_TOOLCHAIN_ROOT/bin/llvm-ar
+                RANLIB=$ANDROID_TOOLCHAIN_ROOT/bin/llvm-ranlib
+                CFLAGS="${CFLAGS} -DANDROID_STL=c++_shared"
                 CXX="${ANDROID_ARM_CLANGXX}"
                 host="arm-linux-android"
                 buildStatic=yes
@@ -73,6 +76,9 @@ for build in ${builds[@]}; do
                 ;;
             android-arm64-v8a)
                 CC="${ANDROID_AARCH64_CLANG}"
+                AR=$ANDROID_TOOLCHAIN_ROOT/bin/llvm-ar
+                RANLIB=$ANDROID_TOOLCHAIN_ROOT/bin/llvm-ranlib
+                CFLAGS="${CFLAGS} -DANDROID_STL=c++_shared"
                 CXX="${ANDROID_AARCH64_CLANGXX}"
                 host="aarch64-linux-android"
                 buildStatic=yes
@@ -81,6 +87,9 @@ for build in ${builds[@]}; do
                 ;;
             android-x86)
                 CC="${ANDROID_X86_CLANG}"
+                AR=$ANDROID_TOOLCHAIN_ROOT/bin/llvm-ar
+                RANLIB=$ANDROID_TOOLCHAIN_ROOT/bin/llvm-ranlib
+                CFLAGS="${CFLAGS} -DANDROID_STL=c++_shared"
                 CXX="${ANDROID_X86_CLANGXX}"
                 host="x86-linux-android"
                 buildStatic=yes
@@ -89,6 +98,9 @@ for build in ${builds[@]}; do
                 ;;
             android-x86_64)
                 CC="${ANDROID_X86_64_CLANG}"
+                AR=$ANDROID_TOOLCHAIN_ROOT/bin/llvm-ar
+                RANLIB=$ANDROID_TOOLCHAIN_ROOT/bin/llvm-ranlib
+                CFLAGS="${CFLAGS} -DANDROID_STL=c++_shared"
                 CXX="${ANDROID_X86_64_CLANGXX}"
                 host="x86_64-linux-android"
                 buildStatic=yes
@@ -100,6 +112,8 @@ for build in ${builds[@]}; do
 
         ./configure \
             CC="$CC" \
+            AR=$AR \
+            RANLIB=$RANLIB \
             CFLAGS="${CFLAGS}" \
             --prefix=$prefix \
             --enable-all \
@@ -124,7 +138,7 @@ for build in ${builds[@]}; do
     if [ "$buildJNI" == "yes" ]; then
         # Build JNI Wrapper
         cd $PROJECT_DIR/src/android
-        ${CXX} -shared -fPIC -DANDROID -I$prefix/include -L$prefix/lib -lsqlite3 -o $prefix/lib/libsqlite3.so jni.cc
+        ${CXX} -shared -fPIC -DANDROID -DANDROID_STL=c++_shared -I$prefix/include -L$prefix/lib -lsqlite3 -o $prefix/lib/libsqlite3.so jni.cc
         cd $PROJECT_DIR/src/sqlite
     fi
 

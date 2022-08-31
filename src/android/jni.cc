@@ -18,11 +18,20 @@
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
 // IN THE SOFTWARE.
 
-#ifdef ANDROID
-#include <jni.h>
 #include <sqlite3.h>
 #include <cstring>
 #include <string>
+
+namespace TP { namespace sqlite {
+    int lookupVariableIndex(sqlite3_stmt* statement, const char* variable) {
+        std::string strVar = variable;
+        std::string boundVarName = ":" + strVar;
+        return sqlite3_bind_parameter_index(statement, boundVarName.c_str());
+    }
+}}
+
+#ifdef ANDROID
+#include <jni.h>
 
 extern "C" {
 
@@ -51,7 +60,7 @@ extern "C" {
     }
 
     JNIEXPORT jlong JNICALL
-    Java_com_totalpave_sqlite_open(JNIEnv* env, jobject jptr, jstring jpath, jint jflags) {
+    Java_com_totalpave_sqlite3_Sqlite_open(JNIEnv* env, jobject jptr, jstring jpath, jint jflags) {
         sqlite3* db;
         jboolean isCopy;
         const char* path = env->GetStringUTFChars(jpath, &isCopy);
@@ -64,7 +73,7 @@ extern "C" {
     }
 
     JNIEXPORT jlong JNICALL
-    Java_com_totalpave_sqlite_prepare(JNIEnv* env, jobject jptr, jlong jdbptr, jstring jsql) {
+    Java_com_totalpave_sqlite3_Sqlite_prepare(JNIEnv* env, jobject jptr, jlong jdbptr, jstring jsql) {
         sqlite3* db = (sqlite3*)jdbptr;
         jboolean isCopy;
         const char* sql = env->GetStringUTFChars(jsql, &isCopy);
@@ -79,11 +88,11 @@ extern "C" {
     }
 
     JNIEXPORT jint JNICALL
-    Java_com_totalpave_sqlite_bindDouble(JNIEnv* env, jobject jptr, jlong jstatement, jstring jVarName, jdouble value) {
+    Java_com_totalpave_sqlite3_Sqlite_bindDouble(JNIEnv* env, jobject jptr, jlong jstatement, jstring jVarName, jdouble value) {
         sqlite3_stmt* statement = (sqlite3_stmt*)jstatement;
         jboolean isCopy;
         const char* varName = env->GetStringUTFChars(jVarName, &isCopy);
-        int index = sqlite3_bind_parameter_index(statement, varName);
+        int index = TP::sqlite::lookupVariableIndex(statement, varName);
         if (index == 0) {
             std::string pname = varName;
             std::string message = "Could not bind parameter \"" + pname + "\"";
@@ -94,11 +103,11 @@ extern "C" {
     }
 
     JNIEXPORT jint JNICALL
-    Java_com_totalpave_sqlite_bindString(JNIEnv* env, jobject jptr, jlong jstatement, jstring jVarName, jstring jvalue) {
+    Java_com_totalpave_sqlite3_Sqlite_bindString(JNIEnv* env, jobject jptr, jlong jstatement, jstring jVarName, jstring jvalue) {
         sqlite3_stmt* statement = (sqlite3_stmt*)jstatement;
         jboolean isCopy;
         const char* varName = env->GetStringUTFChars(jVarName, &isCopy);
-        int index = sqlite3_bind_parameter_index(statement, varName);
+        int index = TP::sqlite::lookupVariableIndex(statement, varName);
         if (index == 0) {
             std::string pname = varName;
             std::string message = "Could not bind parameter \"" + pname + "\"";
@@ -111,11 +120,11 @@ extern "C" {
     }
 
     JNIEXPORT jint JNICALL
-    Java_com_totalpave_sqlite_bindInt(JNIEnv* env, jobject jptr, jlong jstatement, jstring jVarName, jint value) {
+    Java_com_totalpave_sqlite3_Sqlite_bindInt(JNIEnv* env, jobject jptr, jlong jstatement, jstring jVarName, jint value) {
         sqlite3_stmt* statement = (sqlite3_stmt*)jstatement;
         jboolean isCopy;
         const char* varName = env->GetStringUTFChars(jVarName, &isCopy);
-        int index = sqlite3_bind_parameter_index(statement, varName);
+        int index = TP::sqlite::lookupVariableIndex(statement, varName);
         if (index == 0) {
             std::string pname = varName;
             std::string message = "Could not bind parameter \"" + pname + "\"";
@@ -126,61 +135,68 @@ extern "C" {
     }
 
     JNIEXPORT jint JNICALL
-    Java_com_totalpave_sqlite_bindBlob(JNIEnv* env, jobject jptr, jlong jstatement, jstring jVarName, jbyteArray jvalue) {
+    Java_com_totalpave_sqlite3_Sqlite_bindBlob(JNIEnv* env, jobject jptr, jlong jstatement, jstring jVarName, jbyteArray jvalue) {
         sqlite3_stmt* statement = (sqlite3_stmt*)jstatement;
         jboolean isCopy;
         const char* varName = env->GetStringUTFChars(jVarName, &isCopy);
-        int index = sqlite3_bind_parameter_index(statement, varName);
+        int index = TP::sqlite::lookupVariableIndex(statement, varName);
         if (index == 0) {
             std::string pname = varName;
             std::string message = "Could not bind parameter \"" + pname + "\"";
             return throwRuntimeException(env, message.c_str());
         }
 
-        jbyte* bufferPtr = env->GetByteArrayElements(jvalue, NULL);
-        jsize lengthOfArray = env->GetArrayLength(jvalue);
+        int result;
 
-        int result = sqlite3_bind_blob(statement, index, bufferPtr, (int)lengthOfArray, NULL);
+        if (jvalue == NULL) {
+            result = sqlite3_bind_blob(statement, index, NULL, 0, NULL);
+        }
+        else {
+            jbyte* bufferPtr = env->GetByteArrayElements(jvalue, NULL);
+            jsize lengthOfArray = env->GetArrayLength(jvalue);
 
-        env->ReleaseByteArrayElements(jvalue, bufferPtr, 0);
+            result = sqlite3_bind_blob(statement, index, bufferPtr, (int)lengthOfArray, NULL);
+
+            env->ReleaseByteArrayElements(jvalue, bufferPtr, 0);
+        }
 
         return result;
     }
 
     JNIEXPORT jint JNICALL
-    Java_com_totalpave_sqlite_step(JNIEnv* env, jobject jptr, jlong jstatement) {
+    Java_com_totalpave_sqlite3_Sqlite_step(JNIEnv* env, jobject jptr, jlong jstatement) {
         return sqlite3_step((sqlite3_stmt*)jstatement);
     }
 
     JNIEXPORT jint JNICALL
-    Java_com_totalpave_sqlite_columnCount(JNIEnv* env, jobject jptr, jlong jstatement) {
+    Java_com_totalpave_sqlite3_Sqlite_columnCount(JNIEnv* env, jobject jptr, jlong jstatement) {
         return sqlite3_column_count((sqlite3_stmt*)jstatement);
     }
 
     JNIEXPORT jstring JNICALL
-    Java_com_totalpave_sqlite_columnName(JNIEnv* env, jobject jptr, jlong jstatement, jint index) {
+    Java_com_totalpave_sqlite3_Sqlite_columnName(JNIEnv* env, jobject jptr, jlong jstatement, jint index) {
         const char* columnName = sqlite3_column_name((sqlite3_stmt*)jstatement, (int)index);
         return env->NewStringUTF(columnName);
     }
 
     JNIEXPORT jdouble JNICALL
-    Java_com_totalpave_sqlite_getDouble(JNIEnv* env, jobject jptr, jlong jstatement, jint index) {
+    Java_com_totalpave_sqlite3_Sqlite_getDouble(JNIEnv* env, jobject jptr, jlong jstatement, jint index) {
         return (jdouble)sqlite3_column_double((sqlite3_stmt*)jstatement, (int)index);
     }
 
     JNIEXPORT jint JNICALL
-    Java_com_totalpave_sqlite_getInt(JNIEnv* env, jobject jptr, jlong jstatement, jint index) {
+    Java_com_totalpave_sqlite3_Sqlite_getInt(JNIEnv* env, jobject jptr, jlong jstatement, jint index) {
         return (jint)sqlite3_column_int((sqlite3_stmt*)jstatement, (int)index);
     }
 
     JNIEXPORT jstring JNICALL
-    Java_com_totalpave_sqlite_getString(JNIEnv* env, jobject jptr, jlong jstatement, jint index) {
+    Java_com_totalpave_sqlite3_Sqlite_getString(JNIEnv* env, jobject jptr, jlong jstatement, jint index) {
         const unsigned char* text = sqlite3_column_text((sqlite3_stmt*)jstatement, (int)index);
         return env->NewStringUTF((const char*)text);
     }
 
     JNIEXPORT jbyteArray JNICALL
-    Java_com_totalpave_sqlite_getBlob(JNIEnv* env, jobject jptr, jlong jstatement, jint index) {
+    Java_com_totalpave_sqlite3_Sqlite_getBlob(JNIEnv* env, jobject jptr, jlong jstatement, jint index) {
         sqlite3_stmt* statement = (sqlite3_stmt*)jstatement;
         const void* data = sqlite3_column_blob(statement, (int)index);
         int size = sqlite3_column_bytes(statement, (int)index);
@@ -190,12 +206,12 @@ extern "C" {
     }
 
     JNIEXPORT jint JNICALL
-    Java_com_totalpave_sqlite_finalize(JNIEnv* env, jobject jptr, jlong jstatement) {
+    Java_com_totalpave_sqlite3_Sqlite_finalize(JNIEnv* env, jobject jptr, jlong jstatement) {
         return (jint)sqlite3_finalize((sqlite3_stmt*)jstatement);
     }
 
     JNIEXPORT jint JNICALL
-    Java_com_totalpave_sqlite_close(JNIEnv* env, jobject jptr, jlong db) {
+    Java_com_totalpave_sqlite3_Sqlite_close(JNIEnv* env, jobject jptr, jlong db) {
         return (jint)sqlite3_close_v2((sqlite3*)db);
     }
 }
