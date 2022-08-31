@@ -39,7 +39,8 @@ if [ `uname` == "Darwin" ]; then
     builds+=("ios-arm64" "ios-x86_64")
 fi
 
-CFLAGS="-fPIC -DSQLITE_ENABLE_COLUMN_METADATA=1 -DSQLITE_NOHAVE_SYSTEM"
+CFLAGS="-fPIC"
+SQLITE_CFLAGS="-DSQLITE_ENABLE_COLUMN_METADATA=1 -DSQLITE_NOHAVE_SYSTEM"
 
 for build in ${builds[@]}; do
     echo "Building SQLite for $build"
@@ -48,13 +49,13 @@ for build in ${builds[@]}; do
     prefix=$PROJECT_DIR/src/sqlite/out/$build
     mkdir -p $prefix
 
-    buildShared=yes
-    buildStatic=no
-    buildJNI=no
+    buildShared=no
+    buildStatic=yes
 
     if [ "$build" == "local" ]; then
+        CXX="clang++"
         ./configure \
-            CFLAGS="${CFLAGS}" \
+            CFLAGS="${CFLAGS} ${SQLITE_CFLAGS}" \
             --prefix=$prefix \
             --enable-all \
             --enable-static=$buildStatic \
@@ -67,45 +68,33 @@ for build in ${builds[@]}; do
                 CC="${ANDROID_ARM_CLANG}"
                 AR=$ANDROID_TOOLCHAIN_ROOT/bin/llvm-ar
                 RANLIB=$ANDROID_TOOLCHAIN_ROOT/bin/llvm-ranlib
-                CFLAGS="${CFLAGS} -DANDROID_STL=c++_shared"
+                CFLAGS="${CFLAGS} -DANDROID -DANDROID_STL=c++_shared"
                 CXX="${ANDROID_ARM_CLANGXX}"
                 host="arm-linux-android"
-                buildStatic=yes
-                buildShared=no
-                buildJNI=yes
                 ;;
             android-arm64-v8a)
                 CC="${ANDROID_AARCH64_CLANG}"
                 AR=$ANDROID_TOOLCHAIN_ROOT/bin/llvm-ar
                 RANLIB=$ANDROID_TOOLCHAIN_ROOT/bin/llvm-ranlib
-                CFLAGS="${CFLAGS} -DANDROID_STL=c++_shared"
+                CFLAGS="${CFLAGS} -DANDROID -DANDROID_STL=c++_shared"
                 CXX="${ANDROID_AARCH64_CLANGXX}"
                 host="aarch64-linux-android"
-                buildStatic=yes
-                buildShared=no
-                buildJNI=yes
                 ;;
             android-x86)
                 CC="${ANDROID_X86_CLANG}"
                 AR=$ANDROID_TOOLCHAIN_ROOT/bin/llvm-ar
                 RANLIB=$ANDROID_TOOLCHAIN_ROOT/bin/llvm-ranlib
-                CFLAGS="${CFLAGS} -DANDROID_STL=c++_shared"
+                CFLAGS="${CFLAGS} -DANDROID -DANDROID_STL=c++_shared"
                 CXX="${ANDROID_X86_CLANGXX}"
                 host="x86-linux-android"
-                buildStatic=yes
-                buildShared=no
-                buildJNI=yes
                 ;;
             android-x86_64)
                 CC="${ANDROID_X86_64_CLANG}"
                 AR=$ANDROID_TOOLCHAIN_ROOT/bin/llvm-ar
                 RANLIB=$ANDROID_TOOLCHAIN_ROOT/bin/llvm-ranlib
-                CFLAGS="${CFLAGS} -DANDROID_STL=c++_shared"
+                CFLAGS="${CFLAGS} -DANDROID -DANDROID_STL=c++_shared"
                 CXX="${ANDROID_X86_64_CLANGXX}"
                 host="x86_64-linux-android"
-                buildStatic=yes
-                buildShared=no
-                buildJNI=yes
                 ;;
             # TODO add iOS -- it should be built as a shared, not static
         esac
@@ -114,7 +103,7 @@ for build in ${builds[@]}; do
             CC="$CC" \
             AR=$AR \
             RANLIB=$RANLIB \
-            CFLAGS="${CFLAGS}" \
+            CFLAGS="${CFLAGS} ${SQLITE_CFLAGS}" \
             --prefix=$prefix \
             --enable-all \
             --enable-static=$buildStatic \
@@ -135,12 +124,9 @@ for build in ${builds[@]}; do
         exit 1
     fi
 
-    if [ "$buildJNI" == "yes" ]; then
-        # Build JNI Wrapper
-        cd $PROJECT_DIR/src/totalpave
-        ${CXX} -shared -fPIC -DANDROID -DANDROID_STL=c++_shared -I$prefix/include -L$prefix/lib -lsqlite3 -o $prefix/lib/libsqlite3.so binding.cc
-        cd $PROJECT_DIR/src/sqlite
-    fi
+    cd $PROJECT_DIR/src/totalpave
+    $CXX $CFLAGS -shared -I$prefix/include -L$prefix/lib -lsqlite3 -o $prefix/lib/libsqlite3.so binding.cc
+    cd $PROJECT_DIR/src/sqlite
 
     case $build in
         local)
