@@ -22,7 +22,7 @@
 echo "Installing to bin..."
 
 echo "Installing headers"
-cp -r out/`uname`/include bin/include
+cp -r out/`uname`/include/* bin/include/
 
 echo "Installing `uname`"
 cp out/`uname`/lib/libsqlite3.so bin/`uname`/libsqlite3.so
