@@ -22,11 +22,15 @@
 echo "Building SQLite..."
 source _init.sh
 
+./clean.sh
+
 cd $PROJECT_DIR/src/sqlite
 
-make clean > /dev/null 2>&1 # Hide clean errors, they are probably not important (e.g. indicating that there is nothing to clean on fresh repos)
+make clean >> $BUILD_LOG 2>&1 # Hide clean errors, they are probably not important (e.g. indicating that there is nothing to clean on fresh repos)
 
 rm -rf out #clean the out directory and recreate the ABI paths
+rm -f $BUILD_LOG
+touch $BUILD_LOG
 
 if [ `uname` == "Darwin" ]; then
     mkdir -p out/ios/arm64
@@ -39,11 +43,13 @@ if [ `uname` == "Darwin" ]; then
     builds+=("ios-arm64" "ios-x86_64")
 fi
 
-CFLAGS="-fPIC"
+DEFAULT_CFLAGS="-fPIC"
 SQLITE_CFLAGS="-DSQLITE_ENABLE_COLUMN_METADATA=1 -DSQLITE_NOHAVE_SYSTEM"
 
 for build in ${builds[@]}; do
     echo "Building SQLite for $build"
+    echo "Building SQLite for $build" >> $BUILD_LOG 2>&1
+
     # We do not direct the prefix to the prebuilt directory directly because we don't want any executable binaries or shared documentations
     # in the repo, we **just** need the include and library binaries.
     prefix=$PROJECT_DIR/src/sqlite/out/$build
@@ -55,48 +61,69 @@ for build in ${builds[@]}; do
     if [ "$build" == "local" ]; then
         CXX="clang++"
         ./configure \
-            CFLAGS="${CFLAGS} ${SQLITE_CFLAGS}" \
+            CFLAGS="${DEFAULT_CFLAGS} ${SQLITE_CFLAGS}" \
             --prefix=$prefix \
             --enable-all \
             --enable-static=$buildStatic \
             --enable-shared=$buildShared \
             --enable-editline=no \
-            > /dev/null 2>&1
+            >> $BUILD_LOG 2>&1
     else
         case $build in
             android-armeabi-v7a)
                 CC="${ANDROID_ARM_CLANG}"
                 AR=$ANDROID_TOOLCHAIN_ROOT/bin/llvm-ar
                 RANLIB=$ANDROID_TOOLCHAIN_ROOT/bin/llvm-ranlib
-                CFLAGS="${CFLAGS} -DANDROID -DANDROID_STL=c++_shared"
+                CFLAGS="${DEFAULT_CFLAGS} -DANDROID -DANDROID_STL=c++_shared"
                 CXX="${ANDROID_ARM_CLANGXX}"
                 host="arm-linux-android"
+                LIB_EXTENSION=$ANDROID_LIB_EXTENSION
                 ;;
             android-arm64-v8a)
                 CC="${ANDROID_AARCH64_CLANG}"
                 AR=$ANDROID_TOOLCHAIN_ROOT/bin/llvm-ar
                 RANLIB=$ANDROID_TOOLCHAIN_ROOT/bin/llvm-ranlib
-                CFLAGS="${CFLAGS} -DANDROID -DANDROID_STL=c++_shared"
+                CFLAGS="${DEFAULT_CFLAGS} -DANDROID -DANDROID_STL=c++_shared"
                 CXX="${ANDROID_AARCH64_CLANGXX}"
                 host="aarch64-linux-android"
+                LIB_EXTENSION=$ANDROID_LIB_EXTENSION
                 ;;
             android-x86)
                 CC="${ANDROID_X86_CLANG}"
                 AR=$ANDROID_TOOLCHAIN_ROOT/bin/llvm-ar
                 RANLIB=$ANDROID_TOOLCHAIN_ROOT/bin/llvm-ranlib
-                CFLAGS="${CFLAGS} -DANDROID -DANDROID_STL=c++_shared"
+                CFLAGS="${DEFAULT_CFLAGS} -DANDROID -DANDROID_STL=c++_shared"
                 CXX="${ANDROID_X86_CLANGXX}"
                 host="x86-linux-android"
+                LIB_EXTENSION=$ANDROID_LIB_EXTENSION
                 ;;
             android-x86_64)
                 CC="${ANDROID_X86_64_CLANG}"
                 AR=$ANDROID_TOOLCHAIN_ROOT/bin/llvm-ar
                 RANLIB=$ANDROID_TOOLCHAIN_ROOT/bin/llvm-ranlib
-                CFLAGS="${CFLAGS} -DANDROID -DANDROID_STL=c++_shared"
+                CFLAGS="${DEFAULT_CFLAGS} -DANDROID -DANDROID_STL=c++_shared"
                 CXX="${ANDROID_X86_64_CLANGXX}"
                 host="x86_64-linux-android"
+                LIB_EXTENSION=$ANDROID_LIB_EXTENSION
                 ;;
-            # TODO add iOS -- it should be built as a shared, not static
+            ios-arm64)
+                CC="${IOS_ARM64_CLANG}"
+                AR=ar
+                RANLIB=ranlib
+                CFLAGS="${DEFAULT_CFLAGS}"
+                CXX="${IOS_ARM64_CLANGXX}"
+                host="arm64"
+                LIB_EXTENSION=$IOS_LIB_EXTENSION
+                ;;
+            ios-x86_64)
+                CC="${IOS_X86_64_CLANG}"
+                AR=ar
+                RANLIB=ranlib
+                CFLAGS="${DEFAULT_CFLAGS}"
+                CXX="${IOS_X86_64_CLANGXX}"
+                host="x86_64-apple-darwin"
+                LIB_EXTENSION=$IOS_LIB_EXTENSION
+                ;;
         esac
 
         ./configure \
@@ -110,22 +137,22 @@ for build in ${builds[@]}; do
             --enable-shared=$buildShared \
             --enable-editline=no \
             --host=$host \
-            > /dev/null 2>&1
+            >> $BUILD_LOG 2>&1
     fi
 
-    make -j ${CPUCOUNT} > /dev/null 2>&1
+    make -j ${CPUCOUNT} >> $BUILD_LOG 2>&1
     if [ $? -ne 0 ]; then
         echo "Failed to make SQLite for $build"
         exit 1
     fi
-    make install > /dev/null 2>&1
+    make install >> $BUILD_LOG 2>&1
     if [ $? -ne 0 ]; then
         echo "Failed to intermediate install SQLite for $build"
         exit 1
     fi
 
     cd $PROJECT_DIR/src/totalpave
-    $CXX $CFLAGS -shared -I$prefix/include -L$prefix/lib -lsqlite3 -o $prefix/lib/libsqlite3.so binding.cc
+    $CXX $CFLAGS -shared -I$prefix/include -L$prefix/lib -lsqlite3 -o $prefix/lib/libsqlite3.$LIB_EXTENSION binding.cc
     cd $PROJECT_DIR/src/sqlite
 
     case $build in
@@ -156,9 +183,9 @@ for build in ${builds[@]}; do
     mkdir -p $prebuildPath/lib
 
     cp -r $prefix/include $prebuildPath/
-    cp -r $prefix/lib/libsqlite3.so $prebuildPath/lib/libsqlite3.so
+    cp -r $prefix/lib/libsqlite3.$LIB_EXTENSION $prebuildPath/lib/libsqlite3.$LIB_EXTENSION
 
-    make clean > /dev/null 2>&1
+    make clean >> $BUILD_LOG 2>&1
 done
 
 cd $PROJECT_DIR

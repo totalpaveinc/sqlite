@@ -36,12 +36,17 @@ done
 
 cp android/sqlite3/build/outputs/aar/sqlite3-release.aar bin/android/sqlite3.aar
 
-# TODO      bash doesn't like empty if conditions, so uncomment
-# TODO      and fill in the install process for iOS/Macs
-# if [ `uname` == "Darwin" ]; then
-#     # Install iOS libraries/xcframework
-#     # builds+=("ios-arm64" "ios-x86_64")
-# fi
+if [ `uname` == "Darwin" ]; then
+    builds=("ios-arm64" "ios-x86_64")
+    for build in ${builds[@]}; do
+        echo "Installing iOS $build"
+        mkdir -p bin/ios/$build
+        cp out/ios/$build/lib/libsqlite3.dylib bin/ios/$build/libsqlite3.dylib
+    done
+
+    cp -r out/ios/sqlite-release.xcframework bin/ios/sqlite-release.xcframework
+    cp -r out/ios/sqlite-debug.xcframework bin/ios/sqlite-debug.xcframework
+fi
 
 cd bin
 git add *

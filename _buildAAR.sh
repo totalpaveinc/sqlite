@@ -38,4 +38,7 @@ cd android
 gradle wrapper
 ./gradlew build
 
+mkdir -p ../test/android/app/libs
 cp sqlite3/build/outputs/aar/sqlite3-debug.aar ../test/android/app/libs/sqlite3-debug.aar
+
+cd ..

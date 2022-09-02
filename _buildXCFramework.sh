@@ -18,4 +18,17 @@
 # CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE
 # OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-echo "TODO: Build XCFramework"
+# Note xcodebuild -create-xcframework doesn't overwrite xcframework files.
+
+xcodebuild -create-xcframework \
+    -library ./out/ios/arm64/lib/libsqlite3.dylib \
+    -headers ./out/ios/arm64/include \
+    -library ./out/ios/x86_64/lib/libsqlite3.dylib \
+    -headers ./out/ios/x86_64/include \
+    -output ./out/ios/sqlite-debug.xcframework
+
+xcodebuild -create-xcframework \
+    -library ./out/ios/arm64/lib/libsqlite3.dylib \
+    -headers ./out/ios/arm64/include \
+    -output ./out/ios/sqlite-release.xcframework
+

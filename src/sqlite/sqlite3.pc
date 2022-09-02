@@ -1,6 +1,6 @@
 # Package Information for pkg-config
 
-prefix=/development/totalpave/sqlite/src/sqlite/out/android-x86_64
+prefix=/Users/tylerbreau/dev/totalpave/sqlite/src/sqlite/out/ios-x86_64
 exec_prefix=${prefix}
 libdir=${exec_prefix}/lib
 includedir=${prefix}/include
@@ -9,5 +9,5 @@ Name: SQLite
 Description: SQL database engine
 Version: 3.39.2
 Libs: -L${libdir} -lsqlite3
-Libs.private: -lz -lm 
+Libs.private: -lz 
 Cflags: -I${includedir}
