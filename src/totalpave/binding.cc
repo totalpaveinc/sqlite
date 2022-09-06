@@ -131,7 +131,7 @@ extern "C" {
             return throwRuntimeException(env, message.c_str());
         }
 
-        return sqlite3_bind_double(statement, index, (int)value);
+        return sqlite3_bind_int(statement, index, (int)value);
     }
 
     JNIEXPORT jint JNICALL

@@ -20,15 +20,18 @@
 
 echo "Building Local Test Application..."
 
+# -L`pwd`/out/`uname`/lib \
+
 mkdir -p `pwd`/out/bin/`uname`/
 clang++ \
     -fPIC \
     -I`pwd`/out/`uname`/include \
     -L`pwd`/out/`uname`/lib \
-    -lsqlite3 \
     -o `pwd`/out/bin/`uname`/test \
     -g \
     -Wall \
     -rdynamic \
-    `pwd`/test/local/main.cpp
+    `pwd`/test/local/main.cpp \
+    -lsqlite3
+    
 chmod +x `pwd`/out/bin/`uname`/test

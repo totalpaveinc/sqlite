@@ -61,6 +61,11 @@ for build in ${builds[@]}; do
     if [ "$build" == "local" ]; then
         CXX="clang++"
         CFLAGS="${DEFAULT_CFLAGS} ${SQLITE_CFLAGS}"
+        if [ `uname` == "Darwin" ]; then
+            LIB_EXTENSION="dylib"
+        else
+            LIB_EXTENSION="so"
+        fi
         ./configure \
             CFLAGS="${CFLAGS}" \
             --prefix=$prefix \
@@ -153,7 +158,8 @@ for build in ${builds[@]}; do
     fi
 
     cd $PROJECT_DIR/src/totalpave
-    $CXX $CFLAGS -shared -I$prefix/include -L$prefix/lib -lsqlite3 -o $prefix/lib/libsqlite3.$LIB_EXTENSION binding.cc
+    mkdir -p $PROJECT_DIR/src/totalpave/out/$build
+    $CXX $CFLAGS -shared -I$prefix/include -L$prefix/lib -o $PROJECT_DIR/src/totalpave/out/$build/libsqlite3.$LIB_EXTENSION binding.cc -lsqlite3 -pthread -ldl
     cd $PROJECT_DIR/src/sqlite
 
     case $build in
@@ -184,7 +190,7 @@ for build in ${builds[@]}; do
     mkdir -p $prebuildPath/lib
 
     cp -r $prefix/include $prebuildPath/
-    cp -r $prefix/lib/libsqlite3.$LIB_EXTENSION $prebuildPath/lib/libsqlite3.$LIB_EXTENSION
+    cp -r $PROJECT_DIR/src/totalpave/out/$build/libsqlite3.$LIB_EXTENSION $prebuildPath/lib/libsqlite3.$LIB_EXTENSION
 
     make clean >> $BUILD_LOG 2>&1
 done
