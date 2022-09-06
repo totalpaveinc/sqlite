@@ -16,5 +16,9 @@ config.status
 /src/sqlite/Makefile
 *.aar
 *.idea
+android/gradle
+test/android/gradle
 test/android/gradle/wrapper
 */xcuserdata/*
+*.pc
+*.jar

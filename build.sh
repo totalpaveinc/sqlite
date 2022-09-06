@@ -60,8 +60,9 @@ for build in ${builds[@]}; do
 
     if [ "$build" == "local" ]; then
         CXX="clang++"
+        CFLAGS="${DEFAULT_CFLAGS} ${SQLITE_CFLAGS}"
         ./configure \
-            CFLAGS="${DEFAULT_CFLAGS} ${SQLITE_CFLAGS}" \
+            CFLAGS="${CFLAGS}" \
             --prefix=$prefix \
             --enable-all \
             --enable-static=$buildStatic \
@@ -195,3 +196,5 @@ source _buildAAR.sh
 if [ `uname` == "Darwin" ]; then
     source _buildXCFramework.sh
 fi
+
+source _buildLocalTest.sh
