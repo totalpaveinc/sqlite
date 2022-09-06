@@ -25,10 +25,4 @@ xcodebuild -create-xcframework \
     -headers ./out/ios/arm64/include \
     -library ./out/ios/x86_64/lib/libsqlite3.dylib \
     -headers ./out/ios/x86_64/include \
-    -output ./out/ios/sqlite-debug.xcframework
-
-xcodebuild -create-xcframework \
-    -library ./out/ios/arm64/lib/libsqlite3.dylib \
-    -headers ./out/ios/arm64/include \
-    -output ./out/ios/sqlite-release.xcframework
-
+    -output ./out/ios/sqlite.xcframework

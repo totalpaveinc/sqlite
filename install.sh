@@ -37,7 +37,7 @@ done
 cp android/sqlite3/build/outputs/aar/sqlite3-release.aar bin/android/sqlite3.aar
 
 if [ `uname` == "Darwin" ]; then
-    builds=("ios-arm64" "ios-x86_64")
+    builds=("arm64" "x86_64")
     for build in ${builds[@]}; do
         echo "Installing iOS $build"
         mkdir -p bin/ios/$build
