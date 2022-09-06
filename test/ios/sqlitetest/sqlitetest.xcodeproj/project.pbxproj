@@ -14,23 +14,7 @@
 		CB2DBB8E28C142EF00D56B76 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = CB2DBB8D28C142EF00D56B76 /* Assets.xcassets */; };
 		CB2DBB9128C142EF00D56B76 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = CB2DBB8F28C142EF00D56B76 /* LaunchScreen.storyboard */; };
 		CB2DBB9428C142EF00D56B76 /* main.mm in Sources */ = {isa = PBXBuildFile; fileRef = CB2DBB9328C142EF00D56B76 /* main.mm */; };
-		CB2DBBA028C1465300D56B76 /* sqlite.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = CB2DBB9F28C1465300D56B76 /* sqlite.xcframework */; };
-		CB2DBBA128C1465300D56B76 /* sqlite.xcframework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = CB2DBB9F28C1465300D56B76 /* sqlite.xcframework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
-
-/* Begin PBXCopyFilesBuildPhase section */
-		CB2DBBA228C1465300D56B76 /* Embed Frameworks */ = {
-			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
-			dstPath = "";
-			dstSubfolderSpec = 10;
-			files = (
-				CB2DBBA128C1465300D56B76 /* sqlite.xcframework in Embed Frameworks */,
-			);
-			name = "Embed Frameworks";
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		CB2DBB7E28C142EE00D56B76 /* sqlitetest.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = sqlitetest.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -45,7 +29,6 @@
 		CB2DBB9028C142EF00D56B76 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		CB2DBB9228C142EF00D56B76 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		CB2DBB9328C142EF00D56B76 /* main.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = main.mm; sourceTree = "<group>"; };
-		CB2DBB9F28C1465300D56B76 /* sqlite.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = sqlite.xcframework; path = ../../bin/ios/sqlite.xcframework; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -53,7 +36,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				CB2DBBA028C1465300D56B76 /* sqlite.xcframework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -98,7 +80,6 @@
 		CB2DBB9A28C1433900D56B76 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				CB2DBB9F28C1465300D56B76 /* sqlite.xcframework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -113,7 +94,7 @@
 				CB2DBB7A28C142EE00D56B76 /* Sources */,
 				CB2DBB7B28C142EE00D56B76 /* Frameworks */,
 				CB2DBB7C28C142EE00D56B76 /* Resources */,
-				CB2DBBA228C1465300D56B76 /* Embed Frameworks */,
+				CBDA6F8F28C775820004BD84 /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -168,6 +149,26 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		CBDA6F8F28C775820004BD84 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\nif [[ ${CONFIGURATION} == \"WhiteLabelRelease\" ]]; then\n    rm -R \"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/LightTheme.framework\"\nelif [[ ${CONFIGURATION} == \"Release\" ]]; then\n    rm -R \"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/WhiteLabelTheme.framework\"\nfi\n";
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		CB2DBB7A28C142EE00D56B76 /* Sources */ = {

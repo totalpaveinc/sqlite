@@ -54,20 +54,19 @@ export ANDROID_ARM_CLANG="$ANDROID_ARM_CLANG -isysroot=$ANDROID_SYSROOT"
 export ANDROID_X86_CLANG="$ANDROID_X86_CLANG -isysroot=$ANDROID_SYSROOT"
 export ANDROID_X86_64_CLANG="$ANDROID_X86_64_CLANG -isysroot=$ANDROID_SYSROOT"
 
-#export IOS_SYSROOT="/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk"
-export IOS_ARM64_SYSROOT=`xcrun -sdk iphoneos --show-sdk-path`
-export IOS_X86_64_SYSROOT=`xcrun -sdk iphonesimulator --show-sdk-path`
-export IOS_ARM64_CLANG="clang -isysroot $IOS_ARM64_SYSROOT -arch arm64"
-export IOS_ARM64_CLANGXX="clang++ -isysroot $IOS_ARM64_SYSROOT -arch arm64"
-export IOS_X86_64_CLANG="clang -isysroot $IOS_X86_64_SYSROOT -arch x86_64"
-export IOS_X86_64_CLANGXX="clang++ -isysroot $IOS_X86_64_SYSROOT -arch x86_64"
-export IOS_DEPLOYMENT_TARGET=12
+if [ `uname` == "Darwin" ]; then
+    export IOS_ARM64_SYSROOT=`xcrun -sdk iphoneos --show-sdk-path`
+    export IOS_X86_64_SYSROOT=`xcrun -sdk iphonesimulator --show-sdk-path`
+    export IOS_ARM64_CLANG="clang -isysroot $IOS_ARM64_SYSROOT -arch arm64"
+    export IOS_ARM64_CLANGXX="clang++ -isysroot $IOS_ARM64_SYSROOT -arch arm64"
+    export IOS_X86_64_CLANG="clang -isysroot $IOS_X86_64_SYSROOT -arch x86_64"
+    export IOS_X86_64_CLANGXX="clang++ -isysroot $IOS_X86_64_SYSROOT -arch x86_64"
+    export IOS_DEPLOYMENT_TARGET=12
+fi
 
 export PROJECT_DIR=`pwd`
 export BUILD_LOG="$PROJECT_DIR/build.log"
-
-# We need to resolve the relative path, which idk if this works on macs
-export PREBUILT_DIR="$PROJECT_DIR/out" #`readlink -f ./out`
+export PREBUILT_DIR="$PROJECT_DIR/out"
 
 export PREBUILT_LOCAL=${PREBUILT_DIR}/`uname`
 export PREBUILT_ANDROID_ARM64=${PREBUILT_DIR}/android/arm64-v8a

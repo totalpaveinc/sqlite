@@ -26,11 +26,11 @@ source _init.sh
 
 cd $PROJECT_DIR/src/sqlite
 
-make clean >> $BUILD_LOG 2>&1 # Hide clean errors, they are probably not important (e.g. indicating that there is nothing to clean on fresh repos)
-
 rm -rf out #clean the out directory and recreate the ABI paths
 rm -f $BUILD_LOG
 touch $BUILD_LOG
+
+make clean >> $BUILD_LOG 2>&1
 
 if [ `uname` == "Darwin" ]; then
     mkdir -p out/ios/arm64

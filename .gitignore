@@ -17,4 +17,4 @@ config.status
 *.aar
 *.idea
 test/android/gradle/wrapper
-
+*/xcuserdata/*
