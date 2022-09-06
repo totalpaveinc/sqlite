@@ -111,7 +111,7 @@ for build in ${builds[@]}; do
                 CC="${IOS_ARM64_CLANG}"
                 AR=ar
                 RANLIB=ranlib
-                CFLAGS="${DEFAULT_CFLAGS}"
+                CFLAGS="$DEFAULT_CFLAGS -miphoneos-version-min=${IOS_DEPLOYMENT_TARGET}"
                 CXX="${IOS_ARM64_CLANGXX}"
                 host="arm64"
                 LIB_EXTENSION=$IOS_LIB_EXTENSION
@@ -120,7 +120,7 @@ for build in ${builds[@]}; do
                 CC="${IOS_X86_64_CLANG}"
                 AR=ar
                 RANLIB=ranlib
-                CFLAGS="${DEFAULT_CFLAGS}"
+                CFLAGS="$DEFAULT_CFLAGS -miphonesimulator-version-min=${IOS_DEPLOYMENT_TARGET}"
                 CXX="${IOS_X86_64_CLANGXX}"
                 host="x86_64-apple-darwin"
                 LIB_EXTENSION=$IOS_LIB_EXTENSION
