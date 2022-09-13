@@ -179,6 +179,11 @@ extern "C" {
         return env->NewStringUTF(columnName);
     }
 
+    JNIEXPORT jint JNICALL
+    Java_com_totalpave_sqlite3_Sqlite_columnType(JNIEnv* env, jobject jptr, jlong jstatement, jint index) {
+        return sqlite3_column_type((sqlite3_stmt*)jstatement, (int)index);
+    }
+
     JNIEXPORT jdouble JNICALL
     Java_com_totalpave_sqlite3_Sqlite_getDouble(JNIEnv* env, jobject jptr, jlong jstatement, jint index) {
         return (jdouble)sqlite3_column_double((sqlite3_stmt*)jstatement, (int)index);
