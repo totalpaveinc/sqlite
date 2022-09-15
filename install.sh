@@ -53,3 +53,7 @@ git add *
 git commit -m "Update SQLite Binaries"
 git push
 cd ..
+git add bin
+git commit -m "Published SQLite Binaries"
+git push
+
