@@ -1,6 +1,3 @@
-
-package com.totalpave.sqlite3;
-
 // Copyright 2022 Total Pave Inc.
 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -20,6 +17,8 @@ package com.totalpave.sqlite3;
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
 // IN THE SOFTWARE.
+
+package com.totalpave.sqlite3;
 
 public class Statement {
     public static final int OK              = 0;   /* Successful result */

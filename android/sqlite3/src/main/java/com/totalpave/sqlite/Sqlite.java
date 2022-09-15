@@ -1,6 +1,3 @@
-
-package com.totalpave.sqlite3;
-
 // Copyright 2022 Total Pave Inc.
 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -21,6 +18,7 @@ package com.totalpave.sqlite3;
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
 // IN THE SOFTWARE.
 
+package com.totalpave.sqlite3;
 public class Sqlite {
     static {
         System.loadLibrary("sqlite3");
