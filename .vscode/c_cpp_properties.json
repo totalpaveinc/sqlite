@@ -5,7 +5,8 @@
             "includePath": [
                 "${default}",
                 "${ANDROID_HOME}/ndk/25.0.8775105/toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/include",
-                "${workspaceFolder}/src/sqlite"
+                "${workspaceFolder}/src/sqlite",
+                "${workspaceFolder}/out/include"
             ],
             "defines": [
                 "ANDROID"

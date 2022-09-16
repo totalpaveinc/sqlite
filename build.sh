@@ -19,188 +19,42 @@
 # CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE
 # OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-echo "Building SQLite..."
-source _init.sh
+# buildTargets=("local" "android-armv7a" "android-aarch64" "android-i686" "android-x86_64")
+# if [ `uname` == "Darwin" ]; then
+#     buildTargets+=("ios-arm64" "ios-x86_64")
+# fi
+buildTargets=("local")
 
-./clean.sh
+rootDir=`pwd`
 
-cd $PROJECT_DIR/src/sqlite
-
-rm -rf out #clean the out directory and recreate the ABI paths
-rm -f $BUILD_LOG
-touch $BUILD_LOG
-
-make clean >> $BUILD_LOG 2>&1
-
-if [ `uname` == "Darwin" ]; then
-    mkdir -p out/ios/arm64
-    mkdir -p out/ios/x86_64
+if [ `uname` == "Linux" ]; then
+    buildHost="linux"
+else
+    buildHost="darwin"
 fi
 
-# Bash Arrays aren't exportable which means we need to redeclare this in every library...
-builds=("local" "android-armeabi-v7a" "android-arm64-v8a" "android-x86" "android-x86_64")
-if [ `uname` == "Darwin" ]; then
-    builds+=("ios-arm64" "ios-x86_64")
-fi
+mkdir -p build
 
-DEFAULT_CFLAGS="-fPIC"
-SQLITE_CFLAGS="-DSQLITE_ENABLE_COLUMN_METADATA=1 -DSQLITE_NOHAVE_SYSTEM"
-
-for build in ${builds[@]}; do
-    echo "Building SQLite for $build"
-    echo "Building SQLite for $build" >> $BUILD_LOG 2>&1
-
-    # We do not direct the prefix to the prebuilt directory directly because we don't want any executable binaries or shared documentations
-    # in the repo, we **just** need the include and library binaries.
-    prefix=$PROJECT_DIR/src/sqlite/out/$build
-    mkdir -p $prefix
-
-    buildShared=no
-    buildStatic=yes
-
-    if [ "$build" == "local" ]; then
-        CXX="clang++"
-        CFLAGS="${DEFAULT_CFLAGS} ${SQLITE_CFLAGS}"
-        if [ `uname` == "Darwin" ]; then
-            LIB_EXTENSION="dylib"
-        else
-            LIB_EXTENSION="so"
-        fi
-        ./configure \
-            CFLAGS="${CFLAGS}" \
-            --prefix=$prefix \
-            --enable-all \
-            --enable-static=$buildStatic \
-            --enable-shared=$buildShared \
-            --enable-editline=no \
-            >> $BUILD_LOG 2>&1
+for target in ${buildTargets[@]}; do
+    
+    if [ "$target" == "local" ]; then
+        toolchain="local"
     else
-        case $build in
-            android-armeabi-v7a)
-                CC="${ANDROID_ARM_CLANG}"
-                AR=$ANDROID_TOOLCHAIN_ROOT/bin/llvm-ar
-                RANLIB=$ANDROID_TOOLCHAIN_ROOT/bin/llvm-ranlib
-                CFLAGS="${DEFAULT_CFLAGS} -DANDROID -DANDROID_STL=c++_shared"
-                CXX="${ANDROID_ARM_CLANGXX}"
-                host="arm-linux-android"
-                LIB_EXTENSION=$ANDROID_LIB_EXTENSION
-                ;;
-            android-arm64-v8a)
-                CC="${ANDROID_AARCH64_CLANG}"
-                AR=$ANDROID_TOOLCHAIN_ROOT/bin/llvm-ar
-                RANLIB=$ANDROID_TOOLCHAIN_ROOT/bin/llvm-ranlib
-                CFLAGS="${DEFAULT_CFLAGS} -DANDROID -DANDROID_STL=c++_shared"
-                CXX="${ANDROID_AARCH64_CLANGXX}"
-                host="aarch64-linux-android"
-                LIB_EXTENSION=$ANDROID_LIB_EXTENSION
-                ;;
-            android-x86)
-                CC="${ANDROID_X86_CLANG}"
-                AR=$ANDROID_TOOLCHAIN_ROOT/bin/llvm-ar
-                RANLIB=$ANDROID_TOOLCHAIN_ROOT/bin/llvm-ranlib
-                CFLAGS="${DEFAULT_CFLAGS} -DANDROID -DANDROID_STL=c++_shared"
-                CXX="${ANDROID_X86_CLANGXX}"
-                host="x86-linux-android"
-                LIB_EXTENSION=$ANDROID_LIB_EXTENSION
-                ;;
-            android-x86_64)
-                CC="${ANDROID_X86_64_CLANG}"
-                AR=$ANDROID_TOOLCHAIN_ROOT/bin/llvm-ar
-                RANLIB=$ANDROID_TOOLCHAIN_ROOT/bin/llvm-ranlib
-                CFLAGS="${DEFAULT_CFLAGS} -DANDROID -DANDROID_STL=c++_shared"
-                CXX="${ANDROID_X86_64_CLANGXX}"
-                host="x86_64-linux-android"
-                LIB_EXTENSION=$ANDROID_LIB_EXTENSION
-                ;;
-            ios-arm64)
-                CC="${IOS_ARM64_CLANG}"
-                AR=ar
-                RANLIB=ranlib
-                CFLAGS="$DEFAULT_CFLAGS -miphoneos-version-min=${IOS_DEPLOYMENT_TARGET}"
-                CXX="${IOS_ARM64_CLANGXX}"
-                host="arm64"
-                LIB_EXTENSION=$IOS_LIB_EXTENSION
-                ;;
-            ios-x86_64)
-                CC="${IOS_X86_64_CLANG}"
-                AR=ar
-                RANLIB=ranlib
-                CFLAGS="$DEFAULT_CFLAGS -miphonesimulator-version-min=${IOS_DEPLOYMENT_TARGET}"
-                CXX="${IOS_X86_64_CLANGXX}"
-                host="x86_64-apple-darwin"
-                LIB_EXTENSION=$IOS_LIB_EXTENSION
-                ;;
-        esac
-
-        ./configure \
-            CC="$CC" \
-            AR=$AR \
-            RANLIB=$RANLIB \
-            CFLAGS="${CFLAGS} ${SQLITE_CFLAGS}" \
-            --prefix=$prefix \
-            --enable-all \
-            --enable-static=$buildStatic \
-            --enable-shared=$buildShared \
-            --enable-editline=no \
-            --host=$host \
-            >> $BUILD_LOG 2>&1
+        toolchain="$buildHost-$target"
     fi
 
-    make -j ${CPUCOUNT} >> $BUILD_LOG 2>&1
-    if [ $? -ne 0 ]; then
-        echo "Failed to make SQLite for $build"
-        exit 1
-    fi
-    make install >> $BUILD_LOG 2>&1
-    if [ $? -ne 0 ]; then
-        echo "Failed to intermediate install SQLite for $build"
-        exit 1
-    fi
-
-    cd $PROJECT_DIR/src/totalpave
-    mkdir -p $PROJECT_DIR/src/totalpave/out/$build
-    $CXX $CFLAGS -shared -I$prefix/include -L$prefix/lib -o $PROJECT_DIR/src/totalpave/out/$build/libsqlite3.$LIB_EXTENSION binding.cc -lsqlite3 -pthread -ldl
-    cd $PROJECT_DIR/src/sqlite
-
-    case $build in
-        local)
-            prebuildPath=$PREBUILT_LOCAL
-            ;;
-        android-armeabi-v7a)
-            prebuildPath=$PREBUILT_ANDROID_ARM32
-            ;;
-        android-arm64-v8a)
-            prebuildPath=$PREBUILT_ANDROID_ARM64
-            ;;
-        android-x86)
-            prebuildPath=$PREBUILT_ANDROID_X86
-            ;;
-        android-x86_64)
-            prebuildPath=$PREBUILT_ANDROID_X86_64
-            ;;
-        ios-arm64)
-            prebuildPath=$PREBUILT_IOS_ARM64
-            ;;
-        ios-x86_64)
-            prebuildPath=$PREBUILT_IOS_X86_64
-            ;;
-    esac
-
-    mkdir -p $prebuildPath
-    mkdir -p $prebuildPath/lib
-
-    cp -r $prefix/include $prebuildPath/
-    cp -r $PROJECT_DIR/src/totalpave/out/$build/libsqlite3.$LIB_EXTENSION $prebuildPath/lib/libsqlite3.$LIB_EXTENSION
-
-    make clean >> $BUILD_LOG 2>&1
+    cmake \
+        -DCMAKE_MODULE_PATH="$rootDir/cmake" \
+        -DCMAKE_TOOLCHAIN_FILE=`pwd`/cmake/toolchains/$toolchain.cmake \
+        -B build/$target \
+        .
+    
+    cd build/$target
+    make
+    cd $rootDir
 done
 
-cd $PROJECT_DIR
-
-source _buildAAR.sh
-
+# source _buildAAR.sh
 if [ `uname` == "Darwin" ]; then
     source _buildXCFramework.sh
 fi
-
-source _buildLocalTest.sh

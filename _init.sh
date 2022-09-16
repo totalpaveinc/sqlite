@@ -68,12 +68,15 @@ export PROJECT_DIR=`pwd`
 export BUILD_LOG="$PROJECT_DIR/build.log"
 export PREBUILT_DIR="$PROJECT_DIR/out"
 
+export HEADER_DIR="$PREBUILT_DIR/include"
+
 export PREBUILT_LOCAL=${PREBUILT_DIR}/`uname`
 export PREBUILT_ANDROID_ARM64=${PREBUILT_DIR}/android/arm64-v8a
 export PREBUILT_ANDROID_ARM32=${PREBUILT_DIR}/android/armeabi-v7a
 export PREBUILT_ANDROID_X86=${PREBUILT_DIR}/android/x86
 export PREBUILT_ANDROID_X86_64=${PREBUILT_DIR}/android/x86_64
 
+mkdir -p $HEADER_DIR
 mkdir -p $PREBUILT_LOCAL
 mkdir -p $PREBUILT_ANDROID_ARM64
 mkdir -p $PREBUILT_ANDROID_ARM32

@@ -1,4 +1,3 @@
-
 # Copyright 2022 Total Pave Inc.
 
 # Permission is hereby granted, free of charge, to any person obtaining a copy of this
@@ -18,19 +17,10 @@
 # CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE
 # OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-echo "Building Local Test Application..."
+include(${CMAKE_CURRENT_LIST_DIR}/android-toolchain.cmake)
 
-mkdir -p `pwd`/out/bin/`uname`/
-clang++ \
-    -fPIC \
-    -I`pwd`/out/include \
-    -L`pwd`/out/`uname`/lib \
-    -o `pwd`/out/bin/`uname`/test \
-    -g \
-    -Wall \
-    -rdynamic \
-    `pwd`/test/local/main.cpp \
-    -lsqlite3 \ 
-    -v
-    
-chmod +x `pwd`/out/bin/`uname`/test
+set(CMAKE_ANDROID_ARCH_ABI "arm64-v8a")
+set(BUILD_TARGET ${CMAKE_ANDROID_ARCH_ABI})
+set(CMAKE_C_COMPILER "${ANDROID_TOOLCHAIN_ROOT}/bin/aarch64-linux-android${ANDROID_VERSION}-clang")
+set(CMAKE_CXX_COMPILER "${CMAKE_C_COMPILER}++")
+

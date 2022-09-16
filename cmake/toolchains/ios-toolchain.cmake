@@ -1,0 +1,2 @@
+
+set(CMAKE_MACOSX_RPATH 1)

@@ -8,6 +8,7 @@
 #include <signal.h>
 #include <stdlib.h>
 #include <unistd.h>
+#include <tp/sqlite/utilities.h>
     
 void handler(int sig) {
     void *array[10];
@@ -34,7 +35,7 @@ int insertRow(sqlite3* db, int id, const char* name, double height, const void* 
 
     result = sqlite3_bind_int(
         statement,
-        sqlite3_bind_parameter_index(statement, ":id"),
+        TP::sqlite::lookupVariableIndex(statement, "id"),
         id
     );
     if (result != SQLITE_OK) {
@@ -43,7 +44,7 @@ int insertRow(sqlite3* db, int id, const char* name, double height, const void* 
 
     result = sqlite3_bind_text(
         statement,
-        sqlite3_bind_parameter_index(statement, ":name"),
+        TP::sqlite::lookupVariableIndex(statement, "name"),
         name,
         strlen(name),
         NULL
@@ -54,7 +55,7 @@ int insertRow(sqlite3* db, int id, const char* name, double height, const void* 
 
     result = sqlite3_bind_double(
         statement,
-        sqlite3_bind_parameter_index(statement, ":height"),
+        TP::sqlite::lookupVariableIndex(statement, "height"),
         height
     );
     if (result != SQLITE_OK) {
@@ -63,7 +64,7 @@ int insertRow(sqlite3* db, int id, const char* name, double height, const void* 
 
     result = sqlite3_bind_blob(
         statement,
-        sqlite3_bind_parameter_index(statement, ":data"),
+        TP::sqlite::lookupVariableIndex(statement, "data"),
         data, dataLength, SQLITE_STATIC
     );
     if (result != SQLITE_OK) {
@@ -87,6 +88,8 @@ int main(int argc, char** argv) {
     signal(SIGSEGV, handler);
 
     std::cout << "SQLite Version: " << SQLITE_VERSION << std::endl;
+
+    std::cout << "Test Error Message: " << TP::sqlite::getErrorString(SQLITE_ABORT) << std::endl;
 
     sqlite3* db = NULL;
     int result = 0;

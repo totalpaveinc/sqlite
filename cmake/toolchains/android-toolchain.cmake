@@ -1,4 +1,3 @@
-
 # Copyright 2022 Total Pave Inc.
 
 # Permission is hereby granted, free of charge, to any person obtaining a copy of this
@@ -18,19 +17,29 @@
 # CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE
 # OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-echo "Building Local Test Application..."
+include(${CMAKE_CURRENT_LIST_DIR}/common.cmake)
 
-mkdir -p `pwd`/out/bin/`uname`/
-clang++ \
-    -fPIC \
-    -I`pwd`/out/include \
-    -L`pwd`/out/`uname`/lib \
-    -o `pwd`/out/bin/`uname`/test \
-    -g \
-    -Wall \
-    -rdynamic \
-    `pwd`/test/local/main.cpp \
-    -lsqlite3 \ 
-    -v
-    
-chmod +x `pwd`/out/bin/`uname`/test
+set(NDK_VERSION "25.0.8775105")
+set(ANDROID_VERSION 24)
+# set(CMAKE_SYSTEM_NAME "Android")
+# set(CMAKE_SYSTEM_VERSION 24)
+
+# Despite saying it's the NDK root directory, docs says
+# it must contain the `platforms` folder, which contains the android-<version> folders
+# and that folder is ANDROID_HOME, not the /ndk folder...
+# https://cmake.org/cmake/help/latest/variable/CMAKE_ANDROID_NDK.html#variable:CMAKE_ANDROID_NDK
+# set(CMAKE_ANDROID_NDK "$ENV{ANDROID_HOME}")
+
+set(CMAKE_ANDROID_STL_TYPE "c++_shared")
+
+set(ANDROID_TOOLCHAIN_ROOT "$ENV{ANDROID_HOME}/ndk/${NDK_VERSION}/toolchains/llvm/prebuilt/${BUILD_HOST}-${CMAKE_HOST_SYSTEM_PROCESSOR}")
+set(CMAKE_SYSROOT "${ANDROID_TOOLCHAIN_ROOT}/sysroot")
+# message("TOOLCHAIN: ${ANDROID_TOOLCHAIN_ROOT}")
+# set(CMAKE_ANDROID_STANDALONE_TOOLCHAIN ${ANDROID_TOOLCHAIN_ROOT})
+
+if (NOT EXISTS ${CMAKE_SYSROOT})
+    message(FATAL_ERROR "${CMAKE_SYSROOT} does not exists.")
+endif()
+
+SET(CMAKE_FIND_ROOT_PATH_MODE_PROGRAM NEVER)
+set(BUILD_PLATFORM "android")

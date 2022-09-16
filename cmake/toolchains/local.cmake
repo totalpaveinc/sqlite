@@ -1,4 +1,3 @@
-
 # Copyright 2022 Total Pave Inc.
 
 # Permission is hereby granted, free of charge, to any person obtaining a copy of this
@@ -18,19 +17,12 @@
 # CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE
 # OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-echo "Building Local Test Application..."
+include(${CMAKE_CURRENT_LIST_DIR}/common.cmake)
 
-mkdir -p `pwd`/out/bin/`uname`/
-clang++ \
-    -fPIC \
-    -I`pwd`/out/include \
-    -L`pwd`/out/`uname`/lib \
-    -o `pwd`/out/bin/`uname`/test \
-    -g \
-    -Wall \
-    -rdynamic \
-    `pwd`/test/local/main.cpp \
-    -lsqlite3 \ 
-    -v
-    
-chmod +x `pwd`/out/bin/`uname`/test
+set(BUILD_PLATFORM ${CMAKE_HOST_SYSTEM_PROCESSOR})
+set(BUILD_TARGET "local")
+set(CMAKE_C_COMPILER "clang")
+set(CMAKE_CXX_COMPILER "clang++")
+set(CMAKE_SYSROOT "/")
+set(CMAKE_AR "ar")
+set(CMAKE_RANLIB "ranlib")

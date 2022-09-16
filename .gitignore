@@ -22,3 +22,6 @@ test/android/gradle/wrapper
 */xcuserdata/*
 *.pc
 *.jar
+build
+*.db
+
