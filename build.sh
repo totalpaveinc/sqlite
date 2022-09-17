@@ -19,18 +19,17 @@
 # CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE
 # OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-# buildTargets=("local" "android-armv7a" "android-aarch64" "android-i686" "android-x86_64")
-# if [ `uname` == "Darwin" ]; then
-#     buildTargets+=("ios-arm64" "ios-x86_64")
-# fi
-buildTargets=("local")
+buildTargets=("local" "android-armv7a" "android-aarch64" "android-i686" "android-x86_64")
+if [ `uname` == "Darwin" ]; then
+    buildTargets+=("ios-arm64" "ios-x86_64")
+fi
 
 rootDir=`pwd`
 
 if [ `uname` == "Linux" ]; then
     buildHost="linux"
 else
-    buildHost="darwin"
+    buildHost="mac"
 fi
 
 mkdir -p build
@@ -47,6 +46,7 @@ for target in ${buildTargets[@]}; do
         -DCMAKE_MODULE_PATH="$rootDir/cmake" \
         -DCMAKE_TOOLCHAIN_FILE=`pwd`/cmake/toolchains/$toolchain.cmake \
         -B build/$target \
+        -G"Unix Makefiles" \
         .
     
     cd build/$target
