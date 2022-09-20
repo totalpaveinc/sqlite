@@ -54,7 +54,7 @@ for target in ${buildTargets[@]}; do
     cd $rootDir
 done
 
-# source _buildAAR.sh
+source _buildAAR.sh
 if [ `uname` == "Darwin" ]; then
     source _buildXCFramework.sh
 fi
