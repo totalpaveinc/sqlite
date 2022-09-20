@@ -187,38 +187,40 @@ extern "C" {
         return sqlite3_column_type((sqlite3_stmt*)jstatement, (int)index);
     }
 
-    JNIEXPORT jobject JNICALL
+    JNIEXPORT jdouble JNICALL
     Java_com_totalpave_sqlite3_Sqlite_getDouble(JNIEnv* env, jobject jptr, jlong jstatement, jint jindex) {
-        // return (jdouble)sqlite3_column_double((sqlite3_stmt*)jstatement, (int)index);
-        sqlite3_stmt* stmt = (sqlite3_stmt*)jstatement;
-        int index = (int)jindex;
-        jobject retval;
-        if (sqlite3_column_type(stmt, index) == SQLITE_NULL) {
-            retval = NULL;
-        }
-        else {
-            jclass intClass = env->FindClass("java/lang/Double");
-            jmethodID constructor = env->GetMethodID(intClass, "<init>", "(D)V"); // (ParameterTypes)Return Type
-            retval = env->NewObject(intClass, constructor, sqlite3_column_double(stmt, index));
-        }
-        return retval;
+        return (jdouble)sqlite3_column_double((sqlite3_stmt*)jstatement, (int)jindex);
+        // sqlite3_stmt* stmt = (sqlite3_stmt*)jstatement;
+        // int index = (int)jindex;
+        // jobject retval;
+        // if (sqlite3_column_type(stmt, index) == SQLITE_NULL) {
+        //     retval = NULL;
+        // }
+        // else {
+        //     jclass intClass = env->FindClass("java/lang/Double");
+        //     jmethodID constructor = env->GetMethodID(intClass, "<init>", "(D)V"); // (ParameterTypes)Return Type
+        //     double value = sqlite3_column_double(stmt, index);
+        //     retval = env->NewObject(intClass, constructor, value);
+        // }
+        // return retval;
     }
 
-    JNIEXPORT jobject JNICALL
+    JNIEXPORT jint JNICALL
     Java_com_totalpave_sqlite3_Sqlite_getInt(JNIEnv* env, jobject jptr, jlong jstatement, jint jindex) {
-        sqlite3_stmt* stmt = (sqlite3_stmt*)jstatement;
-        int index = (int)jindex;
-        jobject retval;
-        if (sqlite3_column_type(stmt, index) == SQLITE_NULL) {
-            retval = NULL;
-        }
-        else {
-            jclass intClass = env->FindClass("java/lang/Integer");
-            jmethodID constructor = env->GetMethodID(intClass, "<init>", "(I)V");
-            retval = env->NewObject(intClass, constructor, sqlite3_column_int(stmt, index));
-        }
-        return retval;
-        // return (jint)sqlite3_column_int((sqlite3_stmt*)jstatement, (int)index);
+        // sqlite3_stmt* stmt = (sqlite3_stmt*)jstatement;
+        // int index = (int)jindex;
+        // jobject retval;
+        // if (sqlite3_column_type(stmt, index) == SQLITE_NULL) {
+        //     retval = NULL;
+        // }
+        // else {
+        //     jclass intClass = env->FindClass("java/lang/Integer");
+        //     jmethodID constructor = env->GetMethodID(intClass, "<init>", "(I)V");
+        //     int value = sqlite3_column_int(stmt, index);
+        //     retval = env->NewObject(intClass, constructor, value);
+        // }
+        // return retval;
+        return (jint)sqlite3_column_int((sqlite3_stmt*)jstatement, (int)jindex);
     }
 
     JNIEXPORT jstring JNICALL
