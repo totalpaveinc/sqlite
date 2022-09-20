@@ -60,7 +60,8 @@ extern "C" {
         const char* path = env->GetStringUTFChars(jpath, &isCopy);
         int resultCode = sqlite3_open_v2(path, &db, (int)jflags, nullptr);
         if (resultCode != SQLITE_OK) {
-            return throwRuntimeException(env, "Could not open SQLite Database.");
+            std::string error = TP::sqlite::getErrorString(resultCode);
+            return throwRuntimeException(env, error.c_str());
         }
 
         return (jlong)db;
@@ -75,7 +76,8 @@ extern "C" {
         sqlite3_stmt* statement;
         int returnCode = sqlite3_prepare_v2(db, sql, strlen(sql), &statement, 0);
         if (returnCode != SQLITE_OK) {
-            return throwRuntimeException(env, "Could not parse SQL.");
+            std::string error = TP::sqlite::getErrorString(returnCode);
+            return throwRuntimeException(env, error.c_str());
         }
 
         return (jlong)statement;
