@@ -85,6 +85,12 @@
         "future": "cpp",
         "typeindex": "cpp",
         "valarray": "cpp",
-        "variant": "cpp"
+        "variant": "cpp",
+        "any": "cpp",
+        "compare": "cpp",
+        "concepts": "cpp",
+        "semaphore": "cpp",
+        "numbers": "cpp",
+        "stop_token": "cpp"
     }
 }
