@@ -35,3 +35,5 @@ endif()
 
 SET(CMAKE_FIND_ROOT_PATH_MODE_PROGRAM NEVER)
 set(BUILD_PLATFORM "android")
+
+add_compile_definitions("ANDROID")
