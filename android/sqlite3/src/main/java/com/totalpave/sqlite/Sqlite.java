@@ -62,8 +62,8 @@ public class Sqlite {
     public static native String columnName(long statement, int index);
     public static native int columnType(long statement, int index);
 
-    public static native Double getDouble(long statement, int index);
-    public static native Integer getInt(long statement, int index);
+    public static native double getDouble(long statement, int index);
+    public static native int getInt(long statement, int index);
     public static native String getString(long statement, int index);
     public static native byte[] getBlob(long statement, int index);
 
