@@ -26,3 +26,5 @@ set(CMAKE_CXX_COMPILER "clang++")
 set(CMAKE_SYSROOT "/")
 set(CMAKE_AR "ar")
 set(CMAKE_RANLIB "ranlib")
+
+add_compile_definitions("TP_LOCAL")
