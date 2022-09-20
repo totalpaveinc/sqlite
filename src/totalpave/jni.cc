@@ -60,7 +60,9 @@ extern "C" {
         const char* path = env->GetStringUTFChars(jpath, &isCopy);
         int resultCode = sqlite3_open_v2(path, &db, (int)jflags, nullptr);
         if (resultCode != SQLITE_OK) {
+            std::string cxxPath = path;
             std::string error = TP::sqlite::getErrorString(resultCode);
+            error += " (" + cxxPath + ")";
             return throwRuntimeException(env, error.c_str());
         }
 
