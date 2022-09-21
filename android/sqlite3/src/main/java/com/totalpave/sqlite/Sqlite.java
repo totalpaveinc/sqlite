@@ -52,10 +52,11 @@ public class Sqlite {
      */
     public static native long prepare(long db, String sql);
 
-    public static native int bindDouble(long statement, String varName, Double value);
+    public static native int bindDouble(long statement, String varName, double value);
     public static native int bindString(long statement, String varName, String value);
-    public static native int bindInt(long statement, String varName, Integer value);
+    public static native int bindInt(long statement, String varName, int value);
     public static native int bindBlob(long statement, String varName, byte[] value);
+    public static native int bindNull(long statement, String varName);
     
     public static native int step(long statement);
     public static native int columnCount(long statement);

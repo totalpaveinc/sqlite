@@ -91,6 +91,21 @@ extern "C" {
     }
 
     JNIEXPORT jint JNICALL
+    Java_com_totalpave_sqlite3_Sqlite_bindNull(JNIEnv* env, jobject jptr, jlong jstatement, jstring jVarName) {
+        sqlite3_stmt* statement = (sqlite3_stmt*)jstatement;
+        jboolean isCopy;
+        const char* varName = env->GetStringUTFChars(jVarName, &isCopy);
+        int index = TP::sqlite::lookupVariableIndex(statement, varName);
+        if (index == 0) {
+            std::string pname = varName;
+            std::string message = "Could not bind parameter \"" + pname + "\"";
+            return throwRuntimeException(env, message.c_str());
+        }
+
+        return sqlite3_bind_null(statement, index);
+    }
+
+    JNIEXPORT jint JNICALL
     Java_com_totalpave_sqlite3_Sqlite_bindDouble(JNIEnv* env, jobject jptr, jlong jstatement, jstring jVarName, jdouble value) {
         sqlite3_stmt* statement = (sqlite3_stmt*)jstatement;
         jboolean isCopy;
