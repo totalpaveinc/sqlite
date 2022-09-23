@@ -81,7 +81,6 @@ else()
     if ("${CMAKE_SYSTEM_NAME}" STREQUAL "iOS")
         set(LIB_EXT "dylib")
     endif()
-    message("ajdsbajlhdfhkjsdn ${BUILD_PLATFORM} ${BUILD_TARGET}")
     add_custom_command(TARGET sqlite3 POST_BUILD
         COMMAND "${CMAKE_COMMAND}" -E copy
         ${CMAKE_BINARY_DIR}/libsqlite3.${LIB_EXT} ${CMAKE_SOURCE_DIR}/out/${BUILD_PLATFORM}/${BUILD_TARGET}/libsqlite3.${LIB_EXT}

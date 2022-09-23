@@ -21,6 +21,6 @@ include(${CMAKE_CURRENT_LIST_DIR}/common.cmake)
 
 set(NDK_VERSION "25.0.8775105")
 set(ANDROID_USE_LEGACY_TOOLCHAIN_FILE NO)
-
+set(BUILD_PLATFORM "android")
 set(ANDROID_PLATFORM 24)
 include($ENV{ANDROID_HOME}/ndk/${NDK_VERSION}/build/cmake/android.toolchain.cmake)
