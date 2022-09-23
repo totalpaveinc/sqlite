@@ -23,8 +23,6 @@ buildTargets=("local" "android-armv7a" "android-aarch64" "android-i686" "android
 if [ `uname` == "Darwin" ]; then
     buildTargets+=("ios-arm64" "ios-x86_64")
 fi
-# buildTargets=("local" "android-aarch64")
-# buildTargets=("local" "ios-arm64" "ios-x86_64")
 
 rootDir=`pwd`
 
