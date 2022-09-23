@@ -19,9 +19,9 @@
 
 include(${CMAKE_CURRENT_LIST_DIR}/ios-toolchain.cmake)
 
-execute_process(COMMAND xcrun -sdk iphonesimulator --show-sdk-path OUTPUT_VARIABLE CMAKE_SYSROOT)
+execute_process(COMMAND xcrun -sdk iphonesimulator --show-sdk-path OUTPUT_VARIABLE CMAKE_SYSROOT OUTPUT_STRIP_TRAILING_WHITESPACE ERROR_STRIP_TRAILING_WHITESPACE)
+set(CMAKE_OSX_SYSROOT ${CMAKE_SYSROOT})
 
-set(CMAKE_C_COMPILER "clang")
-set(CMAKE_CXX_COMPILER "${CMAKE_C_COMPILER}++")
-set(CMAKE_C_FLAGS "-arch x86_64")
+set(CMAKE_C_FLAGS "-isysroot ${CMAKE_SYSROOT} -arch x86_64")
 set(CMAKE_CXX_FLAGS ${CMAKE_C_FLAGS})
+set(BUILD_TARGET "x86_64")

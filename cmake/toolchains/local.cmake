@@ -23,8 +23,16 @@ set(BUILD_PLATFORM ${CMAKE_HOST_SYSTEM_PROCESSOR})
 set(BUILD_TARGET "local")
 set(CMAKE_C_COMPILER "clang")
 set(CMAKE_CXX_COMPILER "clang++")
-set(CMAKE_SYSROOT "/")
+
+if (NOT "${CMAKE_HOST_SYSTEM_NAME}" STREQUAL "Darwin")
+    # set(CMAKE_SYSROOT "/")
+    # execute_process(COMMAND xcrun --show-sdk-path OUTPUT_VARIABLE CMAKE_SYSROOT)
+else()
+    # set(CMAKE_SYSROOT "/")
+endif()
 set(CMAKE_AR "ar")
 set(CMAKE_RANLIB "ranlib")
+
+# message("SYSROOT: ${CMAKE_SYSROOT}")
 
 add_compile_definitions("TP_LOCAL")

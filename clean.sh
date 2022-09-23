@@ -8,6 +8,7 @@ rm -rf ./android/sqlite3/gradle
 rm -rf ./src/sqlite/out
 rm -rf ./src/sqlite/.libs
 rm -rf ./src/sqlite/.deps
+rm -rf ./build
 
 # if [ `uname` == "Darwin" ]; then
 #     # TODO clean iOS stuff

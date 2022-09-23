@@ -20,9 +20,10 @@
 
 # Note xcodebuild -create-xcframework doesn't overwrite xcframework files.
 
+rm -rf ./out/ios/sqlite.xcframework
 xcodebuild -create-xcframework \
-    -library ./out/ios/arm64/lib/libsqlite3.dylib \
-    -headers ./out/ios/arm64/include \
-    -library ./out/ios/x86_64/lib/libsqlite3.dylib \
-    -headers ./out/ios/x86_64/include \
+    -library ./out/ios/arm64/libsqlite3.dylib \
+    -headers ./out/include \
+    -library ./out/ios/x86_64/libsqlite3.dylib \
+    -headers ./out/include \
     -output ./out/ios/sqlite.xcframework

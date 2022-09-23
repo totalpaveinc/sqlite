@@ -19,7 +19,7 @@
 
 project(
     sqlite3
-    LANGUAGES C CXX
+    # LANGUAGES C CXX
 )
 
 cmake_minimum_required(VERSION 3.22)
@@ -42,7 +42,7 @@ add_library(sqlite3 SHARED
 target_link_libraries(sqlite3
     PUBLIC sqlite-intermediate
     "-Wl"
-    "--no-undefined"
+    # "--no-undefined" # Doesn't compile on AppleClang
 )
 target_include_directories(sqlite3 PUBLIC ./out/include)
 target_compile_options(sqlite3 PUBLIC "-Wall")
@@ -67,16 +67,25 @@ add_custom_command(TARGET sqlite-intermediate POST_BUILD
 )
 
 if ("${BUILD_TARGET}" STREQUAL "local")
+    set(LIB_EXT "so")
+    if ("${CMAKE_HOST_SYSTEM_NAME}" STREQUAL "Darwin")
+        set(LIB_EXT "dylib")
+    endif()
     add_custom_command(TARGET sqlite3 POST_BUILD
         COMMAND "${CMAKE_COMMAND}" -E copy
-        ${CMAKE_BINARY_DIR}/libsqlite3.so ${CMAKE_SOURCE_DIR}/out/${CMAKE_HOST_SYSTEM_NAME}/libsqlite3.so
-        COMMENT "Installing ${BUILD_PLATFORM}/${BUILD_TARGET} libsqlite3.so"
+        ${CMAKE_BINARY_DIR}/libsqlite3.${LIB_EXT} ${CMAKE_SOURCE_DIR}/out/${CMAKE_HOST_SYSTEM_NAME}/libsqlite3.${LIB_EXT}
+        COMMENT "Installing ${BUILD_PLATFORM}/${BUILD_TARGET} libsqlite3.${LIB_EXT}"
     )
 else()
+    set(LIB_EXT "so")
+    if ("${CMAKE_SYSTEM_NAME}" STREQUAL "iOS")
+        set(LIB_EXT "dylib")
+    endif()
+    message("ajdsbajlhdfhkjsdn ${BUILD_PLATFORM} ${BUILD_TARGET}")
     add_custom_command(TARGET sqlite3 POST_BUILD
         COMMAND "${CMAKE_COMMAND}" -E copy
-        ${CMAKE_BINARY_DIR}/libsqlite3.so ${CMAKE_SOURCE_DIR}/out/${BUILD_PLATFORM}/${BUILD_TARGET}/libsqlite3.so
-        COMMENT "Installing ${BUILD_PLATFORM}/${BUILD_TARGET} libsqlite3.so"
+        ${CMAKE_BINARY_DIR}/libsqlite3.${LIB_EXT} ${CMAKE_SOURCE_DIR}/out/${BUILD_PLATFORM}/${BUILD_TARGET}/libsqlite3.${LIB_EXT}
+        COMMENT "Installing ${BUILD_PLATFORM}/${BUILD_TARGET} libsqlite3.${LIB_EXT}"
     )
 endif()
 
@@ -86,7 +95,7 @@ if ("${BUILD_TARGET}" STREQUAL "local")
     target_link_libraries(test
         PUBLIC sqlite3
         "-Wl"
-        "--no-undefined"
+        # "--no-undefined" # Doesn't exist for apple clang
     )
     # target_compile_options(test
     #     PUBLIC "-g"
