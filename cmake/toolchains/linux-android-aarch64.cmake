@@ -17,10 +17,7 @@
 # CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE
 # OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-include(${CMAKE_CURRENT_LIST_DIR}/android-toolchain.cmake)
-
 set(CMAKE_ANDROID_ARCH_ABI "arm64-v8a")
+include(${CMAKE_CURRENT_LIST_DIR}/android-toolchain.cmake)
+include_directories(${CMAKE_SYSROOT}/usr/include/aarch64-linux-android)
 set(BUILD_TARGET ${CMAKE_ANDROID_ARCH_ABI})
-set(CMAKE_C_COMPILER "${ANDROID_TOOLCHAIN_ROOT}/bin/aarch64-linux-android${ANDROID_VERSION}-clang")
-set(CMAKE_CXX_COMPILER "${CMAKE_C_COMPILER}++")
-

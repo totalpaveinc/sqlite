@@ -20,20 +20,7 @@
 include(${CMAKE_CURRENT_LIST_DIR}/common.cmake)
 
 set(NDK_VERSION "25.0.8775105")
-set(ANDROID_VERSION 24)
+set(ANDROID_USE_LEGACY_TOOLCHAIN_FILE NO)
 
-set(CMAKE_ANDROID_STL_TYPE "c++_shared")
-
-set(ANDROID_TOOLCHAIN_ROOT "$ENV{ANDROID_HOME}/ndk/${NDK_VERSION}/toolchains/llvm/prebuilt/${BUILD_HOST}-${CMAKE_HOST_SYSTEM_PROCESSOR}")
-set(CMAKE_SYSROOT "${ANDROID_TOOLCHAIN_ROOT}/sysroot")
-set(CMAKE_AR "${ANDROID_TOOLCHAIN_ROOT}/bin/llvm-ar")
-set(CMAKE_RANLIB "${ANDROID_TOOLCHAIN_ROOT}/bin/llvm-ranlib")
-
-if (NOT EXISTS ${CMAKE_SYSROOT})
-    message(FATAL_ERROR "${CMAKE_SYSROOT} does not exists.")
-endif()
-
-SET(CMAKE_FIND_ROOT_PATH_MODE_PROGRAM NEVER)
-set(BUILD_PLATFORM "android")
-
-add_compile_definitions("ANDROID")
+set(ANDROID_PLATFORM 24)
+include($ENV{ANDROID_HOME}/ndk/${NDK_VERSION}/build/cmake/android.toolchain.cmake)
