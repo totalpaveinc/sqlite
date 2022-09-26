@@ -44,7 +44,7 @@ if [ `uname` == "Darwin" ]; then
         cp out/ios/$build/libsqlite3.dylib bin/ios/$build/libsqlite3.dylib
     done
 
-    cp -r out/ios/sqlite.xcframework bin/ios/sqlite.xcframework
+    cp -r out/ios/sqlite3.xcframework bin/ios/
 fi
 
 cd bin
