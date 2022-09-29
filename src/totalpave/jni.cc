@@ -33,22 +33,21 @@
 // to hopefully make sense of the,
 
 extern "C" {
-
     jint throwNoClassDefError(JNIEnv *env, const char* message ) {
         jclass exClass;
         const char *className = "java/lang/NoClassDefFoundError";
 
         exClass = env->FindClass(className);
         if (exClass == NULL) {
-            return throwNoClassDefError(env, className );
+            throw std::runtime_error("Could not find java/lang/NoClassDefFoundError.");
         }
 
         return env->ThrowNew(exClass, message);
     }
 
-    jint throwRuntimeException(JNIEnv *env, const char* message) {
+    jint throwException(JNIEnv *env, const char* message) {
         jclass exClass;
-        const char* className = "java/lang/RuntimeException" ;
+        const char* className = "java/lang/Exception" ;
 
         exClass = env->FindClass(className);
         if (exClass == NULL) {
@@ -68,7 +67,7 @@ extern "C" {
             std::string cxxPath = path;
             std::string error = TP::sqlite::getErrorString(resultCode);
             error += " (" + cxxPath + ")";
-            return throwRuntimeException(env, error.c_str());
+            return throwException(env, error.c_str());
         }
 
         return (jlong)db;
@@ -84,7 +83,7 @@ extern "C" {
         int returnCode = sqlite3_prepare_v2(db, sql, strlen(sql), &statement, 0);
         if (returnCode != SQLITE_OK) {
             std::string error = TP::sqlite::getErrorString(returnCode);
-            return throwRuntimeException(env, error.c_str());
+            return throwException(env, error.c_str());
         }
 
         return (jlong)statement;
@@ -99,7 +98,7 @@ extern "C" {
         if (index == 0) {
             std::string pname = varName;
             std::string message = "Could not bind parameter \"" + pname + "\"";
-            return throwRuntimeException(env, message.c_str());
+            return throwException(env, message.c_str());
         }
 
         return sqlite3_bind_null(statement, index);
@@ -114,7 +113,7 @@ extern "C" {
         if (index == 0) {
             std::string pname = varName;
             std::string message = "Could not bind parameter \"" + pname + "\"";
-            return throwRuntimeException(env, message.c_str());
+            return throwException(env, message.c_str());
         }
 
         return sqlite3_bind_double(statement, index, (double)value);
@@ -129,7 +128,7 @@ extern "C" {
         if (index == 0) {
             std::string pname = varName;
             std::string message = "Could not bind parameter \"" + pname + "\"";
-            return throwRuntimeException(env, message.c_str());
+            return throwException(env, message.c_str());
         }
 
         const char* value = env->GetStringUTFChars(jvalue, &isCopy);
@@ -146,7 +145,7 @@ extern "C" {
         if (index == 0) {
             std::string pname = varName;
             std::string message = "Could not bind parameter \"" + pname + "\"";
-            return throwRuntimeException(env, message.c_str());
+            return throwException(env, message.c_str());
         }
 
         return sqlite3_bind_int(statement, index, (int)value);
@@ -161,7 +160,7 @@ extern "C" {
         if (index == 0) {
             std::string pname = varName;
             std::string message = "Could not bind parameter \"" + pname + "\"";
-            return throwRuntimeException(env, message.c_str());
+            return throwException(env, message.c_str());
         }
 
         int result;
