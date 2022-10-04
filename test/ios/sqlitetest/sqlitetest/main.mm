@@ -21,26 +21,26 @@ int main(int argc, char * argv[]) {
     
     NSString* location = [NSSearchPathForDirectoriesInDomains(NSLibraryDirectory, NSUserDomainMask, YES) objectAtIndex: 0];
     location = [location stringByAppendingPathComponent:@"nosync"];
-    NSLog(@"%@", location);
+    NSLog(@"Location (%@)", location);
     if (![[NSFileManager defaultManager] fileExistsAtPath: location])
     {
         NSError* error;
         if([[NSFileManager defaultManager] createDirectoryAtPath: location withIntermediateDirectories:NO attributes: nil error:&error]) {
-            printf("bob");
+            NSLog(@"bob");
         }
         else {
-            printf("not bob");
-            NSLog(@"%@",[error localizedDescription]);
+            NSLog(@"not bob");
+            NSLog(@"Error: %@",[error localizedDescription]);
         }
     }
     
-    printf("Version: %s:", SQLITE_VERSION);
+    printf("\nVersion: %s:", SQLITE_VERSION);
     sqlite3* db;
     // Prepare full path
     location = [location stringByAppendingPathComponent:@"bob"];
     location = [location stringByAppendingPathExtension:@"db"];
-    printf("%s ", [location UTF8String]);
-    printf("open %d ", sqlite3_open_v2([location UTF8String], &db, SQLITE_OPEN_CREATE | SQLITE_OPEN_READWRITE | SQLITE_OPEN_URI, NULL));
+    printf("\nLocation (%s) ", [location UTF8String]);
+    printf("\nopen %d ", sqlite3_open_v2([location UTF8String], &db, SQLITE_OPEN_CREATE | SQLITE_OPEN_READWRITE | SQLITE_OPEN_URI, NULL));
     sqlite3_stmt* query;
     sqlite3_stmt* querya;
     sqlite3_stmt* queryb;
@@ -49,7 +49,7 @@ int main(int argc, char * argv[]) {
     
     const char* qstr = "CREATE TABLE IF NOT EXISTS test ( id INTEGER NOT NULL, name TEXT NOT NULL, height REAL, data BLOB)";
     sqlite3_prepare_v2(db, qstr, strlen(qstr), &query, NULL);
-    printf("create %d ", sqlite3_step(query));
+    printf("\ncreate %d ", sqlite3_step(query));
     sqlite3_finalize(query);
     
     const char* that = "INSERT INTO test VALUES (:id, :name, :height, :data)";
@@ -63,7 +63,7 @@ int main(int argc, char * argv[]) {
     index = sqlite3_bind_parameter_index(querya, ":data");
     sqlite3_bind_blob(querya, index, NULL, 0, NULL);
     
-    printf("insert %d ", sqlite3_step(querya));
+    printf("\ninsert %d ", sqlite3_step(querya));
     sqlite3_finalize(querya);
 
     const char* notthat = "SELECT * FROM test;";
@@ -86,7 +86,7 @@ int main(int argc, char * argv[]) {
         //error
     }
 
-    printf("select %d ", code);
+    printf("\nselect %d ", code);
     sqlite3_finalize(queryb);
 
     sqlite3_close(db);

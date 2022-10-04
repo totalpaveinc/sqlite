@@ -14,7 +14,23 @@
 		CB2DBB8E28C142EF00D56B76 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = CB2DBB8D28C142EF00D56B76 /* Assets.xcassets */; };
 		CB2DBB9128C142EF00D56B76 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = CB2DBB8F28C142EF00D56B76 /* LaunchScreen.storyboard */; };
 		CB2DBB9428C142EF00D56B76 /* main.mm in Sources */ = {isa = PBXBuildFile; fileRef = CB2DBB9328C142EF00D56B76 /* main.mm */; };
+		CBF7BE0B28EC867D00D5935D /* sqlite3.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = CBF7BE0A28EC867D00D5935D /* sqlite3.xcframework */; };
+		CBF7BE0C28EC867D00D5935D /* sqlite3.xcframework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = CBF7BE0A28EC867D00D5935D /* sqlite3.xcframework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		CBF7BE0D28EC867D00D5935D /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				CBF7BE0C28EC867D00D5935D /* sqlite3.xcframework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		CB2DBB7E28C142EE00D56B76 /* sqlitetest.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = sqlitetest.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -29,6 +45,7 @@
 		CB2DBB9028C142EF00D56B76 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		CB2DBB9228C142EF00D56B76 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		CB2DBB9328C142EF00D56B76 /* main.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = main.mm; sourceTree = "<group>"; };
+		CBF7BE0A28EC867D00D5935D /* sqlite3.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = sqlite3.xcframework; path = ../../../out/ios/sqlite3.xcframework; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -36,6 +53,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				CBF7BE0B28EC867D00D5935D /* sqlite3.xcframework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -80,6 +98,7 @@
 		CB2DBB9A28C1433900D56B76 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				CBF7BE0A28EC867D00D5935D /* sqlite3.xcframework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -95,6 +114,7 @@
 				CB2DBB7B28C142EE00D56B76 /* Frameworks */,
 				CB2DBB7C28C142EE00D56B76 /* Resources */,
 				CBDA6F8F28C775820004BD84 /* ShellScript */,
+				CBF7BE0D28EC867D00D5935D /* Embed Frameworks */,
 			);
 			buildRules = (
 			);

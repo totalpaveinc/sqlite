@@ -40,6 +40,7 @@ gradle wrapper
 
 mkdir -p ../test/android/app/libs
 cp sqlite3/build/outputs/aar/sqlite3-debug.aar ../test/android/app/libs/sqlite3-debug.aar
+cp ../third_party/libcxx/libcxx-25.0.8775105.aar ../test/android/app/libs/libcxx-25.0.8775105.aar
 
 cp sqlite3/build/outputs/aar/sqlite3-debug.aar ../out/android/
 cp sqlite3/build/outputs/aar/sqlite3-release.aar ../out/android/
