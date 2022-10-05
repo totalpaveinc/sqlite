@@ -59,7 +59,7 @@ public class Sqlite {
     public static native int bindBlob(long statement, String varName, byte[] value) throws SqliteException;
     public static native int bindNull(long statement, String varName) throws SqliteException;
     
-    public static native int step(long statement);
+    public static native int step(long statement) throws SqliteException;
     public static native int columnCount(long statement);
     public static native String columnName(long statement, int index);
     public static native int columnType(long statement, int index);

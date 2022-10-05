@@ -89,6 +89,13 @@ int main(int argc, char * argv[]) {
     printf("\nselect %d ", code);
     sqlite3_finalize(queryb);
 
+
+    const char* test = "SELECT * FROM test;";
+    sqlite3_prepare_v2(db, notthat, strlen(test), &queryb, NULL);
+    sqlite3_finalize(queryb);
+    int a = sqlite3_step(queryb);
+
+
     sqlite3_close(db);
 
     return UIApplicationMain(argc, argv, nil, appDelegateClassName);

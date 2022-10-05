@@ -23,6 +23,8 @@
 #include <sqlite3.h>
 
 namespace TP { namespace sqlite {
+    // https://www.sqlite.org/c3ref/bind_blob.html
+    // When the same named SQL parameter is used more than once, second and subsequent occurrences have the same index as the first occurrence.
     int lookupVariableIndex(sqlite3_stmt* statement, const char* variable) {
         std::string strVar = variable;
         std::string boundVarName = ":" + strVar;
