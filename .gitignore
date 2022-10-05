@@ -24,3 +24,4 @@ test/android/gradle/wrapper
 build
 *.db
 test/ios/sqlitetest/sqlitetest.xcodeproj/project.xcworkspace/xcuserdata/
+android/local.properties
