@@ -89,8 +89,6 @@ int main(int argc, char** argv) {
 
     std::cout << "SQLite Version: " << SQLITE_VERSION << std::endl;
 
-    std::cout << "Test Error Message: " << TP::sqlite::getErrorString(SQLITE_ABORT) << std::endl;
-
     sqlite3* db = NULL;
     int result = 0;
     result = sqlite3_open_v2("./test.db", &db, SQLITE_OPEN_CREATE | SQLITE_OPEN_READWRITE, NULL);

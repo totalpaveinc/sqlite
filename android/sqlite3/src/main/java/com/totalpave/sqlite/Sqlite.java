@@ -21,8 +21,6 @@
 
 package com.totalpave.sqlite3;
 
-import java.lang.Exception;
-
 public class Sqlite {
     static {
         System.loadLibrary("sqlite3");
@@ -46,22 +44,22 @@ public class Sqlite {
      * @param openFlags
      * @return Pointer to Database handler
      */
-    public static native long open(String path, int openFlags) throws Exception;
+    public static native long open(String path, int openFlags) throws SqliteException;
 
     /**
      * @param db
      * @param sql
      * @return Pointer to statement handler
      */
-    public static native long prepare(long db, String sql) throws Exception;
+    public static native long prepare(long db, String sql) throws SqliteException;
 
-    public static native int bindDouble(long statement, String varName, double value) throws Exception;
-    public static native int bindString(long statement, String varName, String value) throws Exception;
-    public static native int bindInt(long statement, String varName, int value) throws Exception;
-    public static native int bindBlob(long statement, String varName, byte[] value) throws Exception;
-    public static native int bindNull(long statement, String varName) throws Exception;
+    public static native int bindDouble(long statement, String varName, double value) throws SqliteException;
+    public static native int bindString(long statement, String varName, String value) throws SqliteException;
+    public static native int bindInt(long statement, String varName, int value) throws SqliteException;
+    public static native int bindBlob(long statement, String varName, byte[] value) throws SqliteException;
+    public static native int bindNull(long statement, String varName) throws SqliteException;
     
-    public static native int step(long statement);
+    public static native int step(long statement) throws SqliteException;
     public static native int columnCount(long statement);
     public static native String columnName(long statement, int index);
     public static native int columnType(long statement, int index);

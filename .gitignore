@@ -19,9 +19,10 @@ config.status
 android/gradle
 test/android/gradle
 test/android/gradle/wrapper
-*/xcuserdata/*
 *.pc
 *.jar
 build
 *.db
-
+test/ios/sqlitetest/sqlitetest.xcodeproj/project.xcworkspace/xcuserdata/
+test/ios/sqlitetest/sqlitetest.xcodeproj/xcuserdata/
+android/local.properties

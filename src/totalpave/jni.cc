@@ -19,42 +19,54 @@
     OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
+#ifdef ANDROID
 #include <sqlite3.h>
 #include <cstring>
 #include <string>
+#include <map>
 #include <tp/sqlite/utilities.h>
-
-#ifdef ANDROID
 #include <jni.h>
 
-// We sometimes construct and invoke java methods using GetMethodID, which contains
-// some cryptic strings for declaring the signature of the method.
-// Refer to https://docs.oracle.com/javase/7/docs/technotes/guides/jni/spec/types.html
-// to hopefully make sense of the,
-
 extern "C" {
-    jint throwNoClassDefError(JNIEnv *env, const char* message ) {
-        jclass exClass;
-        const char *className = "java/lang/NoClassDefFoundError";
-
-        exClass = env->FindClass(className);
-        if (exClass == NULL) {
-            throw std::runtime_error("Could not find java/lang/NoClassDefFoundError.");
-        }
-
-        return env->ThrowNew(exClass, message);
+    // We do not support the details object from here because of the complexities.
+    // The details object is an key-value pair object of arbitrary values - We don't know what is it in.
+    // In addition, java is very type strict. add(string, string), add(string, double), add(string, int), add(string, bool).
+    // We would have to do a lot of type checking and write a considerable amount of code to support the details object.
+    // Instead, the SqliteException provides a setDetails function for java-side code.
+    jint throwJavaException(JNIEnv *env, const char* domain, const char* message, int code) {
+        const char* className = "com/totalpave/sqlite3/SqliteException" ;
+        jclass exClass = env->FindClass(className);
+        // public SQLiteError(String domain, String message, int code) {
+        // Refer to https://docs.oracle.com/javase/7/docs/technotes/guides/jni/spec/types.html for details regarding the 4th parameter.
+        // In addition, oracle's JNIEnv documentation is incorrect, it says there are 4 parameters, the first being JNIEnv but compilation fails saying there are 3 parameters.
+        // Android documentation examples use 3 parameters and don't pass in the JNIEnv. See https://developer.android.com/training/articles/perf-jni for examples.
+        jmethodID constructor = env->GetMethodID(exClass, "<init>", "(Ljava/lang/String;Ljava/lang/String;I)V");
+        return env->Throw((jthrowable)env->NewObject(exClass, constructor, env->NewStringUTF(domain), env->NewStringUTF(message), code));
     }
 
-    jint throwException(JNIEnv *env, const char* message) {
-        jclass exClass;
-        const char* className = "java/lang/Exception" ;
+    // JNIEXPORT void JNICALL
+    // Java_com_totalpave_sqlite3_Sqlite_releaseException(JNIEnv* env, jobject jptr) {
+    //     env->DeleteGlobalRef(jptr);
+    // }
 
-        exClass = env->FindClass(className);
-        if (exClass == NULL) {
-            return throwNoClassDefError(env, className);
-        }
+    // Old FindClass,GetMethodID, NewObject code that was written by norman.
+    // sqlite3_stmt* stmt = (sqlite3_stmt*)jstatement;
+    // int index = (int)jindex;
+    // jobject retval;
+    // if (sqlite3_column_type(stmt, index) == SQLITE_NULL) {
+    //     retval = NULL;
+    // }
+    // else {
+    //     jclass intClass = env->FindClass("java/lang/Double");
+    //     jmethodID constructor = env->GetMethodID(intClass, "<init>", "(D)V"); // (ParameterTypes)Return Type
+    //     double value = sqlite3_column_double(stmt, index);
+    //     retval = env->NewObject(intClass, constructor, value);
+    // }
+    // return retval;
 
-        return env->ThrowNew(exClass, message);
+    jint throwBindError(JNIEnv *env, std::string varName, jstring jVarName) {
+        std::string message = "Could not bind parameter \"" + varName + "\"";
+        return throwJavaException(env, TP::sqlite::TOTALPAVE_SQLITE_ERROR_DOMAIN, message.c_str(), TP::sqlite::ERROR_CODE_BIND_PARAMETER_ERROR);
     }
 
     JNIEXPORT jlong JNICALL
@@ -64,12 +76,11 @@ extern "C" {
         const char* path = env->GetStringUTFChars(jpath, &isCopy);
         int resultCode = sqlite3_open_v2(path, &db, (int)jflags, nullptr);
         if (resultCode != SQLITE_OK) {
-            std::string cxxPath = path;
-            std::string error = TP::sqlite::getErrorString(resultCode);
-            error += " (" + cxxPath + ")";
-            return throwException(env, error.c_str());
+            std::string message = std::string(sqlite3_errstr(resultCode)) + " (" + std::string(path) + ")";
+            env->ReleaseStringUTFChars(jpath, path);
+            return throwJavaException(env, TP::sqlite::SQLITE_ERROR_DOMAIN, message.c_str(), resultCode);
         }
-
+        env->ReleaseStringUTFChars(jpath, path);
         return (jlong)db;
     }
 
@@ -80,10 +91,10 @@ extern "C" {
         const char* sql = env->GetStringUTFChars(jsql, &isCopy);
 
         sqlite3_stmt* statement;
-        int returnCode = sqlite3_prepare_v2(db, sql, strlen(sql), &statement, 0);
-        if (returnCode != SQLITE_OK) {
-            std::string error = TP::sqlite::getErrorString(returnCode);
-            return throwException(env, error.c_str());
+        int resultCode = sqlite3_prepare_v2(db, sql, strlen(sql), &statement, 0);
+        env->ReleaseStringUTFChars(jsql, sql);
+        if (resultCode != SQLITE_OK) {
+            return throwJavaException(env, TP::sqlite::SQLITE_ERROR_DOMAIN, sqlite3_errstr(resultCode), resultCode);
         }
 
         return (jlong)statement;
@@ -96,12 +107,17 @@ extern "C" {
         const char* varName = env->GetStringUTFChars(jVarName, &isCopy);
         int index = TP::sqlite::lookupVariableIndex(statement, varName);
         if (index == 0) {
-            std::string pname = varName;
-            std::string message = "Could not bind parameter \"" + pname + "\"";
-            return throwException(env, message.c_str());
+            jint result = throwBindError(env, varName, jVarName);
+            env->ReleaseStringUTFChars(jVarName, varName);
+            return result;
         }
+        env->ReleaseStringUTFChars(jVarName, varName);
 
-        return sqlite3_bind_null(statement, index);
+        int resultCode = sqlite3_bind_null(statement, index);
+        if (resultCode != SQLITE_OK) {
+            return throwJavaException(env, TP::sqlite::SQLITE_ERROR_DOMAIN, sqlite3_errstr(resultCode), resultCode);
+        }
+        return resultCode;
     }
 
     JNIEXPORT jint JNICALL
@@ -111,12 +127,17 @@ extern "C" {
         const char* varName = env->GetStringUTFChars(jVarName, &isCopy);
         int index = TP::sqlite::lookupVariableIndex(statement, varName);
         if (index == 0) {
-            std::string pname = varName;
-            std::string message = "Could not bind parameter \"" + pname + "\"";
-            return throwException(env, message.c_str());
+            jint result = throwBindError(env, varName, jVarName);
+            env->ReleaseStringUTFChars(jVarName, varName);
+            return result;
         }
+        env->ReleaseStringUTFChars(jVarName, varName);
 
-        return sqlite3_bind_double(statement, index, (double)value);
+        int resultCode = sqlite3_bind_double(statement, index, (double)value);
+        if (resultCode != SQLITE_OK) {
+            return throwJavaException(env, TP::sqlite::SQLITE_ERROR_DOMAIN, sqlite3_errstr(resultCode), resultCode);
+        }
+        return resultCode;
     }
 
     JNIEXPORT jint JNICALL
@@ -126,14 +147,19 @@ extern "C" {
         const char* varName = env->GetStringUTFChars(jVarName, &isCopy);
         int index = TP::sqlite::lookupVariableIndex(statement, varName);
         if (index == 0) {
-            std::string pname = varName;
-            std::string message = "Could not bind parameter \"" + pname + "\"";
-            return throwException(env, message.c_str());
+            jint result = throwBindError(env, varName, jVarName);
+            env->ReleaseStringUTFChars(jVarName, varName);
+            return result;
         }
-
+        env->ReleaseStringUTFChars(jVarName, varName);
         const char* value = env->GetStringUTFChars(jvalue, &isCopy);
 
-        return sqlite3_bind_text(statement, index, value, strlen(value), NULL);
+        int resultCode = sqlite3_bind_text(statement, index, value, strlen(value), NULL);
+        env->ReleaseStringUTFChars(jvalue, value);
+        if (resultCode != SQLITE_OK) {
+            return throwJavaException(env, TP::sqlite::SQLITE_ERROR_DOMAIN, sqlite3_errstr(resultCode), resultCode);
+        }
+        return resultCode;
     }
 
     JNIEXPORT jint JNICALL
@@ -143,12 +169,17 @@ extern "C" {
         const char* varName = env->GetStringUTFChars(jVarName, &isCopy);
         int index = TP::sqlite::lookupVariableIndex(statement, varName);
         if (index == 0) {
-            std::string pname = varName;
-            std::string message = "Could not bind parameter \"" + pname + "\"";
-            return throwException(env, message.c_str());
+            jint result = throwBindError(env, varName, jVarName);
+            env->ReleaseStringUTFChars(jVarName, varName);
+            return result;
         }
+        env->ReleaseStringUTFChars(jVarName, varName);
 
-        return sqlite3_bind_int(statement, index, (int)value);
+        int resultCode = sqlite3_bind_int(statement, index, (int)value);
+        if (resultCode != SQLITE_OK) {
+            return throwJavaException(env, TP::sqlite::SQLITE_ERROR_DOMAIN, sqlite3_errstr(resultCode), resultCode);
+        }
+        return resultCode;
     }
 
     JNIEXPORT jint JNICALL
@@ -158,10 +189,11 @@ extern "C" {
         const char* varName = env->GetStringUTFChars(jVarName, &isCopy);
         int index = TP::sqlite::lookupVariableIndex(statement, varName);
         if (index == 0) {
-            std::string pname = varName;
-            std::string message = "Could not bind parameter \"" + pname + "\"";
-            return throwException(env, message.c_str());
+            jint result = throwBindError(env, varName, jVarName);
+            env->ReleaseStringUTFChars(jVarName, varName);
+            return result;
         }
+        env->ReleaseStringUTFChars(jVarName, varName);
 
         int result;
 
@@ -177,12 +209,19 @@ extern "C" {
             env->ReleaseByteArrayElements(jvalue, bufferPtr, 0);
         }
 
+        if (result != SQLITE_OK) {
+            return throwJavaException(env, TP::sqlite::SQLITE_ERROR_DOMAIN, sqlite3_errstr(result), result);
+        }
         return result;
     }
 
     JNIEXPORT jint JNICALL
     Java_com_totalpave_sqlite3_Sqlite_step(JNIEnv* env, jobject jptr, jlong jstatement) {
-        return sqlite3_step((sqlite3_stmt*)jstatement);
+        int resultCode = sqlite3_step((sqlite3_stmt*)jstatement);
+        if (resultCode != SQLITE_OK && resultCode != SQLITE_DONE && resultCode != SQLITE_ROW) {
+            return throwJavaException(env, TP::sqlite::SQLITE_ERROR_DOMAIN, sqlite3_errstr(resultCode), resultCode);
+        }
+        return resultCode;
     }
 
     JNIEXPORT jint JNICALL
@@ -204,36 +243,10 @@ extern "C" {
     JNIEXPORT jdouble JNICALL
     Java_com_totalpave_sqlite3_Sqlite_getDouble(JNIEnv* env, jobject jptr, jlong jstatement, jint jindex) {
         return (jdouble)sqlite3_column_double((sqlite3_stmt*)jstatement, (int)jindex);
-        // sqlite3_stmt* stmt = (sqlite3_stmt*)jstatement;
-        // int index = (int)jindex;
-        // jobject retval;
-        // if (sqlite3_column_type(stmt, index) == SQLITE_NULL) {
-        //     retval = NULL;
-        // }
-        // else {
-        //     jclass intClass = env->FindClass("java/lang/Double");
-        //     jmethodID constructor = env->GetMethodID(intClass, "<init>", "(D)V"); // (ParameterTypes)Return Type
-        //     double value = sqlite3_column_double(stmt, index);
-        //     retval = env->NewObject(intClass, constructor, value);
-        // }
-        // return retval;
     }
 
     JNIEXPORT jint JNICALL
     Java_com_totalpave_sqlite3_Sqlite_getInt(JNIEnv* env, jobject jptr, jlong jstatement, jint jindex) {
-        // sqlite3_stmt* stmt = (sqlite3_stmt*)jstatement;
-        // int index = (int)jindex;
-        // jobject retval;
-        // if (sqlite3_column_type(stmt, index) == SQLITE_NULL) {
-        //     retval = NULL;
-        // }
-        // else {
-        //     jclass intClass = env->FindClass("java/lang/Integer");
-        //     jmethodID constructor = env->GetMethodID(intClass, "<init>", "(I)V");
-        //     int value = sqlite3_column_int(stmt, index);
-        //     retval = env->NewObject(intClass, constructor, value);
-        // }
-        // return retval;
         return (jint)sqlite3_column_int((sqlite3_stmt*)jstatement, (int)jindex);
     }
 
