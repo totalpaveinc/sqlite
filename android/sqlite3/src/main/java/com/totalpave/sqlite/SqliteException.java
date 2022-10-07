@@ -45,6 +45,20 @@ public class SqliteException extends Exception {
         this.details = null;
     }
 
+    public SqliteException(String domain, String message, int code, JSONObject details) {
+        super(message);
+        this.domain = domain;
+        this.code = code;
+        this.details = details;
+    }
+
+    public SqliteException(String domain, String message, int code, JSONObject details, SqliteException cause) {
+        super(message, cause);
+        this.domain = domain;
+        this.code = code;
+        this.details = details;
+    }
+
     public JSONObject toDictionary() throws JSONException {
         JSONObject error = new JSONObject();
         error.put("code", this.code);
