@@ -154,7 +154,7 @@ extern "C" {
         env->ReleaseStringUTFChars(jVarName, varName);
         const char* value = env->GetStringUTFChars(jvalue, &isCopy);
 
-        int resultCode = sqlite3_bind_text(statement, index, value, strlen(value), NULL);
+        int resultCode = sqlite3_bind_text(statement, index, value, strlen(value), SQLITE_TRANSIENT);
         env->ReleaseStringUTFChars(jvalue, value);
         if (resultCode != SQLITE_OK) {
             return throwJavaException(env, TP::sqlite::SQLITE_ERROR_DOMAIN, sqlite3_errstr(resultCode), resultCode);
@@ -204,7 +204,7 @@ extern "C" {
             jbyte* bufferPtr = env->GetByteArrayElements(jvalue, NULL);
             jsize lengthOfArray = env->GetArrayLength(jvalue);
 
-            result = sqlite3_bind_blob(statement, index, bufferPtr, (int)lengthOfArray, NULL);
+            result = sqlite3_bind_blob(statement, index, bufferPtr, (int)lengthOfArray, SQLITE_TRANSIENT);
 
             env->ReleaseByteArrayElements(jvalue, bufferPtr, 0);
         }
