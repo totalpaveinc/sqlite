@@ -302,6 +302,12 @@ extern "C" {
     Java_com_totalpave_sqlite3_Sqlite_close(JNIEnv* env, jobject jptr, jlong db) {
         return (jint)sqlite3_close_v2((sqlite3*)db);
     }
+
+    JNIEXPORT jstring JNICALL
+    Java_com_totalpave_sqlite3_Sqlite_getLibVersion(JNIEnv* env, jobject jptr) {
+        const char* version = sqlite3_libversion();
+        return env->NewStringUTF((const char*)version);
+    }
 }
 
 #endif

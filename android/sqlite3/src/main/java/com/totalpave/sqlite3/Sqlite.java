@@ -77,4 +77,6 @@ public class Sqlite {
 
     public static native int finalize(long statement);
     public static native int close(long db);
+
+    public static native String getLibVersion();
 }
