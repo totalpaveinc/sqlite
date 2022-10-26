@@ -17,6 +17,8 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        Log.i("UnitTest", "SQLite Version: " + Sqlite.getLibVersion());
+
         File dataDirectory = getApplicationContext().getFilesDir();
         String dbPath = dataDirectory.getAbsolutePath() + "/test.db";
 
