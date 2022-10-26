@@ -84,7 +84,7 @@ public class MainActivity extends AppCompatActivity {
             Sqlite.finalize(statement);
         }
         catch (SqliteException ex) {
-            Log.e("UnitTest", "Could not successfully run queries");
+            Log.e("UnitTest", "Could not successfully run queries", ex);
             Sqlite.finalize(statement);
             Sqlite.close(db);
             return;
@@ -152,7 +152,7 @@ public class MainActivity extends AppCompatActivity {
             Sqlite.finalize(statement);
         }
         catch (SqliteException ex) {
-            Log.e("UnitTest", "Caught unexpected error for bad step (step to non-existent row) As of SQLite3 >3.6.23.1, sqlite3_step calls sqlite3_reset, which should have prevented this error.");
+            Log.e("UnitTest", "Caught unexpected error for bad step (step to non-existent row) As of SQLite3 >3.6.23.1, sqlite3_step calls sqlite3_reset, which should have prevented this error.", ex);
         }
 
         // Calling step after finalize should return SQLITE_MISUSE but it's ultimately undefined behaviour.
