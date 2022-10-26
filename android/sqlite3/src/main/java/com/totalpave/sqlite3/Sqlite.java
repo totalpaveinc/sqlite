@@ -58,6 +58,12 @@ public class Sqlite {
     public static native int bindInt(long statement, String varName, int value) throws SqliteException;
     public static native int bindBlob(long statement, String varName, byte[] value) throws SqliteException;
     public static native int bindNull(long statement, String varName) throws SqliteException;
+    
+    public static native int bindDoubleWithIndex(long statement, int index, double value) throws SqliteException;
+    public static native int bindStringWithIndex(long statement, int index, String value) throws SqliteException;
+    public static native int bindIntWithIndex(long statement, int index, int value) throws SqliteException;
+    public static native int bindBlobWithIndex(long statement, int index, byte[] value) throws SqliteException;
+    public static native int bindNullWithIndex(long statement, int index) throws SqliteException;
 
     public static native int step(long statement) throws SqliteException;
     public static native int columnCount(long statement);
