@@ -69,13 +69,40 @@ Supported data types are:
 - double
 - int
 - byte[]
-- String 
+- String
+- null
 
 ```java
 public static native int bindDouble(long statementHandle, String varName, double value);
 public static native int bindString(long statementHandle, String varName, String value);
 public static native int bindInt(long statementHandle, String varName, int value);
 public static native int bindBlob(long statementHandle, String varName, byte[] value);
+public static native int bindNull(long statementHandle, String varName);
+```
+
+##### Binding Variables with Indexes
+
+The following methods are available to bind variables by index. The return value is an `int` indicating status.
+
+|Type|Parameter|Description|
+|----|---|---|
+|long|statementHandle|A statement handle value, returned from a `prepare` call.
+|int|index|The variable to bind the value with
+|*|value|The value to bind. See below for supported types
+
+Supported data types are:
+- double
+- int
+- byte[]
+- String 
+- null
+
+```java
+public static native int bindDoubleWithIndex(long statementHandle, int index, double value);
+public static native int bindStringWithIndex(long statementHandle, int index, String value);
+public static native int bindIntWithIndex(long statementHandle, int index, int value);
+public static native int bindBlobWithIndex(long statementHandle, int index, byte[] value);
+public static native int bindNullWithIndex(long statementHandle, int index);
 ```
 
 ##### int step(long statementHandle)
@@ -105,3 +132,7 @@ Closes a statement and frees resources. Using the statement handle after finaliz
 ##### int close(long dbHandle)
 
 Closes a database and frees resources. Using the database handle after closing will result in undefined behaviour, likely an application crash.
+
+##### String getLibVersion()
+
+Gets the SQLite lib version via sqlite3_libversion().
