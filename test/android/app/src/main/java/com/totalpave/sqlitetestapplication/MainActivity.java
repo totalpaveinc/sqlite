@@ -170,6 +170,36 @@ public class MainActivity extends AppCompatActivity {
         //    Log.i("UnitTest", "Caught expected error for bad step (step after finalize).");
         //}
 
+        try {
+            statement = Sqlite.prepare(db, "SELECT id FROM test WHERE id = :mystring OR id = :myint OR id = :mydouble OR id = :mynull OR id = :myblob");
+            Sqlite.bindString(statement, "mystring", "asd");
+            Sqlite.bindInt(statement, "myint", 2);
+            Sqlite.bindDouble(statement, "mydouble", 2.4);
+            Sqlite.bindNull(statement, "mynull");
+            Sqlite.bindBlob(statement, "myblob", null);
+
+            Log.i("UnitTest", "All bind calls were successful.");
+            Sqlite.finalize(statement);
+        }
+        catch (SqliteException ex) {
+            Log.e("UnitTest", "Caught unexpected error for a bind call.", ex);
+        }
+
+        try {
+            statement = Sqlite.prepare(db, "SELECT id FROM test WHERE id = ? OR id = ? OR id = ? OR id = ? OR id = ?");
+            Sqlite.bindStringWithIndex(statement, 1, "asd");
+            Sqlite.bindIntWithIndex(statement, 2, 2);
+            Sqlite.bindDoubleWithIndex(statement, 3, 2.4);
+            Sqlite.bindNullWithIndex(statement, 4);
+            Sqlite.bindBlobWithIndex(statement, 5, null);
+
+            Log.i("UnitTest", "All bind with index calls were successful.");
+            Sqlite.finalize(statement);
+        }
+        catch (SqliteException ex) {
+            Log.e("UnitTest", "Caught unexpected error for a bind with index call.", ex);
+        }
+
         Sqlite.close(db);
         return;
     }

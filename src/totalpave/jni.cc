@@ -101,6 +101,15 @@ extern "C" {
     }
 
     JNIEXPORT jint JNICALL
+    Java_com_totalpave_sqlite3_Sqlite_bindNullWithIndex(JNIEnv* env, jobject jptr, jlong jstatement, jint jIndex) {
+        int resultCode = sqlite3_bind_null((sqlite3_stmt*)jstatement, (int)jIndex);
+        if (resultCode != SQLITE_OK) {
+            return throwJavaException(env, TP::sqlite::SQLITE_ERROR_DOMAIN, sqlite3_errstr(resultCode), resultCode);
+        }
+        return resultCode;
+    }
+
+    JNIEXPORT jint JNICALL
     Java_com_totalpave_sqlite3_Sqlite_bindNull(JNIEnv* env, jobject jptr, jlong jstatement, jstring jVarName) {
         sqlite3_stmt* statement = (sqlite3_stmt*)jstatement;
         jboolean isCopy;
@@ -113,7 +122,12 @@ extern "C" {
         }
         env->ReleaseStringUTFChars(jVarName, varName);
 
-        int resultCode = sqlite3_bind_null(statement, index);
+        return Java_com_totalpave_sqlite3_Sqlite_bindNullWithIndex(env, jptr, jstatement, index);
+    }
+
+    JNIEXPORT jint JNICALL
+    Java_com_totalpave_sqlite3_Sqlite_bindDoubleWithIndex(JNIEnv* env, jobject jptr, jlong jstatement, jint jIndex, jdouble value) {
+        int resultCode = sqlite3_bind_double((sqlite3_stmt*)jstatement, jIndex, (double)value);
         if (resultCode != SQLITE_OK) {
             return throwJavaException(env, TP::sqlite::SQLITE_ERROR_DOMAIN, sqlite3_errstr(resultCode), resultCode);
         }
@@ -133,7 +147,15 @@ extern "C" {
         }
         env->ReleaseStringUTFChars(jVarName, varName);
 
-        int resultCode = sqlite3_bind_double(statement, index, (double)value);
+        return Java_com_totalpave_sqlite3_Sqlite_bindDoubleWithIndex(env, jptr, jstatement, index, value);
+    }
+
+    JNIEXPORT jint JNICALL
+    Java_com_totalpave_sqlite3_Sqlite_bindStringWithIndex(JNIEnv* env, jobject jptr, jlong jstatement, jint jIndex, jstring jvalue) {
+        jboolean isCopy;
+        const char* value = env->GetStringUTFChars(jvalue, &isCopy);
+        int resultCode = sqlite3_bind_text((sqlite3_stmt*)jstatement, jIndex, value, strlen(value), SQLITE_TRANSIENT);
+        env->ReleaseStringUTFChars(jvalue, value);
         if (resultCode != SQLITE_OK) {
             return throwJavaException(env, TP::sqlite::SQLITE_ERROR_DOMAIN, sqlite3_errstr(resultCode), resultCode);
         }
@@ -152,10 +174,13 @@ extern "C" {
             return result;
         }
         env->ReleaseStringUTFChars(jVarName, varName);
-        const char* value = env->GetStringUTFChars(jvalue, &isCopy);
 
-        int resultCode = sqlite3_bind_text(statement, index, value, strlen(value), SQLITE_TRANSIENT);
-        env->ReleaseStringUTFChars(jvalue, value);
+        return Java_com_totalpave_sqlite3_Sqlite_bindStringWithIndex(env, jptr, jstatement, index, jvalue);
+    }
+
+    JNIEXPORT jint JNICALL
+    Java_com_totalpave_sqlite3_Sqlite_bindIntWithIndex(JNIEnv* env, jobject jptr, jlong jstatement, jint jIndex, jint value) {
+        int resultCode = sqlite3_bind_int((sqlite3_stmt*)jstatement, jIndex, (int)value);
         if (resultCode != SQLITE_OK) {
             return throwJavaException(env, TP::sqlite::SQLITE_ERROR_DOMAIN, sqlite3_errstr(resultCode), resultCode);
         }
@@ -175,11 +200,30 @@ extern "C" {
         }
         env->ReleaseStringUTFChars(jVarName, varName);
 
-        int resultCode = sqlite3_bind_int(statement, index, (int)value);
-        if (resultCode != SQLITE_OK) {
-            return throwJavaException(env, TP::sqlite::SQLITE_ERROR_DOMAIN, sqlite3_errstr(resultCode), resultCode);
+        return Java_com_totalpave_sqlite3_Sqlite_bindIntWithIndex(env, jptr, jstatement, index, value);
+    }
+
+    JNIEXPORT jint JNICALL
+    Java_com_totalpave_sqlite3_Sqlite_bindBlobWithIndex(JNIEnv* env, jobject jptr, jlong jstatement, jint jIndex, jbyteArray jvalue) {
+        sqlite3_stmt* statement = (sqlite3_stmt*)jstatement;
+
+        int result;
+        if (jvalue == NULL) {
+            result = sqlite3_bind_blob(statement, jIndex, NULL, 0, NULL);
         }
-        return resultCode;
+        else {
+            jbyte* bufferPtr = env->GetByteArrayElements(jvalue, NULL);
+            jsize lengthOfArray = env->GetArrayLength(jvalue);
+
+            result = sqlite3_bind_blob(statement, jIndex, bufferPtr, (int)lengthOfArray, SQLITE_TRANSIENT);
+
+            env->ReleaseByteArrayElements(jvalue, bufferPtr, 0);
+        }
+
+        if (result != SQLITE_OK) {
+            return throwJavaException(env, TP::sqlite::SQLITE_ERROR_DOMAIN, sqlite3_errstr(result), result);
+        }
+        return result;
     }
 
     JNIEXPORT jint JNICALL
@@ -195,24 +239,7 @@ extern "C" {
         }
         env->ReleaseStringUTFChars(jVarName, varName);
 
-        int result;
-
-        if (jvalue == NULL) {
-            result = sqlite3_bind_blob(statement, index, NULL, 0, NULL);
-        }
-        else {
-            jbyte* bufferPtr = env->GetByteArrayElements(jvalue, NULL);
-            jsize lengthOfArray = env->GetArrayLength(jvalue);
-
-            result = sqlite3_bind_blob(statement, index, bufferPtr, (int)lengthOfArray, SQLITE_TRANSIENT);
-
-            env->ReleaseByteArrayElements(jvalue, bufferPtr, 0);
-        }
-
-        if (result != SQLITE_OK) {
-            return throwJavaException(env, TP::sqlite::SQLITE_ERROR_DOMAIN, sqlite3_errstr(result), result);
-        }
-        return result;
+        return Java_com_totalpave_sqlite3_Sqlite_bindBlobWithIndex(env, jptr, jstatement, index, jvalue);
     }
 
     JNIEXPORT jint JNICALL
