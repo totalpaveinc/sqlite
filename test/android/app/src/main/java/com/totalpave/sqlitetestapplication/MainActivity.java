@@ -202,6 +202,29 @@ public class MainActivity extends AppCompatActivity {
             Log.e("UnitTest", "Caught unexpected error for a bind with index call.", ex);
         }
 
+        try {
+            statement = Sqlite.prepare(db, "SELECT id FROM test WHERE id = ? OR id = ? OR id = ? OR id = ? OR id = ?");
+            Sqlite.bindStringWithIndex(statement, 1, "asd");
+            Sqlite.bindIntWithIndex(statement, 2, 2);
+            Sqlite.bindDoubleWithIndex(statement, 3, 2.4);
+            Sqlite.bindNullWithIndex(statement, 4);
+            Sqlite.bindBlobWithIndex(statement, 5, null);
+
+            Sqlite.reset(statement);
+
+            Sqlite.bindStringWithIndex(statement, 1, "asd");
+            Sqlite.bindIntWithIndex(statement, 2, 2);
+            Sqlite.bindDoubleWithIndex(statement, 3, 2.4);
+            Sqlite.bindNullWithIndex(statement, 4);
+            Sqlite.bindBlobWithIndex(statement, 5, null);
+
+            Log.i("UnitTest", "Can rebind after calling reset.");
+            Sqlite.finalize(statement);
+        }
+        catch (SqliteException ex) {
+            Log.e("UnitTest", "Caught unexpected error for rebindind after calling reset.", ex);
+        }
+
         Sqlite.close(db);
         return;
     }

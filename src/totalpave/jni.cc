@@ -252,6 +252,15 @@ extern "C" {
     }
 
     JNIEXPORT jint JNICALL
+    Java_com_totalpave_sqlite3_Sqlite_reset(JNIEnv* env, jobject jptr, jlong jstatement) {
+        int resultCode = sqlite3_reset((sqlite3_stmt*)jstatement);
+        if (resultCode != SQLITE_OK) {
+            return throwJavaException(env, TP::sqlite::SQLITE_ERROR_DOMAIN, sqlite3_errstr(resultCode), resultCode);
+        }
+        return resultCode;
+    }
+
+    JNIEXPORT jint JNICALL
     Java_com_totalpave_sqlite3_Sqlite_columnCount(JNIEnv* env, jobject jptr, jlong jstatement) {
         return sqlite3_column_count((sqlite3_stmt*)jstatement);
     }

@@ -66,6 +66,7 @@ public class Sqlite {
     public static native int bindNullWithIndex(long statement, int index) throws SqliteException;
 
     public static native int step(long statement) throws SqliteException;
+    public static native int reset(long statement) throws SqliteException;
     public static native int columnCount(long statement);
     public static native String columnName(long statement, int index);
     public static native int columnType(long statement, int index);
