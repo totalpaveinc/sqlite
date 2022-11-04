@@ -136,3 +136,7 @@ Closes a database and frees resources. Using the database handle after closing w
 ##### String getLibVersion()
 
 Gets the SQLite lib version via sqlite3_libversion().
+
+##### int setBusyTimeout(long dbHandle, int milliseconds)
+
+Set busy timeout for the connection. See https://www.sqlite.org/c3ref/busy_timeout.html.

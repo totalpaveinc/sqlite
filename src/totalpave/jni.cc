@@ -317,6 +317,11 @@ extern "C" {
         const char* version = sqlite3_libversion();
         return env->NewStringUTF((const char*)version);
     }
+
+    JNIEXPORT jint JNICALL
+    Java_com_totalpave_sqlite3_Sqlite_setBusyTimeout(JNIEnv* env, jobject jptr, jlong db, jint milliseconds) {
+        return (jint)sqlite3_busy_timeout((sqlite3*)db, (int)milliseconds);
+    }
 }
 
 #endif

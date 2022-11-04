@@ -80,4 +80,5 @@ public class Sqlite {
     public static native int close(long db);
 
     public static native String getLibVersion();
+    public static native int setBusyTimeout(long db, int milliseconds);
 }
