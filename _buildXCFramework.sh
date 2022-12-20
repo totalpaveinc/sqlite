@@ -18,12 +18,20 @@
 # CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE
 # OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-# Note xcodebuild -create-xcframework doesn't overwrite xcframework files.
+cp -f ./src/totalpave/utilities.h ./ios/sqlite3/sqlite3/include/tp/sqlite
+cp -f ./src/totalpave/utilities.cpp ./ios/sqlite3/sqlite3/src
+cp -f ./src/sqlite/sqlite3.h ./ios/sqlite3/sqlite3/include
+cp -f ./src/sqlite/sqlite3.c ./ios/sqlite3/sqlite3/src
+cp -f ./src/sqlite/sqlite3ext.h ./ios/sqlite3/sqlite3/include
 
+xcodebuild -project ./ios/sqlite3/sqlite3.xcodeproj -scheme sqlite3 -derivedDataPath ./ios clean
+xcodebuild -project ./ios/sqlite3/sqlite3.xcodeproj -scheme sqlite3  -configuration Release -sdk iphonesimulator -derivedDataPath ./ios build
+xcodebuild -project ./ios/sqlite3/sqlite3.xcodeproj -scheme sqlite3  -configuration Release -sdk iphoneos -derivedDataPath ./ios build    
+cp -rf ./ios/Build/Products/Release-iphonesimulator/sqlite3.framework ./out/ios/x86_64
+cp -rf ./ios/Build/Products/Release-iphoneos/sqlite3.framework ./out/ios/arm64
+# Note xcodebuild -create-xcframework doesn't overwrite xcframework files.
 rm -rf ./out/ios/sqlite3.xcframework
 xcodebuild -create-xcframework \
-    -library ./out/ios/arm64/libsqlite3.dylib \
-    -headers ./out/include \
-    -library ./out/ios/x86_64/libsqlite3.dylib \
-    -headers ./out/include \
+    -framework ./out/ios/arm64/sqlite3.framework \
+    -framework ./out/ios/x86_64/sqlite3.framework \
     -output ./out/ios/sqlite3.xcframework
