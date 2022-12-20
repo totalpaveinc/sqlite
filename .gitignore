@@ -23,6 +23,7 @@ test/android/gradle/wrapper
 *.jar
 build
 *.db
-test/ios/sqlitetest/sqlitetest.xcodeproj/project.xcworkspace/xcuserdata/
-test/ios/sqlitetest/sqlitetest.xcodeproj/xcuserdata/
 android/local.properties
+ios/Logs
+ios/ModuleCache.noindex
+xcuserdata
