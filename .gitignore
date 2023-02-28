@@ -27,3 +27,4 @@ android/local.properties
 ios/Logs
 ios/ModuleCache.noindex
 xcuserdata
+ios/Index.noindex
