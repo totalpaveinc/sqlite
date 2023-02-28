@@ -19,17 +19,20 @@
 # CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE
 # OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-echo "Installing to bin..."
+echo "Building release..."
+./build.sh release
 
-echo "Installing headers"
+echo "Publishing to bin..."
+
+echo "Publishing headers"
 cp -r out/Release/include/* bin/include/
 
-echo "Installing `uname`"
+echo "Publishing `uname`"
 cp out/Release/`uname`/libsqlite3.* bin/`uname`/
 
 androidBuilds=("armeabi-v7a" "arm64-v8a" "x86" "x86_64")
 for build in ${androidBuilds[@]}; do
-    echo "Installing Android $build"
+    echo "Publishing Android $build"
     mkdir -p bin/android/$build
     cp out/Release/android/$build/libsqlite3.so bin/android/$build/libsqlite3.so
 done
@@ -39,7 +42,7 @@ cp out/Release/android/sqlite3-release.aar bin/android/sqlite3.aar
 if [ `uname` == "Darwin" ]; then
     builds=("arm64" "x86_64")
     for build in ${builds[@]}; do
-        echo "Installing iOS $build"
+        echo "Publishing iOS $build"
         mkdir -p bin/ios/$build
         cp out/Release/ios/$build/libsqlite3.dylib bin/ios/$build/libsqlite3.dylib
     done
