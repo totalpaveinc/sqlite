@@ -89,11 +89,17 @@ int main(int argc, char * argv[]) {
     printf("\nselect %d ", code);
     sqlite3_finalize(queryb);
 
-
-    const char* test = "SELECT * FROM test;";
-    sqlite3_prepare_v2(db, notthat, strlen(test), &queryb, NULL);
-    sqlite3_finalize(queryb);
-    int a = sqlite3_step(queryb);
+    
+    //Calling step after finalize should return SQLITE_MISUSE but it's ultimately undefined behaviour.
+    //So anything can happen. During my tests, it was hard-crashing with an uncatchable error.
+    //While creating a preventative system is probably possible, we've decided it would be high-cost-low-reward.
+    //Error cases that could run in to this is not something that randomly happens because of runtime data.
+    //The code path is literally just written incorrectly.
+    //As such we have no way of gracefully handling this error path and we are simply commenting out the try-catch block.
+    //const char* test = "SELECT * FROM test;";
+    //sqlite3_prepare_v2(db, notthat, strlen(test), &queryb, NULL);
+    //sqlite3_finalize(queryb);
+    //int a = sqlite3_step(queryb);
 
 
     sqlite3_close(db);

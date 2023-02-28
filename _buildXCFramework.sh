@@ -18,7 +18,7 @@
 # CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE
 # OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-cp -f ./src/totalpave/utilities.h ./ios/sqlite3/sqlite3/include/tp/sqlite
+cp -f ./src/totalpave/include/tp/sqlite/utilities.h ./ios/sqlite3/sqlite3/include/tp/sqlite
 cp -f ./src/totalpave/utilities.cpp ./ios/sqlite3/sqlite3/src
 cp -f ./src/sqlite/sqlite3.h ./ios/sqlite3/sqlite3/include
 cp -f ./src/sqlite/sqlite3.c ./ios/sqlite3/sqlite3/src
