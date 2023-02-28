@@ -28,3 +28,4 @@ ios/Logs
 ios/ModuleCache.noindex
 xcuserdata
 ios/Index.noindex
+ios/info.plist
