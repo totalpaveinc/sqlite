@@ -22,29 +22,29 @@
 echo "Installing to bin..."
 
 echo "Installing headers"
-cp -r out/include/* bin/include/
+cp -r out/Release/include/* bin/include/
 
 echo "Installing `uname`"
-cp out/`uname`/libsqlite3.* bin/`uname`/
+cp out/Release/`uname`/libsqlite3.* bin/`uname`/
 
 androidBuilds=("armeabi-v7a" "arm64-v8a" "x86" "x86_64")
 for build in ${androidBuilds[@]}; do
     echo "Installing Android $build"
     mkdir -p bin/android/$build
-    cp out/android/$build/libsqlite3.so bin/android/$build/libsqlite3.so
+    cp out/Release/android/$build/libsqlite3.so bin/android/$build/libsqlite3.so
 done
 
-cp android/sqlite3/build/outputs/aar/sqlite3-release.aar bin/android/sqlite3.aar
+cp out/Release/android/sqlite3-release.aar bin/android/sqlite3.aar
 
 if [ `uname` == "Darwin" ]; then
     builds=("arm64" "x86_64")
     for build in ${builds[@]}; do
         echo "Installing iOS $build"
         mkdir -p bin/ios/$build
-        cp out/ios/$build/libsqlite3.dylib bin/ios/$build/libsqlite3.dylib
+        cp out/Release/ios/$build/libsqlite3.dylib bin/ios/$build/libsqlite3.dylib
     done
 
-    cp -r out/ios/sqlite3.xcframework bin/ios/
+    cp -r out/Release/ios/sqlite3.xcframework bin/ios/
 fi
 
 cd bin

@@ -17,16 +17,38 @@
 # CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE
 # OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
+cmake_minimum_required(VERSION 3.22)
+
 project(
-    sqlite3
-    # LANGUAGES C CXX
+    sqlite3 LANGUAGES C CXX
+    VERSION 3.39.2
 )
 
-cmake_minimum_required(VERSION 3.22)
+if ("${CMAKE_BUILD_TYPE}" STREQUAL "") 
+    SET(CMAKE_BUILD_TYPE "Debug")
+endif()
+
+if (
+    (NOT "${CMAKE_BUILD_TYPE}" STREQUAL "Release") AND
+    (NOT "${CMAKE_BUILD_TYPE}" STREQUAL "Debug")
+)
+    message(FATAL_ERROR "Invalid build type \"${CMAKE_BUILD_TYPE}\"")
+endif()
+
+if (PROJECT_SOURCE_DIR STREQUAL PROJECT_BINARY_DIR)
+    message(FATAL_ERROR "In-source builds are not allowed")
+endif()
 
 set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_POSITION_INDEPENDENT_CODE ON)
+
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra")
+if ("${CMAKE_BUILD_TYPE}" STREQUAL "Release")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O2")
+else()
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g -O0")
+endif()
 
 add_library(sqlite-intermediate STATIC
     ./src/sqlite/sqlite3.c
@@ -37,32 +59,33 @@ add_library(sqlite-intermediate STATIC
 add_library(sqlite3 SHARED
     ./src/totalpave/jni.cc
     ./src/totalpave/utilities.cpp
-    ./src/totalpave/utilities.h
+    ./src/totalpave/include/tp/sqlite/utilities.h
 )
 target_link_libraries(sqlite3
     PUBLIC sqlite-intermediate
     "-Wl"
-    # "--no-undefined" # Doesn't compile on AppleClang
 )
-target_include_directories(sqlite3 PUBLIC ./out/include)
-target_compile_options(sqlite3 PUBLIC "-Wall")
+target_include_directories(sqlite3
+    PUBLIC ${CMAKE_SOURCE_DIR}/src/sqlite
+    PUBLIC ${CMAKE_SOURCE_DIR}/src/totalpave/include
+)
 
 # There is a PRE_BUILD... but for all generators other than Visual Studio
 # PRE_BUILD fires just before PRE_LINK... effectively making it
 # a POST_BUILD
 add_custom_command(TARGET sqlite-intermediate POST_BUILD
     COMMAND "${CMAKE_COMMAND}" -E copy
-    ${CMAKE_SOURCE_DIR}/src/sqlite/sqlite3.h ${CMAKE_SOURCE_DIR}/out/include/sqlite3.h
+    ${CMAKE_SOURCE_DIR}/src/sqlite/sqlite3.h ${CMAKE_SOURCE_DIR}/out/${CMAKE_BUILD_TYPE}/include/sqlite3.h
     COMMENT "Installing sqlite3.h"
 )
 add_custom_command(TARGET sqlite-intermediate POST_BUILD
     COMMAND "${CMAKE_COMMAND}" -E copy
-    ${CMAKE_SOURCE_DIR}/src/sqlite/sqlite3ext.h ${CMAKE_SOURCE_DIR}/out/include/sqlite3ext.h
+    ${CMAKE_SOURCE_DIR}/src/sqlite/sqlite3ext.h ${CMAKE_SOURCE_DIR}/out/${CMAKE_BUILD_TYPE}/include/sqlite3ext.h
     COMMENT "Installing sqlite3ext.h"
 )
 add_custom_command(TARGET sqlite-intermediate POST_BUILD
     COMMAND "${CMAKE_COMMAND}" -E copy
-    ${CMAKE_SOURCE_DIR}/src/totalpave/utilities.h ${CMAKE_SOURCE_DIR}/out/include/tp/sqlite/utilities.h
+    ${CMAKE_SOURCE_DIR}/src/totalpave/include/tp/sqlite/utilities.h ${CMAKE_SOURCE_DIR}/out/${CMAKE_BUILD_TYPE}/include/tp/sqlite/utilities.h
     COMMENT "Installing tp/sqlite/utilities.h"
 )
 
@@ -73,7 +96,7 @@ if ("${BUILD_TARGET}" STREQUAL "local")
     endif()
     add_custom_command(TARGET sqlite3 POST_BUILD
         COMMAND "${CMAKE_COMMAND}" -E copy
-        ${CMAKE_BINARY_DIR}/libsqlite3.${LIB_EXT} ${CMAKE_SOURCE_DIR}/out/${CMAKE_HOST_SYSTEM_NAME}/libsqlite3.${LIB_EXT}
+        ${CMAKE_BINARY_DIR}/libsqlite3.${LIB_EXT} ${CMAKE_SOURCE_DIR}/out/${CMAKE_BUILD_TYPE}/${CMAKE_HOST_SYSTEM_NAME}/libsqlite3.${LIB_EXT}
         COMMENT "Installing ${BUILD_PLATFORM}/${BUILD_TARGET} libsqlite3.${LIB_EXT}"
     )
 else()
@@ -83,7 +106,7 @@ else()
     endif()
     add_custom_command(TARGET sqlite3 POST_BUILD
         COMMAND "${CMAKE_COMMAND}" -E copy
-        ${CMAKE_BINARY_DIR}/libsqlite3.${LIB_EXT} ${CMAKE_SOURCE_DIR}/out/${BUILD_PLATFORM}/${BUILD_TARGET}/libsqlite3.${LIB_EXT}
+        ${CMAKE_BINARY_DIR}/libsqlite3.${LIB_EXT} ${CMAKE_SOURCE_DIR}/out/${CMAKE_BUILD_TYPE}/${BUILD_PLATFORM}/${BUILD_TARGET}/libsqlite3.${LIB_EXT}
         COMMENT "Installing ${BUILD_PLATFORM}/${BUILD_TARGET} libsqlite3.${LIB_EXT}"
     )
 endif()
@@ -94,19 +117,10 @@ if ("${BUILD_TARGET}" STREQUAL "local")
     target_link_libraries(test
         PUBLIC sqlite3
         "-Wl"
-        # "--no-undefined" # Doesn't exist for apple clang
     )
-    # target_compile_options(test
-    #     PUBLIC "-g"
-    #     PUBLIC "-Wall"
-    # )
-    # target_link_options(test
-    #     PUBLIC "-Wl"
-    #     PUBLIC "-rdynamic"
-    # )
     add_custom_command(TARGET test POST_BUILD
         COMMAND "${CMAKE_COMMAND}" -E copy
-        ${CMAKE_BINARY_DIR}/test ${CMAKE_SOURCE_DIR}/out/${CMAKE_HOST_SYSTEM_NAME}/test
+        ${CMAKE_BINARY_DIR}/test ${CMAKE_SOURCE_DIR}/out/${CMAKE_BUILD_TYPE}/${CMAKE_HOST_SYSTEM_NAME}/test
         COMMENT "Installing test program"
     )
 endif()

@@ -28,10 +28,10 @@ mkdir -p $ANDROID_JNI_LIBS/armeabi-v7a
 mkdir -p $ANDROID_JNI_LIBS/x86
 mkdir -p $ANDROID_JNI_LIBS/x86_64
 
-cp out/android/arm64-v8a/libsqlite3.so $ANDROID_JNI_LIBS/arm64-v8a/libsqlite3.so
-cp out/android/armeabi-v7a/libsqlite3.so $ANDROID_JNI_LIBS/armeabi-v7a/libsqlite3.so
-cp out/android/x86/libsqlite3.so $ANDROID_JNI_LIBS/x86/libsqlite3.so
-cp out/android/x86_64/libsqlite3.so $ANDROID_JNI_LIBS/x86_64/libsqlite3.so
+cp out/$buildType/android/arm64-v8a/libsqlite3.so $ANDROID_JNI_LIBS/arm64-v8a/libsqlite3.so
+cp out/$buildType/android/armeabi-v7a/libsqlite3.so $ANDROID_JNI_LIBS/armeabi-v7a/libsqlite3.so
+cp out/$buildType/android/x86/libsqlite3.so $ANDROID_JNI_LIBS/x86/libsqlite3.so
+cp out/$buildType/android/x86_64/libsqlite3.so $ANDROID_JNI_LIBS/x86_64/libsqlite3.so
 
 cd android
 
@@ -42,7 +42,7 @@ mkdir -p ../test/android/app/libs
 cp sqlite3/build/outputs/aar/sqlite3-debug.aar ../test/android/app/libs/sqlite3-debug.aar
 cp ../third_party/libcxx/libcxx-25.0.8775105.aar ../test/android/app/libs/libcxx-25.0.8775105.aar
 
-cp sqlite3/build/outputs/aar/sqlite3-debug.aar ../out/android/
-cp sqlite3/build/outputs/aar/sqlite3-release.aar ../out/android/
+cp sqlite3/build/outputs/aar/sqlite3-debug.aar ../out/$buildType/android/
+cp sqlite3/build/outputs/aar/sqlite3-release.aar ../out/$buildType/android/
 
 cd ..

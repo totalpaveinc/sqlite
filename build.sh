@@ -19,6 +19,25 @@
 # CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE
 # OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
+if [ "$1" != "" ] && [ "$1" != "debug" ] && [ "$1" != "release" ]; then
+    echo "Build type must be either \"debug\" or \"release\"."
+    echo ""
+    echo "Usage: ./build.sh [debug|release]"
+    exit 1
+fi
+
+if [ "$1" == "" ]; then
+    buildType="Debug"
+else
+    if [ "$1" == "release" ]; then
+        buildType="Release"
+    else
+        buildType="Debug"
+    fi
+fi
+
+echo "Build Type: $buildType"
+
 buildTargets=("local" "android-armv7a" "android-aarch64" "android-i686" "android-x86_64")
 if [ `uname` == "Darwin" ]; then
     buildTargets+=("ios-arm64" "ios-x86_64")
@@ -45,11 +64,12 @@ for target in ${buildTargets[@]}; do
     cmake \
         -DCMAKE_MODULE_PATH="$rootDir/cmake" \
         -DCMAKE_TOOLCHAIN_FILE=`pwd`/cmake/toolchains/$toolchain.cmake \
-        -B build/$target \
+        -DCMAKE_BUILD_TYPE=$buildType \
+        -B build/$buildType/$target \
         -G"Unix Makefiles" \
         .
     
-    cd build/$target
+    cd build/$buildType/$target
     make
     cd $rootDir
 done

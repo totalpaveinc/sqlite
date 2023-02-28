@@ -27,11 +27,11 @@ cp -f ./src/sqlite/sqlite3ext.h ./ios/sqlite3/sqlite3/include
 xcodebuild -project ./ios/sqlite3/sqlite3.xcodeproj -scheme sqlite3 -derivedDataPath ./ios clean
 xcodebuild -project ./ios/sqlite3/sqlite3.xcodeproj -scheme sqlite3  -configuration Release -sdk iphonesimulator -derivedDataPath ./ios build
 xcodebuild -project ./ios/sqlite3/sqlite3.xcodeproj -scheme sqlite3  -configuration Release -sdk iphoneos -derivedDataPath ./ios build    
-cp -rf ./ios/Build/Products/Release-iphonesimulator/sqlite3.framework ./out/ios/x86_64
-cp -rf ./ios/Build/Products/Release-iphoneos/sqlite3.framework ./out/ios/arm64
+cp -rf ./ios/Build/Products/Release-iphonesimulator/sqlite3.framework ./out/$buildType/ios/x86_64
+cp -rf ./ios/Build/Products/Release-iphoneos/sqlite3.framework ./out/$buildType/ios/arm64
 # Note xcodebuild -create-xcframework doesn't overwrite xcframework files.
-rm -rf ./out/ios/sqlite3.xcframework
+rm -rf ./out/$buildType/ios/sqlite3.xcframework
 xcodebuild -create-xcframework \
-    -framework ./out/ios/arm64/sqlite3.framework \
-    -framework ./out/ios/x86_64/sqlite3.framework \
-    -output ./out/ios/sqlite3.xcframework
+    -framework ./out/$buildType/ios/arm64/sqlite3.framework \
+    -framework ./out/$buildType/ios/x86_64/sqlite3.framework \
+    -output ./out/$buildType/ios/sqlite3.xcframework
