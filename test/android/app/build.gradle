@@ -52,5 +52,5 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
 
     implementation files('libs/libcxx-25.0.8775105.aar')
-    implementation files('libs/sqlite3-debug.aar')
+    implementation files('libs/sqlite3.aar')
 }

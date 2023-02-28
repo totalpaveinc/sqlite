@@ -39,10 +39,15 @@ gradle wrapper
 ./gradlew build
 
 mkdir -p ../test/android/app/libs
-cp sqlite3/build/outputs/aar/sqlite3-debug.aar ../test/android/app/libs/sqlite3-debug.aar
+
+lBuildType=debug
+if [ `$buildType` == "Release" ]; then
+    lBuildType="release"
+fi
+
+cp sqlite3/build/outputs/aar/sqlite3-$lBuildType.aar ../test/android/app/libs/sqlite3.aar
 cp ../third_party/libcxx/libcxx-25.0.8775105.aar ../test/android/app/libs/libcxx-25.0.8775105.aar
 
-cp sqlite3/build/outputs/aar/sqlite3-debug.aar ../out/$buildType/android/
-cp sqlite3/build/outputs/aar/sqlite3-release.aar ../out/$buildType/android/
+cp sqlite3/build/outputs/aar/sqlite3-$lBuildType.aar ../out/$buildType/android/
 
 cd ..
