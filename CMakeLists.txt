@@ -96,7 +96,7 @@ if ("${BUILD_TARGET}" STREQUAL "local")
     endif()
     add_custom_command(TARGET sqlite3 POST_BUILD
         COMMAND "${CMAKE_COMMAND}" -E copy
-        ${CMAKE_BINARY_DIR}/libsqlite3.${LIB_EXT} ${CMAKE_SOURCE_DIR}/out/${CMAKE_BUILD_TYPE}/${CMAKE_HOST_SYSTEM_NAME}/libsqlite3.${LIB_EXT}
+        ${CMAKE_BINARY_DIR}/libsqlite3.${LIB_EXT} ${CMAKE_SOURCE_DIR}/out/${CMAKE_BUILD_TYPE}/${OUT_NAME}/libsqlite3.${LIB_EXT}
         COMMENT "Installing ${BUILD_PLATFORM}/${BUILD_TARGET} libsqlite3.${LIB_EXT}"
     )
 else()
@@ -106,8 +106,8 @@ else()
     endif()
     add_custom_command(TARGET sqlite3 POST_BUILD
         COMMAND "${CMAKE_COMMAND}" -E copy
-        ${CMAKE_BINARY_DIR}/libsqlite3.${LIB_EXT} ${CMAKE_SOURCE_DIR}/out/${CMAKE_BUILD_TYPE}/${BUILD_PLATFORM}/${BUILD_TARGET}/libsqlite3.${LIB_EXT}
-        COMMENT "Installing ${BUILD_PLATFORM}/${BUILD_TARGET} libsqlite3.${LIB_EXT}"
+        ${CMAKE_BINARY_DIR}/libsqlite3.${LIB_EXT} ${CMAKE_SOURCE_DIR}/out/${CMAKE_BUILD_TYPE}/${BUILD_PLATFORM}/${OUT_NAME}/libsqlite3.${LIB_EXT}
+        COMMENT "Installing ${BUILD_PLATFORM}/${OUT_NAME} libsqlite3.${LIB_EXT}"
     )
 endif()
 

@@ -25,3 +25,5 @@ set(CMAKE_OSX_SYSROOT ${CMAKE_SYSROOT})
 set(CMAKE_C_FLAGS "-isysroot ${CMAKE_SYSROOT} -arch arm64")
 set(CMAKE_CXX_FLAGS ${CMAKE_C_FLAGS})
 set(BUILD_TARGET "arm64")
+set(OUT_NAME "ios-arm64")
+

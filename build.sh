@@ -40,7 +40,7 @@ echo "Build Type: $buildType"
 
 buildTargets=("local" "android-armv7a" "android-aarch64" "android-i686" "android-x86_64")
 if [ `uname` == "Darwin" ]; then
-    buildTargets+=("ios-arm64" "ios-x86_64")
+    buildTargets+=("ios-arm64" "ios-x86_64" "ios-arm64-simulator")
 fi
 
 rootDir=`pwd`
