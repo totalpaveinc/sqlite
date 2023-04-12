@@ -1,4 +1,4 @@
-
+.DS_Store
 out
 .deps
 *.log
@@ -24,8 +24,7 @@ test/android/gradle/wrapper
 build
 *.db
 android/local.properties
-ios/Logs
-ios/ModuleCache.noindex
 xcuserdata
-ios/Index.noindex
-ios/info.plist
+ios/build
+/ios/info.plist
+ios/Logs

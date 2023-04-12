@@ -11,8 +11,8 @@ This package is currently using SQLite3 v3.39.2.
 
 Prebuilt binaries are available for:
 - iOS:
-- - ARM64
-- - x86_64 (For simulators)
+- - ARM64 (iOS SDK)
+- - x86_64, ARM64 (iOS Simulator SDK)
 - - xcframework (Contains all architectures)
 - Android:
 - - armeabi-v7a

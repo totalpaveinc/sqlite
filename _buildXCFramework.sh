@@ -24,14 +24,18 @@ cp -f ./src/sqlite/sqlite3.h ./ios/sqlite3/sqlite3/include
 cp -f ./src/sqlite/sqlite3.c ./ios/sqlite3/sqlite3/src
 cp -f ./src/sqlite/sqlite3ext.h ./ios/sqlite3/sqlite3/include
 
-xcodebuild -project ./ios/sqlite3/sqlite3.xcodeproj -scheme sqlite3 -derivedDataPath ./ios clean
-xcodebuild -project ./ios/sqlite3/sqlite3.xcodeproj -scheme sqlite3  -configuration $buildType -sdk iphonesimulator -derivedDataPath ./ios build
-xcodebuild -project ./ios/sqlite3/sqlite3.xcodeproj -scheme sqlite3  -configuration $buildType -sdk iphoneos -derivedDataPath ./ios build    
-cp -rf ./ios/Build/Products/$buildType-iphonesimulator/sqlite3.framework ./out/$buildType/ios/x86_64
-cp -rf ./ios/Build/Products/$buildType-iphoneos/sqlite3.framework ./out/$buildType/ios/arm64
+mkdir -p ./out/$buildType/ios/frameworks/simulator
+mkdir -p ./out/$buildType/ios/frameworks/phone
+mkdir -p ./ios/build
+
+xcodebuild -quiet -project ./ios/sqlite3/sqlite3.xcodeproj -scheme sqlite3 -derivedDataPath ./ios clean
+xcodebuild -quiet -project ./ios/sqlite3/sqlite3.xcodeproj -scheme sqlite3  -configuration $buildType -sdk iphonesimulator -derivedDataPath ./ios/build build
+xcodebuild -quiet -project ./ios/sqlite3/sqlite3.xcodeproj -scheme sqlite3  -configuration $buildType -sdk iphoneos -arch arm64 -derivedDataPath ./ios/build build
+cp -rf ./ios/build/Build/Products/$buildType-iphonesimulator/sqlite3.framework ./out/$buildType/ios/frameworks/simulator/sqlite3.framework
+cp -rf ./ios/build/Build/Products/$buildType-iphoneos/sqlite3.framework ./out/$buildType/ios/frameworks/phone/sqlite3.framework
 # Note xcodebuild -create-xcframework doesn't overwrite xcframework files.
 rm -rf ./out/$buildType/ios/sqlite3.xcframework
-xcodebuild -create-xcframework \
-    -framework ./out/$buildType/ios/arm64/sqlite3.framework \
-    -framework ./out/$buildType/ios/x86_64/sqlite3.framework \
+xcodebuild -quiet -create-xcframework \
+    -framework ./out/$buildType/ios/frameworks/simulator/sqlite3.framework \
+    -framework ./out/$buildType/ios/frameworks/phone/sqlite3.framework \
     -output ./out/$buildType/ios/sqlite3.xcframework
