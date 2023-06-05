@@ -20,13 +20,11 @@
 include(${CMAKE_CURRENT_LIST_DIR}/common.cmake)
 
 set(BUILD_PLATFORM ${CMAKE_HOST_SYSTEM_PROCESSOR})
-set(BUILD_TARGET "local")
 set(CMAKE_C_COMPILER "clang")
 set(CMAKE_CXX_COMPILER "clang++")
+set(INSTALL_TEST ON)
 
 set(CMAKE_AR "ar")
 set(CMAKE_RANLIB "ranlib")
-
-set(OUT_NAME "${BUILD_PLATFORM}")
 
 add_compile_definitions("TP_LOCAL")

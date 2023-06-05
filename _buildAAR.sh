@@ -20,7 +20,7 @@
 
 echo "Building Android AAR..."
 
-
+NDK_VERSION="25.0.8775105"
 ANDROID_JNI_LIBS=./android/sqlite3/src/main/jniLibs
 
 mkdir -p $ANDROID_JNI_LIBS/arm64-v8a
@@ -28,7 +28,7 @@ mkdir -p $ANDROID_JNI_LIBS/armeabi-v7a
 mkdir -p $ANDROID_JNI_LIBS/x86
 mkdir -p $ANDROID_JNI_LIBS/x86_64
 
-cp out/$buildType/android/arm64-v8a/libsqlite3.so $ANDROID_JNI_LIBS/arm64-v8a/libsqlite3.so
+cp out/$buildType/android/arm64/libsqlite3.so $ANDROID_JNI_LIBS/arm64-v8a/libsqlite3.so
 cp out/$buildType/android/armeabi-v7a/libsqlite3.so $ANDROID_JNI_LIBS/armeabi-v7a/libsqlite3.so
 cp out/$buildType/android/x86/libsqlite3.so $ANDROID_JNI_LIBS/x86/libsqlite3.so
 cp out/$buildType/android/x86_64/libsqlite3.so $ANDROID_JNI_LIBS/x86_64/libsqlite3.so
@@ -46,7 +46,7 @@ if [ "$buildType" == "Release" ]; then
 fi
 
 cp sqlite3/build/outputs/aar/sqlite3-$lBuildType.aar ../test/android/app/libs/sqlite3.aar
-cp ../third_party/libcxx/libcxx-25.0.8775105.aar ../test/android/app/libs/libcxx-25.0.8775105.aar
+cp ../third_party/libcxx/libcxx-$NDK_VERSION.aar ../test/android/app/libs/libcxx-$NDK_VERSION.aar
 
 cp sqlite3/build/outputs/aar/sqlite3-$lBuildType.aar ../out/$buildType/android/
 

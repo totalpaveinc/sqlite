@@ -38,9 +38,11 @@ fi
 
 echo "Build Type: $buildType"
 
-buildTargets=("local" "android-armv7a" "android-aarch64" "android-i686" "android-x86_64")
+buildTargets=("android-armv7a" "android-aarch64" "android-i686" "android-x86_64")
 if [ `uname` == "Darwin" ]; then
-    buildTargets+=("ios-arm64" "ios-x86_64" "ios-arm64-simulator")
+    buildTargets+=("mac-x86_64" "mac-arm64" "ios-arm64" "iossim-x86_64" "iossim-arm64")
+else
+    buildTargets+=("linux-x86_64")
 fi
 
 rootDir=`pwd`
@@ -54,16 +56,9 @@ fi
 mkdir -p build
 
 for target in ${buildTargets[@]}; do
-    
-    if [ "$target" == "local" ]; then
-        toolchain="local"
-    else
-        toolchain="$target"
-    fi
-
     cmake \
         -DCMAKE_MODULE_PATH="$rootDir/cmake" \
-        -DCMAKE_TOOLCHAIN_FILE=`pwd`/cmake/toolchains/$toolchain.cmake \
+        -DCMAKE_TOOLCHAIN_FILE=`pwd`/cmake/toolchains/$target.cmake \
         -DCMAKE_BUILD_TYPE=$buildType \
         -B build/$buildType/$target \
         -G"Unix Makefiles" \

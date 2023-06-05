@@ -27,5 +27,6 @@ set(CMAKE_XCODE_ATTRIBUTE_DEVELOPMENT_TEAM "77ML2BDZY2")
 set(CMAKE_AR "ar")
 set(CMAKE_RANLIB "ranlib")
 set(BUILD_PLATFORM "ios")
+set(LIB_EXT "dylib")
 
 add_compile_definitions("IOS")

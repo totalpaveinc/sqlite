@@ -24,6 +24,8 @@ project(
     VERSION 3.39.2
 )
 
+message("CFLAGS ${CMAKE_CXX_FLAGS}")
+
 if ("${CMAKE_BUILD_TYPE}" STREQUAL "") 
     SET(CMAKE_BUILD_TYPE "Debug")
 endif()
@@ -89,30 +91,14 @@ add_custom_command(TARGET sqlite-intermediate POST_BUILD
     COMMENT "Installing tp/sqlite/utilities.h"
 )
 
-if ("${BUILD_TARGET}" STREQUAL "local")
-    set(LIB_EXT "so")
-    if ("${CMAKE_HOST_SYSTEM_NAME}" STREQUAL "Darwin")
-        set(LIB_EXT "dylib")
-    endif()
-    add_custom_command(TARGET sqlite3 POST_BUILD
-        COMMAND "${CMAKE_COMMAND}" -E copy
-        ${CMAKE_BINARY_DIR}/libsqlite3.${LIB_EXT} ${CMAKE_SOURCE_DIR}/out/${CMAKE_BUILD_TYPE}/${OUT_NAME}/libsqlite3.${LIB_EXT}
-        COMMENT "Installing ${BUILD_PLATFORM}/${BUILD_TARGET} libsqlite3.${LIB_EXT}"
-    )
-else()
-    set(LIB_EXT "so")
-    if ("${CMAKE_SYSTEM_NAME}" STREQUAL "iOS")
-        set(LIB_EXT "dylib")
-    endif()
-    add_custom_command(TARGET sqlite3 POST_BUILD
-        COMMAND "${CMAKE_COMMAND}" -E copy
-        ${CMAKE_BINARY_DIR}/libsqlite3.${LIB_EXT} ${CMAKE_SOURCE_DIR}/out/${CMAKE_BUILD_TYPE}/${BUILD_PLATFORM}/${OUT_NAME}/libsqlite3.${LIB_EXT}
-        COMMENT "Installing ${BUILD_PLATFORM}/${OUT_NAME} libsqlite3.${LIB_EXT}"
-    )
-endif()
+add_custom_command(TARGET sqlite3 POST_BUILD
+    COMMAND "${CMAKE_COMMAND}" -E copy
+    ${CMAKE_BINARY_DIR}/libsqlite3.${LIB_EXT} ${CMAKE_SOURCE_DIR}/out/${CMAKE_BUILD_TYPE}/${OUT_PLATFORM}/${OUT_ARCH}/libsqlite3.${LIB_EXT}
+    COMMENT "Installing ${BUILD_PLATFORM}/${OUT_NAME} libsqlite3.${LIB_EXT}"
+)
 
 # Local Tests
-if ("${BUILD_TARGET}" STREQUAL "local")
+if (${INSTALL_TEST})
     add_executable(test ./test/local/main.cpp)
     target_link_libraries(test
         PUBLIC sqlite3
@@ -120,7 +106,7 @@ if ("${BUILD_TARGET}" STREQUAL "local")
     )
     add_custom_command(TARGET test POST_BUILD
         COMMAND "${CMAKE_COMMAND}" -E copy
-        ${CMAKE_BINARY_DIR}/test ${CMAKE_SOURCE_DIR}/out/${CMAKE_BUILD_TYPE}/${CMAKE_HOST_SYSTEM_NAME}/test
+        ${CMAKE_BINARY_DIR}/test ${CMAKE_SOURCE_DIR}/out/${CMAKE_BUILD_TYPE}/${OUT_PLATFORM}/${OUT_ARCH}/test
         COMMENT "Installing test program"
     )
 endif()

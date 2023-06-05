@@ -1,3 +1,4 @@
+
 # Copyright 2022 Total Pave Inc.
 
 # Permission is hereby granted, free of charge, to any person obtaining a copy of this
@@ -17,8 +18,9 @@
 # CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE
 # OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-set(CMAKE_ANDROID_ARCH_ABI "arm64-v8a")
-include(${CMAKE_CURRENT_LIST_DIR}/android-toolchain.cmake)
-include_directories(${CMAKE_SYSROOT}/usr/include/aarch64-linux-android)
-set(OUT_PLATFORM "android")
-set(OUT_ARCH "arm64")
+include(${CMAKE_CURRENT_LIST_DIR}/local.cmake)
+
+set(CMAKE_C_FLAGS "-arch x86_64")
+set(CMAKE_CXX_FLAGS ${CMAKE_C_FLAGS})
+set(OUT_PLATFORM "linux")
+set(OUT_ARCH "x86_64")

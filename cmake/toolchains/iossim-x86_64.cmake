@@ -24,5 +24,5 @@ set(CMAKE_OSX_SYSROOT ${CMAKE_SYSROOT})
 
 set(CMAKE_C_FLAGS "-isysroot ${CMAKE_SYSROOT} -arch x86_64")
 set(CMAKE_CXX_FLAGS ${CMAKE_C_FLAGS})
-set(BUILD_TARGET "x86_64")
-set(OUT_NAME "ios-sim-x86_64")
+set(OUT_PLATFORM "iossim")
+set(OUT_ARCH "x86_64")
