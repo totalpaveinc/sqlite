@@ -23,32 +23,10 @@ echo "Building release..."
 ./build.sh release
 
 echo "Publishing to bin..."
+rm -rf bin/dist
+mkdir -p bin/dist
 
-echo "Publishing headers"
-cp -r out/Release/include/* bin/include/
-
-echo "Publishing `uname`"
-cp out/Release/`uname`/libsqlite3.* bin/`uname`/
-
-androidBuilds=("armeabi-v7a" "arm64-v8a" "x86" "x86_64")
-for build in ${androidBuilds[@]}; do
-    echo "Publishing Android $build"
-    mkdir -p bin/android/$build
-    cp out/Release/android/$build/libsqlite3.so bin/android/$build/libsqlite3.so
-done
-
-cp out/Release/android/sqlite3-release.aar bin/android/sqlite3.aar
-
-if [ `uname` == "Darwin" ]; then
-    builds=("arm64" "x86_64")
-    for build in ${builds[@]}; do
-        echo "Publishing iOS $build"
-        mkdir -p bin/ios/$build
-        cp out/Release/ios/$build/libsqlite3.dylib bin/ios/$build/libsqlite3.dylib
-    done
-
-    cp -r out/Release/ios/sqlite3.xcframework bin/ios/
-fi
+cp -r out/Release/* bin/dist
 
 cd bin
 git add *
