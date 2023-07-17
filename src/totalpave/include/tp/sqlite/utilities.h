@@ -28,7 +28,9 @@ namespace TP { namespace sqlite {
 
     constexpr char const * const TOTALPAVE_SQLITE_ERROR_DOMAIN = "com.totalpave.sqlite3.ErrorDomain";
     constexpr char const * const SQLITE_ERROR_DOMAIN = "com.sqlite3.ErrorDomain";
+    
     constexpr int const ERROR_CODE_BIND_PARAMETER_ERROR = 1;
+    constexpr int const ERROR_CODE_NO_DB                = 2;
 
     int lookupVariableIndex(sqlite3_stmt* state, const char* variable);
 }}
