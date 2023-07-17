@@ -22,5 +22,5 @@ include(${CMAKE_CURRENT_LIST_DIR}/local.cmake)
 
 set(CMAKE_C_FLAGS "-arch arm64")
 set(CMAKE_CXX_FLAGS ${CMAKE_C_FLAGS})
-set(OUT_PLATFORM "mac")
+set(OUT_PLATFORM "linux")
 set(OUT_ARCH "arm64")
