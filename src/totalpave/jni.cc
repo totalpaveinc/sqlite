@@ -23,6 +23,7 @@
 #include <sqlite3.h>
 #include <cstring>
 #include <string>
+#include <stdio.h>
 #include <map>
 #include <tp/sqlite/utilities.h>
 #include <jni.h>
@@ -92,6 +93,31 @@ extern "C" {
     jint throwBindError(JNIEnv *env, std::string varName, jstring jVarName) {
         std::string message = "Could not bind parameter \"" + varName + "\"";
         return throwJavaException(env, TP::sqlite::TOTALPAVE_SQLITE_ERROR_DOMAIN, message.c_str(), TP::sqlite::ERROR_CODE_BIND_PARAMETER_ERROR);
+    }
+
+    JNIEXPORT void JNICALL
+    Java_com_totalpave_sqlite3_Sqlite_setTempDir(JNIEnv* env, jobject jptr, jstring jpath) {
+        // Read special notes: https://www.sqlite.org/c3ref/temp_directory.html
+        jboolean isCopy;
+        const char* path = env->GetStringUTFChars(jpath, &isCopy);
+
+        if (path == NULL) {
+            sqlite3_temp_directory = NULL;
+            return;
+        }
+
+        std::size_t len = strlen(path) + 1; // +1 for NULL terminator
+        char* sqliteStr = (char*)sqlite3_malloc(len);
+
+        if (sqliteStr == NULL) {
+            // Allocation failure
+            throwJavaException(env, TP::sqlite::TOTALPAVE_SQLITE_ERROR_DOMAIN, "Unable to allocate temp directory path", TP::sqlite::ERROR_CODE_ALLOC_FAILURE);
+            return;
+        }
+
+        strcpy(sqliteStr, path);
+
+        sqlite3_temp_directory = sqliteStr;
     }
 
     JNIEXPORT jlong JNICALL

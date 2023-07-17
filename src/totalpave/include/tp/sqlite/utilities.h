@@ -31,6 +31,7 @@ namespace TP { namespace sqlite {
     
     constexpr int const ERROR_CODE_BIND_PARAMETER_ERROR = 1;
     constexpr int const ERROR_CODE_NO_DB                = 2;
+    constexpr int const ERROR_CODE_ALLOC_FAILURE        = 3;
 
     int lookupVariableIndex(sqlite3_stmt* state, const char* variable);
 }}

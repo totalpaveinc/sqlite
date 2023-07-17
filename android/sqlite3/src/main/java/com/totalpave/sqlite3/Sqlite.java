@@ -40,6 +40,14 @@ public class Sqlite {
     public static final int NO_FOLLOW       = 0x01000000;
 
     /**
+     * Sets the usable tmp directory.
+     * This may be required if your queries can be large.
+     * It must be set **once** on initialization. It's unsafe
+     * to change this directory while any DBs are opened.
+     */
+    public static native void setTempDir(String path) throws SqliteException;
+
+    /**
      * @param path
      * @param openFlags
      * @return Pointer to Database handler
