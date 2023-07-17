@@ -36,7 +36,7 @@ cp out/$buildType/android/x86_64/libsqlite3.so $ANDROID_JNI_LIBS/x86_64/libsqlit
 cd android
 
 gradle wrapper
-./gradlew build
+./gradlew assemble$buildType
 
 mkdir -p ../test/android/app/libs
 

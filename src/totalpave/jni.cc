@@ -26,6 +26,12 @@
 #include <map>
 #include <tp/sqlite/utilities.h>
 #include <jni.h>
+#include <unordered_map>
+
+namespace sqlitejni_internal {
+    // Map of statement to the db handle
+    std::unordered_map<sqlite3_stmt*, sqlite3*> statementMap;
+}
 
 extern "C" {
     // We do not support the details object from here because of the complexities.
@@ -42,6 +48,25 @@ extern "C" {
         // Android documentation examples use 3 parameters and don't pass in the JNIEnv. See https://developer.android.com/training/articles/perf-jni for examples.
         jmethodID constructor = env->GetMethodID(exClass, "<init>", "(Ljava/lang/String;Ljava/lang/String;I)V");
         return env->Throw((jthrowable)env->NewObject(exClass, constructor, env->NewStringUTF(domain), env->NewStringUTF(message), code));
+    }
+
+    jint throwStatementError(JNIEnv* env, jlong jstatement) {
+        sqlite3_stmt* statement = (sqlite3_stmt*)jstatement;
+
+        // We do .find vs [] operator because .find will not modify the map,
+        //whereas [] operator will insert a new uninitialized property onto the map.
+        if (sqlitejni_internal::statementMap.find(statement) == sqlitejni_internal::statementMap.end()) {
+            // There is no db for this statement. Potential use after free?
+            return throwJavaException(env, TP::sqlite::TOTALPAVE_SQLITE_ERROR_DOMAIN, "No DB tied to this statement. Are you using a freed statement?", TP::sqlite::ERROR_CODE_NO_DB);
+        }
+
+        sqlite3* db = sqlitejni_internal::statementMap[(sqlite3_stmt*)jstatement];
+        return throwJavaException(env, TP::sqlite::SQLITE_ERROR_DOMAIN, sqlite3_errmsg(db), sqlite3_extended_errcode(db));
+    }
+
+    jint throwDBError(JNIEnv* env, jlong sqlite3db) {
+        sqlite3* db = (sqlite3*)sqlite3db;
+        return throwJavaException(env, TP::sqlite::SQLITE_ERROR_DOMAIN, sqlite3_errmsg(db), sqlite3_extended_errcode(db));
     }
 
     // JNIEXPORT void JNICALL
@@ -94,8 +119,10 @@ extern "C" {
         int resultCode = sqlite3_prepare_v2(db, sql, strlen(sql), &statement, 0);
         env->ReleaseStringUTFChars(jsql, sql);
         if (resultCode != SQLITE_OK) {
-            return throwJavaException(env, TP::sqlite::SQLITE_ERROR_DOMAIN, sqlite3_errstr(resultCode), resultCode);
+            return throwDBError(env, jdbptr);
         }
+
+        sqlitejni_internal::statementMap[statement] = db;
 
         return (jlong)statement;
     }
@@ -104,7 +131,7 @@ extern "C" {
     Java_com_totalpave_sqlite3_Sqlite_bindNullWithIndex(JNIEnv* env, jobject jptr, jlong jstatement, jint jIndex) {
         int resultCode = sqlite3_bind_null((sqlite3_stmt*)jstatement, (int)jIndex);
         if (resultCode != SQLITE_OK) {
-            return throwJavaException(env, TP::sqlite::SQLITE_ERROR_DOMAIN, sqlite3_errstr(resultCode), resultCode);
+            return throwStatementError(env, jstatement);
         }
         return resultCode;
     }
@@ -129,7 +156,7 @@ extern "C" {
     Java_com_totalpave_sqlite3_Sqlite_bindDoubleWithIndex(JNIEnv* env, jobject jptr, jlong jstatement, jint jIndex, jdouble value) {
         int resultCode = sqlite3_bind_double((sqlite3_stmt*)jstatement, jIndex, (double)value);
         if (resultCode != SQLITE_OK) {
-            return throwJavaException(env, TP::sqlite::SQLITE_ERROR_DOMAIN, sqlite3_errstr(resultCode), resultCode);
+            return throwStatementError(env, jstatement);
         }
         return resultCode;
     }
@@ -157,7 +184,7 @@ extern "C" {
         int resultCode = sqlite3_bind_text((sqlite3_stmt*)jstatement, jIndex, value, strlen(value), SQLITE_TRANSIENT);
         env->ReleaseStringUTFChars(jvalue, value);
         if (resultCode != SQLITE_OK) {
-            return throwJavaException(env, TP::sqlite::SQLITE_ERROR_DOMAIN, sqlite3_errstr(resultCode), resultCode);
+            return throwStatementError(env, jstatement);
         }
         return resultCode;
     }
@@ -182,7 +209,7 @@ extern "C" {
     Java_com_totalpave_sqlite3_Sqlite_bindIntWithIndex(JNIEnv* env, jobject jptr, jlong jstatement, jint jIndex, jint value) {
         int resultCode = sqlite3_bind_int((sqlite3_stmt*)jstatement, jIndex, (int)value);
         if (resultCode != SQLITE_OK) {
-            return throwJavaException(env, TP::sqlite::SQLITE_ERROR_DOMAIN, sqlite3_errstr(resultCode), resultCode);
+            return throwStatementError(env, jstatement);
         }
         return resultCode;
     }
@@ -221,7 +248,7 @@ extern "C" {
         }
 
         if (result != SQLITE_OK) {
-            return throwJavaException(env, TP::sqlite::SQLITE_ERROR_DOMAIN, sqlite3_errstr(result), result);
+            return throwStatementError(env, jstatement);
         }
         return result;
     }
@@ -246,7 +273,7 @@ extern "C" {
     Java_com_totalpave_sqlite3_Sqlite_step(JNIEnv* env, jobject jptr, jlong jstatement) {
         int resultCode = sqlite3_step((sqlite3_stmt*)jstatement);
         if (resultCode != SQLITE_OK && resultCode != SQLITE_DONE && resultCode != SQLITE_ROW) {
-            return throwJavaException(env, TP::sqlite::SQLITE_ERROR_DOMAIN, sqlite3_errstr(resultCode), resultCode);
+            return throwStatementError(env, jstatement);
         }
         return resultCode;
     }
@@ -255,7 +282,7 @@ extern "C" {
     Java_com_totalpave_sqlite3_Sqlite_reset(JNIEnv* env, jobject jptr, jlong jstatement) {
         int resultCode = sqlite3_reset((sqlite3_stmt*)jstatement);
         if (resultCode != SQLITE_OK) {
-            return throwJavaException(env, TP::sqlite::SQLITE_ERROR_DOMAIN, sqlite3_errstr(resultCode), resultCode);
+            return throwStatementError(env, jstatement);
         }
         return resultCode;
     }
@@ -304,6 +331,7 @@ extern "C" {
 
     JNIEXPORT jint JNICALL
     Java_com_totalpave_sqlite3_Sqlite_finalize(JNIEnv* env, jobject jptr, jlong jstatement) {
+        sqlitejni_internal::statementMap.erase((sqlite3_stmt*)jstatement);
         return (jint)sqlite3_finalize((sqlite3_stmt*)jstatement);
     }
 

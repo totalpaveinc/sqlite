@@ -73,3 +73,5 @@ source _buildAAR.sh
 if [ `uname` == "Darwin" ]; then
     source _buildXCFramework.sh
 fi
+
+echo "Finish $buildType task"
