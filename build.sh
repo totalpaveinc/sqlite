@@ -52,11 +52,6 @@ else
 fi
 
 mkdir -p build
-mkdir -p ./out/$buildType/android
-mkdir -p ./out/$buildType/android/arm64-v8a
-mkdir -p ./out/$buildType/android/armeabi-v7a
-mkdir -p ./out/$buildType/android/x86
-mkdir -p ./out/$buildType/android/x86_64
 
 for target in ${buildTargets[@]}; do
     
