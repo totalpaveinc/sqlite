@@ -20,6 +20,7 @@
 # OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 echo "Building release..."
+./clean.sh
 ./build.sh release
 
 echo "Publishing to bin..."
