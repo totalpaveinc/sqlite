@@ -41,7 +41,7 @@ gradle wrapper
 mkdir -p ../test/android/app/libs
 
 lBuildType=debug
-if [ `$buildType` == "Release" ]; then
+if [ "$buildType" == "Release" ]; then
     lBuildType="release"
 fi
 
