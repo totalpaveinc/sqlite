@@ -20,6 +20,12 @@
 # OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 echo "Building release..."
+
+if [ `uname` != "Darwin" ]; then
+    echo "Mac is required for publishing"
+    exit 1
+fi
+
 ./clean.sh
 ./build.sh release
 
