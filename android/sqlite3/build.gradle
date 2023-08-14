@@ -8,6 +8,7 @@ task wrapper(type: Wrapper) {
 }
 
 android {
+    namespace "com.totalpave.sqlite3"
     compileSdk 32
 
     defaultConfig {
