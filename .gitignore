@@ -28,3 +28,4 @@ xcuserdata
 ios/build
 /ios/info.plist
 ios/Logs
+ios/*.noindex
