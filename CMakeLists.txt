@@ -63,14 +63,29 @@ add_library(sqlite3 SHARED
     ./src/totalpave/utilities.cpp
     ./src/totalpave/include/tp/sqlite/utilities.h
 )
+
+add_library(ConvertISO8601ToTimestamp STATIC
+    ./src/totalpave/extensions/ConvertISO8601ToTimestamp.cpp
+    ./src/totalpave/include/tp/sqlite/extensions/ConvertISO8601ToTimestamp.h
+)
+
 target_link_libraries(sqlite3
+    PUBLIC ConvertISO8601ToTimestamp
     PUBLIC sqlite-intermediate
     "-Wl"
 )
+
 target_include_directories(sqlite3
     PUBLIC ${CMAKE_SOURCE_DIR}/src/sqlite
     PUBLIC ${CMAKE_SOURCE_DIR}/src/totalpave/include
 )
+
+target_include_directories(ConvertISO8601ToTimestamp
+    PUBLIC ${CMAKE_SOURCE_DIR}/src/sqlite
+    PUBLIC ${CMAKE_SOURCE_DIR}/src/totalpave/include
+)
+
+# target_compile_definitions(ConvertISO8601ToTimestamp PUBLIC "SQLITE_CORE")
 
 # There is a PRE_BUILD... but for all generators other than Visual Studio
 # PRE_BUILD fires just before PRE_LINK... effectively making it

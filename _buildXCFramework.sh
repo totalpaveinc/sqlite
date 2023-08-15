@@ -18,8 +18,9 @@
 # CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE
 # OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-cp -f ./src/totalpave/include/tp/sqlite/utilities.h ./ios/sqlite3/sqlite3/include/tp/sqlite
+cp -rf ./src/totalpave/include/tp ./ios/sqlite3/sqlite3/include/
 cp -f ./src/totalpave/utilities.cpp ./ios/sqlite3/sqlite3/src
+cp -rf ./src/totalpave/extensions ./ios/sqlite3/sqlite3/src
 cp -f ./src/sqlite/sqlite3.h ./ios/sqlite3/sqlite3/include
 cp -f ./src/sqlite/sqlite3.c ./ios/sqlite3/sqlite3/src
 cp -f ./src/sqlite/sqlite3ext.h ./ios/sqlite3/sqlite3/include
@@ -29,8 +30,8 @@ mkdir -p ./out/$buildType/ios/frameworks/phone
 mkdir -p ./ios/build
 
 xcodebuild -quiet -project ./ios/sqlite3/sqlite3.xcodeproj -scheme sqlite3 -derivedDataPath ./ios clean
-xcodebuild -quiet -project ./ios/sqlite3/sqlite3.xcodeproj -scheme sqlite3  -configuration $buildType -sdk iphonesimulator -derivedDataPath ./ios/build build
-xcodebuild -quiet -project ./ios/sqlite3/sqlite3.xcodeproj -scheme sqlite3  -configuration $buildType -sdk iphoneos -arch arm64 -derivedDataPath ./ios/build build
+xcodebuild -quiet -project ./ios/sqlite3/sqlite3.xcodeproj -scheme sqlite3 -configuration $buildType -sdk iphonesimulator -derivedDataPath ./ios/build build
+xcodebuild -quiet -project ./ios/sqlite3/sqlite3.xcodeproj -scheme sqlite3 -configuration $buildType -sdk iphoneos -arch arm64 -derivedDataPath ./ios/build build
 cp -rf ./ios/build/Build/Products/$buildType-iphonesimulator/sqlite3.framework ./out/$buildType/ios/frameworks/simulator/sqlite3.framework
 cp -rf ./ios/build/Build/Products/$buildType-iphoneos/sqlite3.framework ./out/$buildType/ios/frameworks/phone/sqlite3.framework
 # Note xcodebuild -create-xcframework doesn't overwrite xcframework files.
