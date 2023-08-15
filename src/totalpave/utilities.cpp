@@ -21,6 +21,7 @@
 
 #include <tp/sqlite/utilities.h>
 #include <sqlite3.h>
+#include <tp/sqlite/extensions/ConvertISO8601ToTimestamp.h>
 
 namespace TP { namespace sqlite {
     // https://www.sqlite.org/c3ref/bind_blob.html
@@ -29,5 +30,17 @@ namespace TP { namespace sqlite {
         std::string strVar = variable;
         std::string boundVarName = ":" + strVar;
         return sqlite3_bind_parameter_index(statement, boundVarName.c_str());
+    }
+
+    int open(const char* path, sqlite3** outDB, int flags) {
+        int resultCode = sqlite3_open_v2(path, outDB, flags, nullptr);
+
+        if (resultCode != SQLITE_OK) {
+            return resultCode;
+        }
+
+        resultCode = extensions::ConvertISO8601ToTimestamp::init(*outDB);
+
+        return resultCode;
     }
 }}

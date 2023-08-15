@@ -62,6 +62,8 @@ add_library(sqlite3 SHARED
     ./src/totalpave/jni.cc
     ./src/totalpave/utilities.cpp
     ./src/totalpave/include/tp/sqlite/utilities.h
+    ./src/totalpave/include/tp/sqlite/extensions/ConvertISO8601ToTimestamp.h
+    ./src/totalpave/extensions/ConvertISO8601ToTimestamp.cpp
 )
 target_link_libraries(sqlite3
     PUBLIC sqlite-intermediate

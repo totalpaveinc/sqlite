@@ -34,4 +34,6 @@ namespace TP { namespace sqlite {
     constexpr int const ERROR_CODE_ALLOC_FAILURE        = 3;
 
     int lookupVariableIndex(sqlite3_stmt* state, const char* variable);
+
+    int open(const char* path, sqlite3** db, int flags);
 }}

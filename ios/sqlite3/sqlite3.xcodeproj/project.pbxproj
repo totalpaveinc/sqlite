@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		94C54D942A8C0B6000FA7E3D /* ConvertISO8601ToTimestamp.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 94C54D932A8C0B6000FA7E3D /* ConvertISO8601ToTimestamp.cpp */; };
 		CBA2AE65296620C9001B2D62 /* tp in Headers */ = {isa = PBXBuildFile; fileRef = CBA2AE63296620C0001B2D62 /* tp */; settings = {ATTRIBUTES = (Public, ); }; };
 		CBD725BA2952416C00829674 /* sqlite3.c in Sources */ = {isa = PBXBuildFile; fileRef = CBD725B82952416C00829674 /* sqlite3.c */; };
 		CBD725BB2952416C00829674 /* utilities.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CBD725B92952416C00829674 /* utilities.cpp */; };
@@ -27,6 +28,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		94C54D932A8C0B6000FA7E3D /* ConvertISO8601ToTimestamp.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ConvertISO8601ToTimestamp.cpp; sourceTree = "<group>"; };
 		CB8B95C1294FB2BA0020A17B /* sqlite3.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = sqlite3.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		CBA2AE63296620C0001B2D62 /* tp */ = {isa = PBXFileReference; lastKnownFileType = folder; path = tp; sourceTree = "<group>"; };
 		CBD725B82952416C00829674 /* sqlite3.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = sqlite3.c; sourceTree = "<group>"; };
@@ -85,6 +87,7 @@
 			isa = PBXGroup;
 			children = (
 				CBD725B82952416C00829674 /* sqlite3.c */,
+				94C54D932A8C0B6000FA7E3D /* ConvertISO8601ToTimestamp.cpp */,
 				CBD725B92952416C00829674 /* utilities.cpp */,
 			);
 			path = src;
@@ -173,6 +176,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				CBD725BB2952416C00829674 /* utilities.cpp in Sources */,
+				94C54D942A8C0B6000FA7E3D /* ConvertISO8601ToTimestamp.cpp in Sources */,
 				CBD725BA2952416C00829674 /* sqlite3.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

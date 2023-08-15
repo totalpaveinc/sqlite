@@ -8,7 +8,9 @@
 #import <UIKit/UIKit.h>
 #import "AppDelegate.h"
 
-#include <sqlite3.h>
+//#import <sqlite3/sqlite3.h>
+//#include <sqlite3.h>
+#import <sqlite3/tp/sqlite/utilities.h>
 
 int main(int argc, char * argv[]) {
     NSString * appDelegateClassName;
@@ -40,10 +42,12 @@ int main(int argc, char * argv[]) {
     location = [location stringByAppendingPathComponent:@"bob"];
     location = [location stringByAppendingPathExtension:@"db"];
     printf("\nLocation (%s) ", [location UTF8String]);
-    printf("\nopen %d ", sqlite3_open_v2([location UTF8String], &db, SQLITE_OPEN_CREATE | SQLITE_OPEN_READWRITE | SQLITE_OPEN_URI, NULL));
+    //printf("\nopen %d ", sqlite3_open_v2([location UTF8String], &db, SQLITE_OPEN_CREATE | SQLITE_OPEN_READWRITE | SQLITE_OPEN_URI, NULL));
+    printf("\nopen %d ", TP::sqlite::open([location UTF8String], &db, SQLITE_OPEN_CREATE | SQLITE_OPEN_READWRITE | SQLITE_OPEN_URI));
     sqlite3_stmt* query;
     sqlite3_stmt* querya;
     sqlite3_stmt* queryb;
+    sqlite3_stmt* queryc;
     
     // Note code 101 === DONE, it's a successful code.
     
@@ -89,7 +93,23 @@ int main(int argc, char * argv[]) {
     printf("\nselect %d ", code);
     sqlite3_finalize(queryb);
 
-    
+    const char* datetimestamp = "SELECT ConvertISO8601ToTimestamp('2023-08-14T19:14:49.456Z');";
+    sqlite3_prepare_v2(db, datetimestamp, strlen(datetimestamp), &queryc, NULL);
+    code = sqlite3_step(queryc);
+    while (code == SQLITE_ROW) {
+        printf(
+            "\ntime: %lld \nexpectation: 1692040489456 \n is same: %d",
+        sqlite3_column_int64(queryc, 0),
+        sqlite3_column_int64(queryc, 0) == 1692040489456
+        );
+        code = sqlite3_step(queryc);
+    }
+    if (code != SQLITE_OK) {
+        //error
+    }
+    printf("\nselect %d ", code);
+    sqlite3_finalize(queryc);
+
     //Calling step after finalize should return SQLITE_MISUSE but it's ultimately undefined behaviour.
     //So anything can happen. During my tests, it was hard-crashing with an uncatchable error.
     //While creating a preventative system is probably possible, we've decided it would be high-cost-low-reward.

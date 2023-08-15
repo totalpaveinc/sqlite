@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		94C54D972A8C121900FA7E3D /* sqlite3.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 94C54D952A8C0C3600FA7E3D /* sqlite3.xcframework */; };
+		94C54D982A8C121900FA7E3D /* sqlite3.xcframework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 94C54D952A8C0C3600FA7E3D /* sqlite3.xcframework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		CB2DBB8328C142EE00D56B76 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = CB2DBB8228C142EE00D56B76 /* AppDelegate.m */; };
 		CB2DBB8628C142EE00D56B76 /* SceneDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = CB2DBB8528C142EE00D56B76 /* SceneDelegate.m */; };
 		CB2DBB8928C142EE00D56B76 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CB2DBB8828C142EE00D56B76 /* ViewController.m */; };
@@ -14,8 +16,6 @@
 		CB2DBB8E28C142EF00D56B76 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = CB2DBB8D28C142EF00D56B76 /* Assets.xcassets */; };
 		CB2DBB9128C142EF00D56B76 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = CB2DBB8F28C142EF00D56B76 /* LaunchScreen.storyboard */; };
 		CB2DBB9428C142EF00D56B76 /* main.mm in Sources */ = {isa = PBXBuildFile; fileRef = CB2DBB9328C142EF00D56B76 /* main.mm */; };
-		CBF7BE0B28EC867D00D5935D /* sqlite3.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = CBF7BE0A28EC867D00D5935D /* sqlite3.xcframework */; };
-		CBF7BE0C28EC867D00D5935D /* sqlite3.xcframework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = CBF7BE0A28EC867D00D5935D /* sqlite3.xcframework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -25,7 +25,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				CBF7BE0C28EC867D00D5935D /* sqlite3.xcframework in Embed Frameworks */,
+				94C54D982A8C121900FA7E3D /* sqlite3.xcframework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -33,6 +33,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		94C54D952A8C0C3600FA7E3D /* sqlite3.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = sqlite3.xcframework; path = ../../../out/Debug/ios/sqlite3.xcframework; sourceTree = "<group>"; };
 		CB2DBB7E28C142EE00D56B76 /* sqlitetest.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = sqlitetest.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		CB2DBB8128C142EE00D56B76 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		CB2DBB8228C142EE00D56B76 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
@@ -45,7 +46,6 @@
 		CB2DBB9028C142EF00D56B76 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		CB2DBB9228C142EF00D56B76 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		CB2DBB9328C142EF00D56B76 /* main.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = main.mm; sourceTree = "<group>"; };
-		CBF7BE0A28EC867D00D5935D /* sqlite3.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = sqlite3.xcframework; path = ../../../out/ios/sqlite3.xcframework; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -53,7 +53,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				CBF7BE0B28EC867D00D5935D /* sqlite3.xcframework in Frameworks */,
+				94C54D972A8C121900FA7E3D /* sqlite3.xcframework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -98,7 +98,7 @@
 		CB2DBB9A28C1433900D56B76 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				CBF7BE0A28EC867D00D5935D /* sqlite3.xcframework */,
+				94C54D952A8C0C3600FA7E3D /* sqlite3.xcframework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
