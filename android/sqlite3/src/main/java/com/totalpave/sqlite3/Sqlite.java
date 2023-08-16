@@ -63,13 +63,13 @@ public class Sqlite {
 
     public static native int bindDouble(long statement, String varName, double value) throws SqliteException;
     public static native int bindString(long statement, String varName, String value) throws SqliteException;
-    public static native int bindInt(long statement, String varName, int value) throws SqliteException;
+    public static native int bindInt(long statement, String varName, long value) throws SqliteException;
     public static native int bindBlob(long statement, String varName, byte[] value) throws SqliteException;
     public static native int bindNull(long statement, String varName) throws SqliteException;
     
     public static native int bindDoubleWithIndex(long statement, int index, double value) throws SqliteException;
     public static native int bindStringWithIndex(long statement, int index, String value) throws SqliteException;
-    public static native int bindIntWithIndex(long statement, int index, int value) throws SqliteException;
+    public static native int bindIntWithIndex(long statement, int index, long value) throws SqliteException;
     public static native int bindBlobWithIndex(long statement, int index, byte[] value) throws SqliteException;
     public static native int bindNullWithIndex(long statement, int index) throws SqliteException;
 
@@ -80,7 +80,7 @@ public class Sqlite {
     public static native int columnType(long statement, int index);
 
     public static native double getDouble(long statement, int index);
-    public static native int getInt(long statement, int index);
+    public static native long getInt(long statement, int index);
     public static native String getString(long statement, int index);
     public static native byte[] getBlob(long statement, int index);
 

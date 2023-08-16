@@ -60,7 +60,7 @@ public class MainActivity extends AppCompatActivity {
                 int result = Sqlite.step(statement);
                 if (result == Statement.ROW) {
                     rowCount++;
-                    int id = Sqlite.getInt(statement, 0);
+                    long id = Sqlite.getInt(statement, 0);
                     String name = Sqlite.getString(statement, 1);
                     double height = Sqlite.getDouble(statement, 2);
                     byte[] data = Sqlite.getBlob(statement, 4);

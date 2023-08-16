@@ -232,8 +232,8 @@ extern "C" {
     }
 
     JNIEXPORT jint JNICALL
-    Java_com_totalpave_sqlite3_Sqlite_bindIntWithIndex(JNIEnv* env, jobject jptr, jlong jstatement, jint jIndex, jint value) {
-        int resultCode = sqlite3_bind_int((sqlite3_stmt*)jstatement, jIndex, (int)value);
+    Java_com_totalpave_sqlite3_Sqlite_bindIntWithIndex(JNIEnv* env, jobject jptr, jlong jstatement, jint jIndex, jlong value) {
+        int resultCode = sqlite3_bind_int64((sqlite3_stmt*)jstatement, jIndex, (long)value);
         if (resultCode != SQLITE_OK) {
             return throwStatementError(env, jstatement);
         }
@@ -241,7 +241,7 @@ extern "C" {
     }
 
     JNIEXPORT jint JNICALL
-    Java_com_totalpave_sqlite3_Sqlite_bindInt(JNIEnv* env, jobject jptr, jlong jstatement, jstring jVarName, jint value) {
+    Java_com_totalpave_sqlite3_Sqlite_bindInt(JNIEnv* env, jobject jptr, jlong jstatement, jstring jVarName, jlong value) {
         sqlite3_stmt* statement = (sqlite3_stmt*)jstatement;
         jboolean isCopy;
         const char* varName = env->GetStringUTFChars(jVarName, &isCopy);
@@ -334,9 +334,9 @@ extern "C" {
         return (jdouble)sqlite3_column_double((sqlite3_stmt*)jstatement, (int)jindex);
     }
 
-    JNIEXPORT jint JNICALL
+    JNIEXPORT jlong JNICALL
     Java_com_totalpave_sqlite3_Sqlite_getInt(JNIEnv* env, jobject jptr, jlong jstatement, jint jindex) {
-        return (jint)sqlite3_column_int((sqlite3_stmt*)jstatement, (int)jindex);
+        return (jlong)sqlite3_column_int64((sqlite3_stmt*)jstatement, (int)jindex);
     }
 
     JNIEXPORT jstring JNICALL
