@@ -24,6 +24,7 @@ test/android/gradle/wrapper
 build
 *.db
 android/local.properties
+android/publishing.properties
 xcuserdata
 ios/build
 /ios/info.plist

@@ -1,6 +1,7 @@
 
 plugins {
     id 'com.android.library'
+    id 'maven-publish'
 }
 
 task wrapper(type: Wrapper) {
@@ -20,6 +21,42 @@ android {
     buildTypes {
         release {
             minifyEnabled false
+        }
+    }
+}
+
+publishing {
+    publications {
+        release(MavenPublication) {
+            groupId = 'totalpave'
+            artifactId = 'sqlite3'
+            version = '0.0.1'
+
+            afterEvaluate {
+                from components.release
+            }
+        }
+    }
+
+    repositories {
+        maven {
+            url = 'https://archiva.totalpave.com/repository/public'
+            credentials {
+                if (project.hasProperty('publishing.properties')) {
+                    def publishingFile = file(project.property('publishing.properties'))
+                    if (publishingFile.exists()) {
+                        def publisher = new Properties()
+                        publisher.load(new FileInputStream(publishingFile))
+
+                        username publisher['username']
+                        password publisher['password']
+                    } else {
+                        throw new GradleException("Publishing properties file not found: ${publishingFile.absolutePath}")
+                    }
+                } else {
+                    throw new GradleException("publishing.properties file not defined.")
+                }
+            }
         }
     }
 }

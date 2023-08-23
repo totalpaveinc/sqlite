@@ -92,5 +92,6 @@
         "semaphore": "cpp",
         "numbers": "cpp",
         "stop_token": "cpp"
-    }
+    },
+    "java.configuration.updateBuildConfiguration": "disabled"
 }
