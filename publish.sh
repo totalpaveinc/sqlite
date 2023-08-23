@@ -30,7 +30,7 @@ if [ `uname` != "Darwin" ]; then
     exit 1
 fi
 
-# Check if the working directory is clean
+Check if the working directory is clean
 if ! git diff-index --quiet HEAD --; then
     echo "Git repository is not clean. There are uncommitted changes."
     exit 1
@@ -43,7 +43,7 @@ if [ -z "$VERSION" ]; then
     exit 2
 fi
 
-perl -p -i -e "s/^\s?+s\.version.+$/s.version = ${VERSION}/gm" sqlite3.podspec
+perl -p -i -e "s/^(\s+)?s\.version.+$/  s.version = ${VERSION}/gm" sqlite3.podspec
 
 exit 0
 
