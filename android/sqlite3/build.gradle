@@ -27,7 +27,7 @@ publishing {
         release(MavenPublication) {
             groupId = 'totalpave'
             artifactId = 'sqlite3'
-            version = file('version.txt').text.trim()
+            version = file('../../VERSION').text.trim()
 
             afterEvaluate {
                 from components.release
