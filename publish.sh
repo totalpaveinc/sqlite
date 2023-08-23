@@ -19,12 +19,33 @@
 # CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE
 # OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-echo "Building release..."
+# Check if the current directory is a Git repository
+if ! git rev-parse --is-inside-work-tree >/dev/null 2>&1; then
+    echo "Not in a Git repository."
+    exit 1
+fi
 
 if [ `uname` != "Darwin" ]; then
     echo "Mac is required for publishing"
     exit 1
 fi
+
+# Check if the working directory is clean
+if ! git diff-index --quiet HEAD --; then
+    echo "Git repository is not clean. There are uncommitted changes."
+    exit 1
+fi
+
+VERSION="$1"
+
+if [ -z "$VERSION" ]; then
+    echo "Version is required."
+    exit 2
+fi
+
+perl -p -i -e "s/^\s?+s\.version.+$/s.version = ${VERSION}/gm" sqlite3.podspec
+
+exit 0
 
 ./clean.sh
 ./build.sh release
