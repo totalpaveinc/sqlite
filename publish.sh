@@ -30,7 +30,7 @@ if [ `uname` != "Darwin" ]; then
     exit 1
 fi
 
-Check if the working directory is clean
+# Check if the working directory is clean
 if ! git diff-index --quiet HEAD --; then
     echo "Git repository is not clean. There are uncommitted changes."
     exit 1
@@ -43,9 +43,7 @@ if [ -z "$VERSION" ]; then
     exit 2
 fi
 
-perl -p -i -e "s/^(\s+)?s\.version.+$/  s.version = ${VERSION}/gm" sqlite3.podspec
-
-exit 0
+perl -p -i -e "s/^(\s+)?s\.version.+$/  s.version = '${VERSION}'/gm" sqlite3.podspec
 
 ./clean.sh
 ./build.sh release
@@ -60,8 +58,16 @@ cd bin
 git add *
 git commit -m "Update SQLite Binaries"
 git push
+git tag -m "v$VERSION" "v$VERSION"
+git push --tags
 cd ..
 git add bin
 git commit -m "Published SQLite Binaries"
 git push
 
+pod spec lint sqlite3.podspec
+if [ $? -ne 0 ]; then
+    exit $?
+fi
+
+pod repo push tp-public sqlite3.podspec
