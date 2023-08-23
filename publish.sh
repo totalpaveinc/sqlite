@@ -43,7 +43,7 @@ if [ -z "$VERSION" ]; then
     exit 2
 fi
 
-perl -p -i -e "s/^(\s+)?s\.version.+$/  s.version = '${VERSION}'/gm" sqlite3.podspec
+echo $VERSION > VERSION
 
 ./clean.sh
 ./build.sh release
@@ -56,13 +56,13 @@ cp -r out/Release/* bin/dist
 
 cd bin
 git add *
-git commit -m "Update SQLite Binaries"
+git commit -m "Update SQLite Binaries $VERSION"
 git push
 git tag -m "v$VERSION" "v$VERSION"
 git push --tags
 cd ..
-git add bin
-git commit -m "Published SQLite Binaries"
+git add bin VERSION
+git commit -m "Published SQLite Binaries $VERSION"
 git push
 
 pod spec lint sqlite3.podspec
@@ -71,3 +71,6 @@ if [ $? -ne 0 ]; then
 fi
 
 pod repo push tp-public sqlite3.podspec
+
+cd android
+./gradlew publishReleasePublicationToMavenRepository
