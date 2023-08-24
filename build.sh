@@ -19,6 +19,11 @@
 # CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE
 # OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
+if [ `uname` != "Darwin" ]; then
+    echo "Mac is required for building"
+    exit 1
+fi
+
 if [ "$1" != "" ] && [ "$1" != "debug" ] && [ "$1" != "release" ]; then
     echo "Build type must be either \"debug\" or \"release\"."
     echo ""
@@ -38,40 +43,19 @@ fi
 
 echo "Build Type: $buildType"
 
-buildTargets=("android-armv7a" "android-aarch64" "android-i686" "android-x86_64")
-if [ `uname` == "Darwin" ]; then
-    buildTargets+=("mac-x86_64" "mac-arm64" "ios-arm64" "iossim-x86_64" "iossim-arm64")
-else
-    buildTargets+=("linux-x86_64")
-fi
+cd android
+gradle wrapper
+./gradlew assemble$buildType
+cd ..
 
-rootDir=`pwd`
-
-if [ `uname` == "Linux" ]; then
-    buildHost="linux"
-else
-    buildHost="mac"
-fi
-
-mkdir -p build
-
-for target in ${buildTargets[@]}; do
-    cmake \
-        -DCMAKE_MODULE_PATH="$rootDir/cmake" \
-        -DCMAKE_TOOLCHAIN_FILE=`pwd`/cmake/toolchains/$target.cmake \
-        -DCMAKE_BUILD_TYPE=$buildType \
-        -B build/$buildType/$target \
-        -G"Unix Makefiles" \
-        .
-    
-    cd build/$buildType/$target
-    make
-    cd $rootDir
-done
-
-source _buildAAR.sh
-if [ `uname` == "Darwin" ]; then
-    source _buildXCFramework.sh
-fi
+cd ios/sqlite3
+xcodebuild -quiet -derivedDataPath ./build -project sqlite3.xcodeproj -configuration $buildType -scheme sqlite3 -destination "generic/platform=iOS" build
+xcodebuild -quiet -derivedDataPath ./build -project sqlite3.xcodeproj -configuration $buildType -scheme sqlite3 -destination "generic/platform=iOS Simulator" build
+rm -rf ./build/sqlite3-$buildType.xcframework
+xcodebuild -quiet -create-xcframework \
+    -framework ./build/Build/Products/$buildType-iphoneos/sqlite3.framework \
+    -framework ./build/Build/Products/$buildType-iphonesimulator/sqlite3.framework \
+    -output ./build/sqlite3-$buildType.xcframework
+cd ../..
 
 echo "Finish $buildType task"

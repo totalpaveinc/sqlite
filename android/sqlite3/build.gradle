@@ -12,6 +12,8 @@ android {
     namespace 'com.totalpave.sqlite3'
 
     compileSdk 33
+    ndkVersion '25.0.8775105'
+    buildToolsVersion = '33.0.2'
 
     defaultConfig {
         aarMetadata {
@@ -19,6 +21,13 @@ android {
         }
 
         minSdk 24
+
+        externalNativeBuild {
+            cmake {
+                version '3.22.1'
+                arguments "-DANDROID_STL=c++_shared"
+            }
+        }
     }
 
     buildTypes {
@@ -32,6 +41,27 @@ android {
             withSourcesJar()
         }
     }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    externalNativeBuild {
+        cmake {
+            path file('src/main/cpp/CMakeLists.txt')
+        }
+    }
+
+    packagingOptions {
+        excludes = [
+            "**/libc++_shared.so"
+        ]
+    }
+}
+
+dependencies {
+    runtimeOnly 'totalpave:libcxx:25.0.8775105'
 }
 
 publishing {

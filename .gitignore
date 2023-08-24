@@ -30,3 +30,4 @@ ios/build
 /ios/info.plist
 ios/Logs
 ios/*.noindex
+/android/sqlite3/.cxx

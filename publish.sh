@@ -52,7 +52,16 @@ echo "Publishing to bin..."
 rm -rf bin/dist
 mkdir -p bin/dist
 
-cp -r out/Release/* bin/dist
+mkdir -p bin/dist/include
+mkdir -p bin/dist/ios
+mkdir -p bin/dist/iossim
+
+cp -r ios/sqlite3/build/Build/Products/Release-iphoneos/sqlite3.framework/Headers/* bin/dist/include/
+cp -r ios/sqlite3/build/Build/Products/Release-iphoneos/sqlite3.framework/sqlite3 bin/dist/ios/libsqlite3.dylib
+cp -r ios/sqlite3/build/Build/Products/Release-iphonesimulator/sqlite3.framework/sqlite3 bin/dist/iossim/libsqlite3.dylib
+
+mkdir -p bin/dist/android
+cp -r android/sqlite3/build/intermediates/library_jni/release/jni/* bin/dist/android/
 
 cd bin
 git add *
