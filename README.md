@@ -20,10 +20,6 @@ Prebuilt binaries are available for:
 - - x86
 - - x86_64
 - - AAR library (Contains all prebuilt architectures)
-- Linux:
-- - x86_64
-- Mac OS:
-- - x86_64
 
 If you simply need the prebuilt binaries, take a look at our [sqlite-bin](https://github.com/totalpaveinc/sqlite-bin) repository.
 
@@ -77,4 +73,6 @@ e.g: `git clone --recurse-submodules git@github.com:totalpaveinc/sqlite.git`
 
 If you have already cloned without submodules, you can correct the repo by running `git submodule update --init`
 
-Without the `bin/` (`sqlite-bin`) submodule, the `install.sh` script will not work properly.
+Without the `bin/` (`sqlite-bin`) submodule, the `publish.sh` script will not work properly.
+
+To publish, run `./publish.sh <version>`
