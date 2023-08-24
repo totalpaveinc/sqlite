@@ -9,15 +9,27 @@ task wrapper(type: Wrapper) {
 }
 
 android {
+    namespace 'com.totalpave.sqlite3'
+
     compileSdk 33
 
     defaultConfig {
+        aarMetadata {
+            minCompileSdk 24
+        }
+
         minSdk 24
     }
 
     buildTypes {
         release {
             minifyEnabled false
+        }
+    }
+
+    publishing {
+        singleVariant('release') {
+            withSourcesJar()
         }
     }
 }
@@ -39,8 +51,8 @@ publishing {
         maven {
             url = 'https://archiva.totalpave.com/repository/public'
             credentials {
-                username settings['totalpave.repository.username']
-                password publisher['totalpave.repository.password']
+                username properties['totalpave.repository.user']
+                password properties['totalpave.repository.password']
             }
         }
     }
