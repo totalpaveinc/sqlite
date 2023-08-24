@@ -51,8 +51,8 @@ publishing {
         maven {
             url = 'https://archiva.totalpave.com/repository/public'
             credentials {
-                username properties['totalpave.repository.user']
-                password properties['totalpave.repository.password']
+                username findProperty('totalpave.repository.user')
+                password findProperty('totalpave.repository.password')
             }
         }
     }
