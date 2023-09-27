@@ -8,7 +8,9 @@
 #import <UIKit/UIKit.h>
 #import "AppDelegate.h"
 
-#include <sqlite3.h>
+//#include <sqlite3.h>
+#import <sqlite/sqlite3.h>
+#import <sqlite/TPISQLiteUtilities.h>
 
 int main(int argc, char * argv[]) {
     NSString * appDelegateClassName;
@@ -54,13 +56,13 @@ int main(int argc, char * argv[]) {
     
     const char* that = "INSERT INTO test VALUES (:id, :name, :height, :data)";
     sqlite3_prepare_v2(db, that, strlen(that), &querya, NULL);
-    int index = sqlite3_bind_parameter_index(querya, ":id");
+    int index = [TPISQLiteUtilities lookupVariableIndex:querya var:@"id"];
     sqlite3_bind_int(querya, index, 1);
-    index = sqlite3_bind_parameter_index(querya, ":name");
+    index = [TPISQLiteUtilities lookupVariableIndex:querya var:@"name"];
     sqlite3_bind_text(querya, index, "bob", 4, NULL);
-    index = sqlite3_bind_parameter_index(querya, ":height");
+    index = [TPISQLiteUtilities lookupVariableIndex:querya var:@"height"];
     sqlite3_bind_double(querya, index, 34.2);
-    index = sqlite3_bind_parameter_index(querya, ":data");
+    index = [TPISQLiteUtilities lookupVariableIndex:querya var:@"data"];
     sqlite3_bind_blob(querya, index, NULL, 0, NULL);
     
     printf("\ninsert %d ", sqlite3_step(querya));

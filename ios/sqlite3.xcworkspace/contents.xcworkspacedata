@@ -5,6 +5,6 @@
       location = "group:sqlitetestapp/sqlitetestapp.xcodeproj">
    </FileRef>
    <FileRef
-      location = "group:sqlite3/sqlite3.xcodeproj">
+      location = "group:/Users/norman/development/totalpave/sqlite/ios/sqlite3/sqlite.xcodeproj">
    </FileRef>
 </Workspace>
