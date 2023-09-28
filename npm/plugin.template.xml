@@ -7,9 +7,8 @@
   <keywords>cordova,cordova-android,cordova-ios</keywords>
   <repo>https://github.com/totalpaveinc/sqlite3</repo>
 
-  <dependency id="@totalpave/cordova-plugin-libcxx" version="25.0.8775105" />
-
   <platform name="android">
+    <dependency id="@totalpave/cordova-plugin-libcxx" version="25.0.8775105" />
     <framework src="totalpave.sqlite3:SQLITE_VERSION" />
   </platform>
 
