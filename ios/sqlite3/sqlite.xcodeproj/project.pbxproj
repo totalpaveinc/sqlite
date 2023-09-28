@@ -10,7 +10,6 @@
 		94B79BDA2AC4DB8200453F98 /* sqlite.h in Headers */ = {isa = PBXBuildFile; fileRef = 941862372A97C5CB00CCFEE1 /* sqlite.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		94B79BE12AC4DC5900453F98 /* sqlite3.h in Headers */ = {isa = PBXBuildFile; fileRef = 94B79BDE2AC4DC5900453F98 /* sqlite3.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		94B79BE22AC4DC5900453F98 /* sqlite3.c in Sources */ = {isa = PBXBuildFile; fileRef = 94B79BDF2AC4DC5900453F98 /* sqlite3.c */; };
-		94B79BE32AC4DC5900453F98 /* sqlite3ext.h in Headers */ = {isa = PBXBuildFile; fileRef = 94B79BE02AC4DC5900453F98 /* sqlite3ext.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		94B79BE62AC4DE1E00453F98 /* sqlite3rc.h in Headers */ = {isa = PBXBuildFile; fileRef = 94B79BE52AC4DE1E00453F98 /* sqlite3rc.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		94B79BEB2AC4DE8800453F98 /* utilities.h in Headers */ = {isa = PBXBuildFile; fileRef = 94B79BEA2AC4DE8800453F98 /* utilities.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		94B79BED2AC4DF0900453F98 /* utilities.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 94B79BEC2AC4DF0900453F98 /* utilities.cpp */; };
@@ -35,7 +34,6 @@
 		941862372A97C5CB00CCFEE1 /* sqlite.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = sqlite.h; sourceTree = "<group>"; };
 		94B79BDE2AC4DC5900453F98 /* sqlite3.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = sqlite3.h; path = ../../../src/sqlite/sqlite3.h; sourceTree = "<group>"; };
 		94B79BDF2AC4DC5900453F98 /* sqlite3.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = sqlite3.c; path = ../../../src/sqlite/sqlite3.c; sourceTree = "<group>"; };
-		94B79BE02AC4DC5900453F98 /* sqlite3ext.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = sqlite3ext.h; path = ../../../src/sqlite/sqlite3ext.h; sourceTree = "<group>"; };
 		94B79BE52AC4DE1E00453F98 /* sqlite3rc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = sqlite3rc.h; path = ../../../src/sqlite/sqlite3rc.h; sourceTree = "<group>"; };
 		94B79BEA2AC4DE8800453F98 /* utilities.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; fileEncoding = 4; name = utilities.h; path = ../../../include/tp/sqlite/utilities.h; sourceTree = "<group>"; };
 		94B79BEC2AC4DF0900453F98 /* utilities.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = utilities.cpp; path = ../../../src/totalpave/sqlite/utilities.cpp; sourceTree = "<group>"; };
@@ -96,7 +94,6 @@
 				94B79BE52AC4DE1E00453F98 /* sqlite3rc.h */,
 				94B79BDF2AC4DC5900453F98 /* sqlite3.c */,
 				94B79BDE2AC4DC5900453F98 /* sqlite3.h */,
-				94B79BE02AC4DC5900453F98 /* sqlite3ext.h */,
 			);
 			name = sqlite;
 			sourceTree = "<group>";
@@ -119,7 +116,6 @@
 			files = (
 				94B79BE12AC4DC5900453F98 /* sqlite3.h in Headers */,
 				94B79BDA2AC4DB8200453F98 /* sqlite.h in Headers */,
-				94B79BE32AC4DC5900453F98 /* sqlite3ext.h in Headers */,
 				94B79BEF2AC4DF2D00453F98 /* TPISQLiteUtilities.h in Headers */,
 				94B79BEB2AC4DE8800453F98 /* utilities.h in Headers */,
 				94B79BE62AC4DE1E00453F98 /* sqlite3rc.h in Headers */,

@@ -17,7 +17,6 @@ FOUNDATION_EXPORT const unsigned char sqlite3VersionString[];
 
 // The pure SQLite headers
 #import <sqlite/sqlite3.h>
-#import <sqlite/sqlite3ext.h>
 #import <sqlite/sqlite3rc.h>
 
 #import <sqlite/TPISQLiteUtilities.h>
