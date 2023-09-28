@@ -61,7 +61,7 @@ gh release create v$VERSION \
     ./dist/android/sqlite3.aar \
     ./dist/cordova/cordova-plugin-libsqlite.tgz \
     ./dist/sqlite3-dev.zip \
-    ./dist/sqlite3-dev.sha1.txt \
+    ./dist/sqlite3-dev.zip.sha1.txt \
     ./dist/android/sqlite3.aar.sha1.txt \
     ./dist/ios/sqlite3.xcframework.sha1.txt \
     --verify-tag --generate-notes
