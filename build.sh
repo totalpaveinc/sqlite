@@ -21,6 +21,7 @@
 
 source build-tools/public/assertions.sh
 source build-tools/public/DirectoryTools.sh
+source build-tools/public/Checksum.sh
 
 assertMac
 
@@ -33,6 +34,8 @@ spopd
 mkdir -p dist/android
 cp android/sqlite3/build/outputs/aar/sqlite3-release.aar dist/android/sqlite3.aar
 assertLastCall
+
+echo $(sha1_compute ./dist/android/sqlite3.aar) > dist/android/sqlite3.aar.sha1.txt
 
 echo "Building iOS Frameworks"
 spushd ios
@@ -54,6 +57,13 @@ xcodebuild -quiet -create-xcframework \
     -output dist/ios/sqlite3.xcframework
 assertLastCall
 
+spushd dist/ios
+    zip -q sqlite3.xcframework.zip -r sqlite3.xcframework
+    assertLastCall
+spopd
+
+echo $(sha1_compute ./dist/ios/sqlite3.xcframework.zip) > dist/ios/sqlite3.xcframework.sha1.txt
+
 mkdir -p dist/cordova
 spushd npm
 echo -n $(cat package.template.json) > package.json
@@ -74,5 +84,7 @@ cp -r android/sqlite3/build/intermediates/library_and_local_jars_jni/release/jni
 assertLastCall
 
 spushd dist
-    zip ./sqlite3-dev.zip -r ./sqlite3-dev
+    zip -q ./sqlite3-dev.zip -r ./sqlite3-dev
 spopd
+
+echo $(sha1_compute ./dist/sqlite3-dev.zip) > dist/sqlite3-dev.zip.sha1.txt
