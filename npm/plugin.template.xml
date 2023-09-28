@@ -9,7 +9,7 @@
 
   <platform name="android">
     <dependency id="@totalpave/cordova-plugin-libcxx" version="25.0.8775105" />
-    <framework src="totalpave.sqlite3:SQLITE_VERSION" />
+    <framework src="totalpave:sqlite3:SQLITE_VERSION" />
   </platform>
 
   <platform name="ios">
