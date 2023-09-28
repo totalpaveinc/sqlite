@@ -4,3 +4,6 @@
 [submodule "third_party/libcxx"]
 	path = third_party/libcxx
 	url = https://github.com/totalpaveinc/android-libcxx-bin
+[submodule "build-tools/public"]
+	path = build-tools/public
+	url = https://github.com/totalpaveinc/build-tools-public.git

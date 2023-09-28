@@ -4,10 +4,6 @@ plugins {
     id 'maven-publish'
 }
 
-task wrapper(type: Wrapper) {
-    gradleVersion = "7.6.1"
-}
-
 android {
     namespace 'com.totalpave.sqlite3'
 

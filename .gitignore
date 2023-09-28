@@ -31,3 +31,8 @@ ios/build
 ios/Logs
 ios/*.noindex
 /android/sqlite3/.cxx
+/dist
+npm/package.json
+npm/plugin.xml
+npm/*.tgz
+npm/bin

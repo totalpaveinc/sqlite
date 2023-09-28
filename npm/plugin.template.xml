@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<plugin xmlns="http://apache.org/cordova/ns/plugins/1.0" id="@totalpave/cordova-plugin-libsqlite" version="SQLITE_VERSION">
+  <name>SQLite Binaries v3.39.2</name>
+  <description>Cordova plugin that supplies the libtilegen shared libraries.</description>
+  <author>Total Pave Inc.</author>
+  <license>Apache-2.0</license>
+  <keywords>cordova,cordova-android,cordova-ios</keywords>
+  <repo>https://github.com/totalpaveinc/sqlite3</repo>
+
+  <dependency id="@totalpave/cordova-plugin-libcxx" version="25.0.8775105" />
+
+  <platform name="android">
+    <framework src="totalpave.sqlite3:SQLITE_VERSION" />
+  </platform>
+
+  <platform name="ios">
+    <!-- <hook type="after_plugin_install" src="hooks/ios/configureXCode.py"/>
+    <hook type="before_plugin_uninstall" src="hooks/ios/deconfigureXcode.py"/>
+    <hook type="after_platform_add" src="hooks/ios/configureXCode.py"/> -->
+    
+    <framework src="./bin/sqlite3.xcframework" custom="true" embed="true" link="true" />
+  </platform>
+</plugin>

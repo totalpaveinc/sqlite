@@ -21,7 +21,7 @@ get_filename_component(ROOT "../../../../../" ABSOLUTE ${CMAKE_SOURCE_DIR})
 
 include_directories(
     "${ROOT}/src/sqlite"
-    "${ROOT}/src/totalpave/include"
+    "${ROOT}/include"
 )
 
 # The pure Sqlite3 C library
@@ -47,7 +47,7 @@ add_library(sqlite-intermediate STATIC
 add_library(sqlite3 SHARED
     # List C/C++ source files with relative paths to this CMakeLists.txt.
     jni.cc
-    ${ROOT}/src/totalpave/utilities.cpp ${ROOT}/src/totalpave/include/tp/sqlite/utilities.h
+    ${ROOT}/src/totalpave/sqlite/utilities.cpp ${ROOT}/include/tp/sqlite/utilities.h
 )
 
 # Specifies libraries CMake should link to your target library. You

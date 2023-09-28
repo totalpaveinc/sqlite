@@ -1,0 +1,5 @@
+copyBinaries.sh
+plugin.template.xml
+package.template.json
+totalpave-cordova-plugin-libtilegen-*.tgz
+bin/.gitkeep

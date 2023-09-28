@@ -19,43 +19,60 @@
 # CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE
 # OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-if [ `uname` != "Darwin" ]; then
-    echo "Mac is required for building"
-    exit 1
-fi
+source build-tools/public/assertions.sh
+source build-tools/public/DirectoryTools.sh
 
-if [ "$1" != "" ] && [ "$1" != "debug" ] && [ "$1" != "release" ]; then
-    echo "Build type must be either \"debug\" or \"release\"."
-    echo ""
-    echo "Usage: ./build.sh [debug|release]"
-    exit 1
-fi
+assertMac
 
-if [ "$1" == "" ]; then
-    buildType="Debug"
-else
-    if [ "$1" == "release" ]; then
-        buildType="Release"
-    else
-        buildType="Debug"
-    fi
-fi
+echo "Building Android Frameworks"
+spushd android
+    ./gradlew :sqlite3:assembleRelease
+    assertLastCall
+spopd
 
-echo "Build Type: $buildType"
+mkdir -p dist/android
+cp android/sqlite3/build/outputs/aar/sqlite3-release.aar dist/android/sqlite3.aar
+assertLastCall
 
-cd android
-gradle wrapper
-./gradlew assemble$buildType
-cd ..
+echo "Building iOS Frameworks"
+spushd ios
+    xcodebuild -quiet -workspace sqlite3.xcworkspace -configuration Release -scheme sqlite -destination "generic/platform=iOS" build
+    assertLastCall
+    xcodebuild -quiet -workspace sqlite3.xcworkspace -configuration Debug -scheme sqlite -destination "generic/platform=iOS Simulator" build
+    assertLastCall
 
-cd ios/sqlite3
-xcodebuild -quiet -derivedDataPath ./build -project sqlite3.xcodeproj -configuration $buildType -scheme sqlite3 -destination "generic/platform=iOS" build
-xcodebuild -quiet -derivedDataPath ./build -project sqlite3.xcodeproj -configuration $buildType -scheme sqlite3 -destination "generic/platform=iOS Simulator" build
-rm -rf ./build/sqlite3-$buildType.xcframework
+    iosBuild=$(echo "$(xcodebuild -workspace sqlite3.xcworkspace -scheme sqlite -configuration Release -sdk iphoneos -showBuildSettings | grep "CONFIGURATION_BUILD_DIR")" | cut -d'=' -f2 | xargs)
+    simBuild=$(echo "$(xcodebuild -workspace sqlite3.xcworkspace -scheme sqlite -configuration Debug -sdk iphonesimulator -showBuildSettings | grep "CONFIGURATION_BUILD_DIR")" | cut -d'=' -f2 | xargs)
+spopd
+
+mkdir -p dist/ios
+rm -rf dist/ios/sqlite3.xcframework
+
 xcodebuild -quiet -create-xcframework \
-    -framework ./build/Build/Products/$buildType-iphoneos/sqlite3.framework \
-    -framework ./build/Build/Products/$buildType-iphonesimulator/sqlite3.framework \
-    -output ./build/sqlite3-$buildType.xcframework
-cd ../..
+    -framework $iosBuild/sqlite.framework \
+    -framework $simBuild/sqlite.framework \
+    -output dist/ios/sqlite3.xcframework
+assertLastCall
 
-echo "Finish $buildType task"
+mkdir -p dist/cordova
+spushd npm
+echo -n $(cat package.template.json) > package.json
+npm version $(cat ../VERSION) --no-git-tag-version --no-commit-hooks
+assertLastCall
+TGZ=$(npm pack)
+cp $TGZ ../dist/cordova/cordova-plugin-libsqlite.tgz
+spopd
+
+mkdir -p dist/sqlite3-dev
+rm -rf dist/sqlite3-dev/include
+cp -r include dist/sqlite3-dev/
+cp src/sqlite/sqlite3.h dist/sqlite3-dev/include/
+cp src/sqlite/sqlite3ext.h dist/sqlite3-dev/include/
+cp src/sqlite/sqlite3rc.h dist/sqlite3-dev/include/
+mkdir -p dist/sqlite3-dev/lib/android
+cp -r android/sqlite3/build/intermediates/library_and_local_jars_jni/release/jni/* dist/sqlite3-dev/lib/android/
+assertLastCall
+
+spushd dist
+    zip ./sqlite3-dev.zip -r ./sqlite3-dev
+spopd
