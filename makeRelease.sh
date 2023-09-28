@@ -63,5 +63,5 @@ gh release create v$VERSION \
     ./dist/sqlite3-dev.zip \
     ./dist/sqlite3-dev.zip.sha1.txt \
     ./dist/android/sqlite3.aar.sha1.txt \
-    ./dist/ios/sqlite3.xcframework.sha1.txt \
+    ./dist/ios/sqlite3.xcframework.zip.sha1.txt \
     --verify-tag --generate-notes
