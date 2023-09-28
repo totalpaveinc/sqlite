@@ -44,6 +44,7 @@ git commit -m "Release: $VERSION"
 assertLastCall
 git tag -a "v$VERSION" -m "Release: $VERSION"
 assertLastCall
+git push
 git push --tags
 assertLastCall
 
