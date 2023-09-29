@@ -45,7 +45,6 @@
 		941862812A97C96800CCFEE1 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		941862832A97C96800CCFEE1 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		941862842A97C96800CCFEE1 /* main.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = main.mm; sourceTree = "<group>"; };
-		9418628C2A97C98500CCFEE1 /* sqlite3.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = sqlite3.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		94B79BF22AC4E17A00453F98 /* sqlite.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = sqlite.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -100,7 +99,6 @@
 			isa = PBXGroup;
 			children = (
 				94B79BF22AC4E17A00453F98 /* sqlite.framework */,
-				9418628C2A97C98500CCFEE1 /* sqlite3.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
