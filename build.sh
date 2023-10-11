@@ -54,6 +54,7 @@ rm -rf dist/ios/sqlite3.xcframework
 
 xcodebuild -quiet -create-xcframework \
     -framework $iosBuild/sqlite.framework \
+    -debug-symbols $iosBuild/sqlite.framework.dSYM \
     -framework $simBuild/sqlite.framework \
     -output dist/ios/sqlite3.xcframework
 assertLastCall
@@ -90,4 +91,3 @@ spushd dist
 spopd
 
 sha1_compute ./dist/sqlite3-dev.zip
-# echo $(sha1_compute ./dist/sqlite3-dev.zip) > dist/sqlite3-dev.zip.sha1.txt
