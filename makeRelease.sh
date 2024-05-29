@@ -58,16 +58,16 @@ spushd dist/cordova
 spopd
 
 gh release create v$VERSION \
-    ./dist/ios/sqlite3.xcframework.zip \
+    ./dist/ios/sqlite.xcframework.zip \
     ./dist/android/sqlite3.aar \
     ./dist/cordova/cordova-plugin-libsqlite.tgz \
     ./dist/sqlite3-dev.zip \
     ./dist/sqlite3-dev.zip.sha1.txt \
     ./dist/android/sqlite3.aar.sha1.txt \
-    ./dist/ios/sqlite3.xcframework.zip.sha1.txt \
+    ./dist/ios/sqlite.xcframework.zip.sha1.txt \
     --verify-tag --generate-notes
 
-pod spec lint sqlite3.podspec
+pod spec lint sqlite.podspec
 assertLastCall
 
-pod repo push tp-public sqlite3.podspec
+pod repo push tp-public sqlite.podspec
