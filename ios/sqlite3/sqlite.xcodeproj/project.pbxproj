@@ -16,6 +16,7 @@
 		94B79BED2AC4DF0900453F98 /* utilities.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 94B79BEC2AC4DF0900453F98 /* utilities.cpp */; };
 		94B79BEF2AC4DF2D00453F98 /* TPISQLiteUtilities.h in Headers */ = {isa = PBXBuildFile; fileRef = 94B79BEE2AC4DF2D00453F98 /* TPISQLiteUtilities.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		94B79BF12AC4DF4A00453F98 /* TPISQLiteUtilities.mm in Sources */ = {isa = PBXBuildFile; fileRef = 94B79BF02AC4DF4A00453F98 /* TPISQLiteUtilities.mm */; };
+		94FA40522C077E2F000AF380 /* LICENSE in Resources */ = {isa = PBXBuildFile; fileRef = 94FA40512C077E2F000AF380 /* LICENSE */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -41,6 +42,7 @@
 		94B79BEC2AC4DF0900453F98 /* utilities.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = utilities.cpp; path = ../../../src/totalpave/sqlite/utilities.cpp; sourceTree = "<group>"; };
 		94B79BEE2AC4DF2D00453F98 /* TPISQLiteUtilities.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TPISQLiteUtilities.h; sourceTree = "<group>"; };
 		94B79BF02AC4DF4A00453F98 /* TPISQLiteUtilities.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = TPISQLiteUtilities.mm; sourceTree = "<group>"; };
+		94FA40512C077E2F000AF380 /* LICENSE */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = LICENSE; path = ../../LICENSE; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -57,6 +59,7 @@
 		9418622A2A97C5CB00CCFEE1 = {
 			isa = PBXGroup;
 			children = (
+				94FA40512C077E2F000AF380 /* LICENSE */,
 				9430D20F2BC4769E00C70C1E /* PrivacyInfo.xcprivacy */,
 				941862362A97C5CB00CCFEE1 /* sqlite */,
 				941862352A97C5CB00CCFEE1 /* Products */,
@@ -184,6 +187,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				94FA40522C077E2F000AF380 /* LICENSE in Resources */,
 				9430D2102BC4769E00C70C1E /* PrivacyInfo.xcprivacy in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
