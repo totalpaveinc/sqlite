@@ -91,3 +91,11 @@ spushd dist
 spopd
 
 sha1_compute ./dist/sqlite3-dev.zip
+
+CHECKSUM=$(cat ./dist/ios/sqlite3.xcframework.zip.sha1.txt)
+
+podspec=$(<sqlite3.podspec.template)
+podspec=${podspec//\$VERSION\$/$VERSION}
+podspec=${podspec//\$CHECKSUM\$/$CHECKSUM}
+
+echo "$podspec" > sqlite3.podspec

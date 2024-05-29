@@ -36,3 +36,4 @@ npm/package.json
 npm/plugin.xml
 npm/*.tgz
 npm/bin
+/sqlite3.podspec

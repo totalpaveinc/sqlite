@@ -66,3 +66,8 @@ gh release create v$VERSION \
     ./dist/android/sqlite3.aar.sha1.txt \
     ./dist/ios/sqlite3.xcframework.zip.sha1.txt \
     --verify-tag --generate-notes
+
+pod spec lint sqlite3.podspec
+assertLastCall
+
+pod repo push tp-public sqlite3.podspec
