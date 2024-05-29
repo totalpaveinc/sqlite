@@ -1,4 +1,10 @@
+
 plugins {
     id 'com.android.library' version '8.1.1' apply false
     id 'com.android.application' version '8.1.1' apply false
+}
+
+tasks.wrapper {
+    distributionType = Wrapper.DistributionType.BIN
+    gradleVersion = "8.7"
 }
