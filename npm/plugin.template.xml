@@ -12,10 +12,6 @@
   </platform>
 
   <platform name="ios">
-    <!-- <hook type="after_plugin_install" src="hooks/ios/configureXCode.py"/>
-    <hook type="before_plugin_uninstall" src="hooks/ios/deconfigureXcode.py"/>
-    <hook type="after_platform_add" src="hooks/ios/configureXCode.py"/> -->
-    
     <framework src="./bin/sqlite3.xcframework" custom="true" embed="true" link="true" />
   </platform>
 </plugin>
