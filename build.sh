@@ -38,7 +38,6 @@ cp android/sqlite3/build/outputs/aar/sqlite3-release.aar dist/android/sqlite3.aa
 assertLastCall
 
 sha1_compute ./dist/android/sqlite3.aar
-# echo $(sha1_compute ./dist/android/sqlite3.aar) > dist/android/sqlite3.aar.sha1.txt
 
 echo "Building iOS Frameworks"
 spushd ios
@@ -67,7 +66,6 @@ spushd dist/ios
 spopd
 
 sha1_compute ./dist/ios/sqlite3.xcframework.zip
-# echo $(sha1_compute ./dist/ios/sqlite3.xcframework.zip) > dist/ios/sqlite3.xcframework.zip.sha1.txt
 
 mkdir -p dist/cordova
 spushd npm
@@ -85,7 +83,7 @@ cp src/sqlite/sqlite3.h dist/sqlite3-dev/include/
 cp src/sqlite/sqlite3ext.h dist/sqlite3-dev/include/
 cp src/sqlite/sqlite3rc.h dist/sqlite3-dev/include/
 mkdir -p dist/sqlite3-dev/lib/android
-cp -r android/sqlite3/build/intermediates/library_and_local_jars_jni/release/jni/* dist/sqlite3-dev/lib/android/
+cp -r android/sqlite3/build/intermediates/merged_native_libs/release/mergeReleaseNativeLibs/out/lib/* dist/sqlite3-dev/lib/android/
 assertLastCall
 
 spushd dist
