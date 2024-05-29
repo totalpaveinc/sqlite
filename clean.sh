@@ -4,7 +4,7 @@ source build-tools/public/DirectoryTools.sh
 
 spushd android
     rm -rf ./android/sqlite3/.cxx
-    gradle clean
+    ./gradlew clean
     assertLastCall
 spopd
 
