@@ -7,7 +7,7 @@ plugins {
 android {
     namespace 'com.totalpave.sqlite3'
 
-    compileSdk 33
+    compileSdk 34
     ndkVersion '25.0.8775105'
 
     defaultConfig {
