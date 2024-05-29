@@ -14,18 +14,18 @@
 		9418627F2A97C96800CCFEE1 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9418627E2A97C96800CCFEE1 /* Assets.xcassets */; };
 		941862822A97C96800CCFEE1 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 941862802A97C96800CCFEE1 /* LaunchScreen.storyboard */; };
 		941862852A97C96800CCFEE1 /* main.mm in Sources */ = {isa = PBXBuildFile; fileRef = 941862842A97C96800CCFEE1 /* main.mm */; };
-		94B79BF32AC4E17A00453F98 /* sqlite.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 94B79BF22AC4E17A00453F98 /* sqlite.framework */; };
-		94B79BF42AC4E17A00453F98 /* sqlite.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 94B79BF22AC4E17A00453F98 /* sqlite.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		94FA40582C07887A000AF380 /* sqlite.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 94FA40572C07887A000AF380 /* sqlite.framework */; };
+		94FA40592C07887A000AF380 /* sqlite.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 94FA40572C07887A000AF380 /* sqlite.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
-		94B79BF52AC4E17A00453F98 /* Embed Frameworks */ = {
+		94FA405A2C07887A000AF380 /* Embed Frameworks */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				94B79BF42AC4E17A00453F98 /* sqlite.framework in Embed Frameworks */,
+				94FA40592C07887A000AF380 /* sqlite.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -45,7 +45,7 @@
 		941862812A97C96800CCFEE1 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		941862832A97C96800CCFEE1 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		941862842A97C96800CCFEE1 /* main.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = main.mm; sourceTree = "<group>"; };
-		94B79BF22AC4E17A00453F98 /* sqlite.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = sqlite.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		94FA40572C07887A000AF380 /* sqlite.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = sqlite.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -53,7 +53,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				94B79BF32AC4E17A00453F98 /* sqlite.framework in Frameworks */,
+				94FA40582C07887A000AF380 /* sqlite.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -98,7 +98,7 @@
 		9418628B2A97C98500CCFEE1 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				94B79BF22AC4E17A00453F98 /* sqlite.framework */,
+				94FA40572C07887A000AF380 /* sqlite.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -113,7 +113,7 @@
 				9418626B2A97C96700CCFEE1 /* Sources */,
 				9418626C2A97C96700CCFEE1 /* Frameworks */,
 				9418626D2A97C96700CCFEE1 /* Resources */,
-				94B79BF52AC4E17A00453F98 /* Embed Frameworks */,
+				94FA405A2C07887A000AF380 /* Embed Frameworks */,
 			);
 			buildRules = (
 			);

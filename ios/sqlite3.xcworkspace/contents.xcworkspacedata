@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Workspace
-   version = "1.1">
+   version = "1.0">
    <FileRef
-      location = "group:sqlite3/sqlite.xcodeproj">
+      location = "group:/Users/norman/development/totalpave/sqlite/ios/sqlite3/sqlite.xcodeproj">
    </FileRef>
    <FileRef
       location = "group:sqlitetestapp/sqlitetestapp.xcodeproj">

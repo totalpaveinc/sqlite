@@ -8,7 +8,6 @@
 #import <UIKit/UIKit.h>
 #import "AppDelegate.h"
 
-//#include <sqlite3.h>
 #import <sqlite/sqlite3.h>
 #import <sqlite/TPISQLiteUtilities.h>
 

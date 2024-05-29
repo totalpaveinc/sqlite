@@ -51,21 +51,21 @@ spushd ios
 spopd
 
 mkdir -p dist/ios
-rm -rf dist/ios/sqlite3.xcframework
+rm -rf dist/ios/sqlite.xcframework
 
 xcodebuild -quiet -create-xcframework \
     -framework $iosBuild/sqlite.framework \
     -debug-symbols $iosBuild/sqlite.framework.dSYM \
     -framework $simBuild/sqlite.framework \
-    -output dist/ios/sqlite3.xcframework
+    -output dist/ios/sqlite.xcframework
 assertLastCall
 
 spushd dist/ios
-    zip -q sqlite3.xcframework.zip -r sqlite3.xcframework
+    zip -q sqlite.xcframework.zip -r sqlite.xcframework
     assertLastCall
 spopd
 
-sha1_compute ./dist/ios/sqlite3.xcframework.zip
+sha1_compute ./dist/ios/sqlite.xcframework.zip
 
 mkdir -p dist/cordova
 spushd npm
@@ -92,10 +92,10 @@ spopd
 
 sha1_compute ./dist/sqlite3-dev.zip
 
-CHECKSUM=$(cat ./dist/ios/sqlite3.xcframework.zip.sha1.txt)
+CHECKSUM=$(cat ./dist/ios/sqlite.xcframework.zip.sha1.txt)
 
-podspec=$(<sqlite3.podspec.template)
+podspec=$(<sqlite.podspec.template)
 podspec=${podspec//\$VERSION\$/$VERSION}
 podspec=${podspec//\$CHECKSUM\$/$CHECKSUM}
 
-echo "$podspec" > sqlite3.podspec
+echo "$podspec" > sqlite.podspec

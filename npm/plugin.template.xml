@@ -5,13 +5,21 @@
   <author>Total Pave Inc.</author>
   <license>Apache-2.0</license>
   <keywords>cordova,cordova-android,cordova-ios</keywords>
-  <repo>https://github.com/totalpaveinc/sqlite3</repo>
+  <repo>https://github.com/totalpaveinc/sqlite</repo>
 
   <platform name="android">
     <framework src="totalpave:sqlite3:SQLITE_VERSION" />
   </platform>
 
   <platform name="ios">
-    <framework src="./bin/sqlite3.xcframework" custom="true" embed="true" link="true" />
+    <podspec>
+      <config>
+        <source url="https://github.com/totalpaveinc/pods-public" />
+      </config>
+      <pods use-frameworks="true">
+        <pod name="sqlite" spec="= SQLITE_VERSION" />
+      </pods>
+    </podspec>
+    <!-- <framework src="./bin/sqlite.xcframework" custom="true" embed="true" link="true" /> -->
   </platform>
 </plugin>

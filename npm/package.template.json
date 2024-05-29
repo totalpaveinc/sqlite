@@ -9,10 +9,9 @@
     },
     "scripts": {
       "test": "echo \"Error: no test specified\" && exit 1",
-      "build": "./copyBinaries.sh",
       "update-plugin-version": "sed \"s/SQLITE_VERSION/$npm_package_version/\" plugin.template.xml  > plugin.xml",
       "preversion": "mkdir -p ./.git && if [ `uname` != \"Darwin\" ]; then echo \"Releases must be done on Macs.\"; exit 1; fi",
-      "version": "npm run build && npm run update-plugin-version"
+      "version": "npm run update-plugin-version"
     },
     "author": "Total Pave Inc.",
     "license": "UNLICENSED"

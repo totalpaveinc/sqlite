@@ -7,7 +7,7 @@
 #
 
 Pod::Spec.new do |s|
-  s.name             = 'sqlite3'
+  s.name             = 'sqlite'
   s.version          = '$VERSION$'
   s.summary          = 'SQLite'
 
@@ -25,14 +25,14 @@ SQLite built for iOS and iOS simulators.
   s.author           = { 'Norman Breau' => 'norman@totalpave.com' }
   s.license          = { 
     :type => 'MIT',
-    :file => 'sqlite3.xcframework/ios-arm64/sqlite.framework/LICENSE'
+    :file => 'sqlite.xcframework/ios-arm64/sqlite.framework/LICENSE'
   }
   s.source           = {
-    :http => 'https://github.com/totalpaveinc/sqlite/releases/download/v$VERSION$/sqlite3.xcframework.zip',
+    :http => 'https://github.com/totalpaveinc/sqlite/releases/download/v$VERSION$/sqlite.xcframework.zip',
     :sha1 => '$CHECKSUM$'
   }
 
   s.ios.deployment_target = '11.0'
 
-  s.vendored_frameworks = 'sqlite3.xcframework'
+  s.vendored_frameworks = 'sqlite.xcframework'
 end
