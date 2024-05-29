@@ -25,6 +25,8 @@ source build-tools/public/Checksum.sh
 
 assertMac
 
+VERSION=$(< VERSION)
+
 echo "Building Android Frameworks"
 spushd android
     ./gradlew :sqlite3:assembleRelease

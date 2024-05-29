@@ -28,7 +28,7 @@ SQLite built for iOS and iOS simulators.
     :file => 'sqlite3.xcframework/ios-arm64/sqlite.framework/LICENSE'
   }
   s.source           = {
-    :http => 'https://github.com/totalpaveinc/sqlite/releases/download/ios/$VERSION$/sqlite3.xcframework.zip',
+    :http => 'https://github.com/totalpaveinc/sqlite/releases/download/v$VERSION$/sqlite3.xcframework.zip',
     :sha1 => '$CHECKSUM$'
   }
 
