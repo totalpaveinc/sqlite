@@ -7,7 +7,7 @@ If an application contains mulitple copies of SQLite, database corruption could 
 
 This package contains the original SQLite sources which is in the Public Domain. Additionally it contains build scripts for producing binaries for several architectures. Built binaries gets published to the [sqlite-bin](https://github.com/totalpaveinc/sqlite-bin) repository.
 
-This package is currently using SQLite3 v3.39.2.
+This package is currently using SQLite3 v3.46.0.
 
 Prebuilt binaries are available for:
 - iOS:
@@ -21,13 +21,11 @@ Prebuilt binaries are available for:
 - - x86_64
 - - AAR library (Contains all prebuilt architectures)
 
-If you simply need the prebuilt binaries, take a look at our [sqlite-bin](https://github.com/totalpaveinc/sqlite-bin) repository.
-
-The individual SO libraries are provided for linking with other libraries. Applications should import the AAR / xcframework file.
+Android builds are built on NDK 27 and is 16k page size supported and is backwards compatible to 4k page size devices.
 
 Note that the AAR files do not contain JNI. The AAR package is simply to ensure applications all use a single copy of SQLite.
 
-Android binaries are built using API 24.
+The individual SO libraries are provided for linking with other libraries. Applications should import the AAR / xcframework file.
 
 ## Licensing
 
@@ -48,14 +46,14 @@ Mac OS or Linux with bash shell is required.
 #### Android
 
 The following tools is required:
-- NDK Version 25.0.8775105
-- Gradle 7
+- NDK Version 27.0.11902837
+- Gradle 8.9
 - `ANDROID_HOME` environment variable should be set to the Android SDK.
 
 #### iOS
 
 The following tools is required:
-- XCode 13.0 (with additional command line tools installed)
+- XCode 15.0 (with additional command line tools installed)
 
 #### Linux
 
@@ -73,6 +71,4 @@ e.g: `git clone --recurse-submodules git@github.com:totalpaveinc/sqlite.git`
 
 If you have already cloned without submodules, you can correct the repo by running `git submodule update --init`
 
-Without the `bin/` (`sqlite-bin`) submodule, the `publish.sh` script will not work properly.
-
-To publish, run `./publish.sh <version>`
+To publish, run `./makeRelease.sh <version>`

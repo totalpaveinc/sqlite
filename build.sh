@@ -81,7 +81,6 @@ rm -rf dist/sqlite3-dev/include
 cp -r include dist/sqlite3-dev/
 cp src/sqlite/sqlite3.h dist/sqlite3-dev/include/
 cp src/sqlite/sqlite3ext.h dist/sqlite3-dev/include/
-cp src/sqlite/sqlite3rc.h dist/sqlite3-dev/include/
 mkdir -p dist/sqlite3-dev/lib/android
 cp -r android/sqlite3/build/intermediates/merged_native_libs/release/mergeReleaseNativeLibs/out/lib/* dist/sqlite3-dev/lib/android/
 assertLastCall
