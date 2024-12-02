@@ -8,7 +8,7 @@ android {
     namespace 'com.totalpave.sqlite3'
 
     compileSdk 34
-    ndkVersion '27.0.11902837'
+    ndkVersion '28.0.12674087'
 
     defaultConfig {
         aarMetadata {
@@ -19,7 +19,7 @@ android {
 
         externalNativeBuild {
             cmake {
-                version '3.22.1'
+                version '3.31.0'
                 arguments += [ "-DANDROID_STL=c++_shared", "-DANDROID_SUPPORT_FLEXIBLE_PAGE_SIZES=ON" ]
             }
         }
@@ -38,8 +38,8 @@ android {
     }
 
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
     }
 
     externalNativeBuild {
@@ -56,7 +56,7 @@ android {
 }
 
 dependencies {
-    runtimeOnly 'totalpave:libcxx:27.0.11902837'
+    runtimeOnly 'totalpave:libcxx:28.0.12674087'
 }
 
 publishing {
