@@ -74,7 +74,7 @@ publishing {
 
     repositories {
         maven {
-            url = 'https://archiva.totalpave.com/repository/public'
+            url = 'https://android-artifacts.internal.totalpave.com/android'
             credentials {
                 username findProperty('totalpave.repository.user')
                 password findProperty('totalpave.repository.password')

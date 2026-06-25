@@ -33,3 +33,4 @@ npm/plugin.xml
 npm/*.tgz
 npm/bin
 /sqlite.podspec
+/.build

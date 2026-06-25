@@ -65,7 +65,8 @@ spushd dist/ios
     assertLastCall
 spopd
 
-sha1_compute ./dist/ios/sqlite.xcframework.zip
+# SPM binaryTarget checksums are SHA256 (matches `swift package compute-checksum`).
+echo -n "$(shasum -a 256 ./dist/ios/sqlite.xcframework.zip | cut -d ' ' -f 1)" > ./dist/ios/sqlite.xcframework.zip.sha256.txt
 
 mkdir -p dist/cordova
 spushd npm
@@ -91,10 +92,12 @@ spopd
 
 sha1_compute ./dist/sqlite3-dev.zip
 
-CHECKSUM=$(cat ./dist/ios/sqlite.xcframework.zip.sha1.txt)
+CHECKSUM=$(cat ./dist/ios/sqlite.xcframework.zip.sha256.txt)
 
-podspec=$(<sqlite.podspec.template)
-podspec=${podspec//\$VERSION\$/$VERSION}
-podspec=${podspec//\$CHECKSUM\$/$CHECKSUM}
+# Package.swift must be committed at the release tag, since SPM reads it
+# directly from the git checkout of that tag (see makeRelease.sh).
+package=$(<Package.swift.template)
+package=${package//\$VERSION\$/$VERSION}
+package=${package//\$CHECKSUM\$/$CHECKSUM}
 
-echo "$podspec" > sqlite.podspec
+echo "$package" > Package.swift

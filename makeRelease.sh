@@ -22,6 +22,9 @@
 source build-tools/public/assertions.sh
 source build-tools/public/DirectoryTools.sh
 
+# Because builds updates the Package.swift file on each build 
+git checkout -- Package.swift
+
 assertMac
 assertGitRepo
 assertCleanRepo
@@ -38,7 +41,7 @@ echo $VERSION > VERSION
 ./clean.sh
 ./build.sh release
 
-git add VERSION
+git add VERSION Package.swift
 assertLastCall
 git commit -m "Release: $VERSION"
 assertLastCall
@@ -64,10 +67,5 @@ gh release create v$VERSION \
     ./dist/sqlite3-dev.zip \
     ./dist/sqlite3-dev.zip.sha1.txt \
     ./dist/android/sqlite3.aar.sha1.txt \
-    ./dist/ios/sqlite.xcframework.zip.sha1.txt \
+    ./dist/ios/sqlite.xcframework.zip.sha256.txt \
     --verify-tag --generate-notes
-
-pod spec lint sqlite.podspec
-assertLastCall
-
-pod repo push tp-public sqlite.podspec

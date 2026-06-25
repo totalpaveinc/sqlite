@@ -9,7 +9,7 @@ dependencyResolutionManagement {
     repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
     repositories {
         maven {
-            url "https://archiva.totalpave.com/repository/public"
+            url "https://android-artifacts.internal.totalpave.com/android"
         }
         google()
         mavenCentral()
