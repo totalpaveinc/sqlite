@@ -68,18 +68,6 @@ spopd
 # SPM binaryTarget checksums are SHA256 (matches `swift package compute-checksum`).
 echo -n "$(shasum -a 256 ./dist/ios/sqlite.xcframework.zip | cut -d ' ' -f 1)" > ./dist/ios/sqlite.xcframework.zip.sha256.txt
 
-mkdir -p dist/cordova
-spushd npm
-    echo -n $(cat package.template.json) > package.json
-    npm version $(cat ../VERSION) --no-git-tag-version --no-commit-hooks
-    assertLastCall
-    npm pack --pack-destination ../dist/cordova
-    assertLastCall
-
-    # strip the version from the tgz filename
-    mv ../dist/cordova/*.tgz ../dist/cordova/cordova-plugin-libsqlite.tgz 
-spopd
-
 mkdir -p dist/sqlite3-dev
 rm -rf dist/sqlite3-dev/include
 cp -r include dist/sqlite3-dev/
@@ -104,3 +92,16 @@ package=${package//\$VERSION\$/$VERSION}
 package=${package//\$CHECKSUM\$/$CHECKSUM}
 
 echo "$package" > Package.swift
+
+rm -rf dist/cordova
+mkdir -p dist/cordova
+spushd npm
+    echo -n $(cat package.template.json) > package.json
+    npm version $(cat ../VERSION) --no-git-tag-version --no-commit-hooks
+    assertLastCall
+    npm pack --pack-destination ../dist/cordova
+    assertLastCall
+
+    # strip the version from the tgz filename
+    mv ../dist/cordova/*.tgz ../dist/cordova/cordova-plugin-libsqlite.tgz 
+spopd
