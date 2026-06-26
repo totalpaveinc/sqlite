@@ -21,8 +21,8 @@ let package = Package(
     targets: [
         .binaryTarget(
             name: "sqlite",
-            url: "https://github.com/totalpaveinc/sqlite/releases/download/v0.4.1/sqlite.xcframework.zip",
-            checksum: "e6333a364e3d6454f3329f69dbea71fdc3f71fca099c9ff22f23f42834443029"
+            url: "https://github.com/totalpaveinc/sqlite/releases/download/v0.4.2/sqlite.xcframework.zip",
+            checksum: "4d11867b36da2ab803ca52c8764793b1fd30060dfe654b9e7fed242886bf4bfa"
         )
     ]
 )
