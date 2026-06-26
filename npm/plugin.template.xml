@@ -11,15 +11,5 @@
     <framework src="totalpave:sqlite3:SQLITE_VERSION" />
   </platform>
 
-  <platform name="ios">
-    <podspec>
-      <config>
-        <source url="https://github.com/totalpaveinc/pods-public" />
-      </config>
-      <pods use-frameworks="true">
-        <pod name="sqlite" spec="= SQLITE_VERSION" />
-      </pods>
-    </podspec>
-    <!-- <framework src="./bin/sqlite.xcframework" custom="true" embed="true" link="true" /> -->
-  </platform>
+  <platform name="ios" package="swift"></platform>
 </plugin>
