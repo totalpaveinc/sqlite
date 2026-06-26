@@ -10,6 +10,7 @@
     "scripts": {
       "test": "echo \"Error: no test specified\" && exit 1",
       "update-plugin-version": "sed \"s/SQLITE_VERSION/$npm_package_version/\" plugin.template.xml  > plugin.xml",
+      "prepack": "cp ../Package.swift ./",
       "preversion": "mkdir -p ./.git && if [ `uname` != \"Darwin\" ]; then echo \"Releases must be done on Macs.\"; exit 1; fi",
       "version": "npm run update-plugin-version"
     },
