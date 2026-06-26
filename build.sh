@@ -70,11 +70,14 @@ echo -n "$(shasum -a 256 ./dist/ios/sqlite.xcframework.zip | cut -d ' ' -f 1)" >
 
 mkdir -p dist/cordova
 spushd npm
-echo -n $(cat package.template.json) > package.json
-npm version $(cat ../VERSION) --no-git-tag-version --no-commit-hooks
-assertLastCall
-TGZ=$(npm pack)
-cp $TGZ ../dist/cordova/cordova-plugin-libsqlite.tgz
+    echo -n $(cat package.template.json) > package.json
+    npm version $(cat ../VERSION) --no-git-tag-version --no-commit-hooks
+    assertLastCall
+    npm pack --pack-destination ../dist/cordova
+    assertLastCall
+
+    # strip the version from the tgz filename
+    mv ../dist/cordova/*.tgz ../dist/cordova/cordova-plugin-libsqlite.tgz 
 spopd
 
 mkdir -p dist/sqlite3-dev
